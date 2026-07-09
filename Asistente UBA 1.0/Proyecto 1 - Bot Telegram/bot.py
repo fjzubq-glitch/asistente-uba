@@ -8,11 +8,16 @@ from urllib3.util.retry import Retry
 import traceback
 import re
 import threading
+from dotenv import load_dotenv
 
-TELEGRAM_TOKEN = "8694110517:AAE1t8lJ01DWs7HwGRfKd4SElnbmoiubinU"
-GROQ_API_KEY = "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"
-NOTION_TOKEN = "ntn_x5931551603GM6vMMdNCL3USam8UcbrKBg3jnCxlCU28XR"
-NOTION_DB_ID = "3941618c-4b73-81af-a4c3-fda97cf51de8"
+# Cargar variables de entorno desde el archivo .env
+load_dotenv()
+
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+NOTION_TOKEN = os.environ.get("NOTION_TOKEN")
+NOTION_DB_ID = os.environ.get("NOTION_DB_ID")
+
 
 # Archivos de persistencia y logs
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))

@@ -2,6 +2,11 @@ import os
 import sys
 import argparse
 import requests
+from dotenv import load_dotenv
+
+# Cargar variables de entorno desde el archivo .env
+load_dotenv()
+
 
 # Configuración de Proveedores y Modelos por defecto
 DEFAULT_PROVIDER = "openrouter"
@@ -326,8 +331,8 @@ FICHA Y HANDOFF (PASO 1 GENERADO):
     if args.upload:
         notion_token = os.environ.get("NOTION_TOKEN")
         if not notion_token:
-            # Fallback al token por defecto del bot
-            notion_token = "ntn_x5931551603GM6vMMdNCL3USam8UcbrKBg3jnCxlCU28XR"
+            print("❌ Error: No se encontró la variable de entorno NOTION_TOKEN.")
+            sys.exit(1)
             
         print("\n[INFO] Iniciando subida automatica a Notion...")
         try:
