@@ -1,0 +1,74 @@
+[
+  {
+    "supermercado": "Coto",
+    "producto": "Leche Entera / Descremada Coto 1L (Sachet)",
+    "precio": "$950",
+    "condiciones": "Límite de 4 unidades por compra."
+  },
+  {
+    "supermercado": "Coto",
+    "producto": "Aceite de Girasol Coto 1.5L",
+    "precio": "$1.890",
+    "condiciones": "Límite de 2 unidades por compra."
+  },
+  {
+    "supermercado": "Coto",
+    "producto": "Fideos Tallarines Coto 500g",
+    "precio": "$780",
+    "condiciones": "Segunda unidad con 70% de descuento."
+  },
+  {
+    "supermercado": "Coto",
+    "producto": "Queso Cremoso Coto (por kg)",
+    "precio": "$5.800",
+    "condiciones": "Exclusivo Comunidad Coto."
+  },
+  {
+    "supermercado": "Carrefour",
+    "producto": "Leche Entera / Descremada Carrefour 1L (Cartón)",
+    "precio": "$990",
+    "condiciones": "Precios Corrientes."
+  },
+  {
+    "supermercado": "Carrefour",
+    "producto": "Fideos Tirabuzón Carrefour 500g",
+    "precio": "$820",
+    "condiciones": "Llevando 3, pagas 2 (3x2)."
+  },
+  {
+    "supermercado": "Carrefour",
+    "producto": "Yerba Mate Playadito 1kg",
+    "precio": "$3.400",
+    "condiciones": "Válido con Tarjeta Mi Carrefour."
+  },
+  {
+    "supermercado": "Carrefour",
+    "producto": "Queso Rallado Carrefour 150g",
+    "precio": "$1.550",
+    "condiciones": "2da unidad al 50%."
+  },
+  {
+    "supermercado": "Día",
+    "producto": "Leche Entera Día 1L (Sachet)",
+    "precio": "$920",
+    "condiciones": "Válido con Club Dia."
+  },
+  {
+    "supermercado": "Día",
+    "producto": "Papas Fritas en Tubo Día 150g",
+    "precio": "$1.690",
+    "condiciones": "Oferta imperdible."
+  },
+  {
+    "supermercado": "Día",
+    "producto": "Aceite de Girasol Día 900ml",
+    "precio": "$1.250",
+    "condiciones": "Límite de 2 unidades."
+  },
+  {
+    "supermercado": "Día",
+    "producto": "Fideos Guiseros Día 500g",
+    "precio": "$750",
+    "condiciones": "3x2 llevando Club Dia."
+  }
+]

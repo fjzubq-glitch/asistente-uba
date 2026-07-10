@@ -494,16 +494,22 @@ REGLAS DE RESPUESTA EXCLUSIVA PARA COMANDOS (Si detectas una acción, responde �
 2. Leer agenda de un día: Si el usuario quiere saber sus eventos de un día específico, responde EXACTAMENTE así:
    LEER_DIA: YYYY-MM-DD
    (Ejemplo para hoy: LEER_DIA: {ahora.strftime("%Y-%m-%d")})
-3. Consultar promociones/ofertas: Si el usuario pregunta por ofertas o promociones de supermercados, responde EXACTAMENTE así:
+3. Consultar promociones/descuentos bancarios: Si el usuario pregunta por descuentos de tarjetas, bancos o reintegros generales de los supermercados, responde EXACTAMENTE así:
    LEER_PROMOS: Supermercado|DiaDeLaSemana
-   (Donde Supermercado puede ser coto, carrefour, día, o todos. DiaDeLaSemana puede ser hoy, lunes, martes, miércoles, jueves, viernes, sábado, domingo, o todos. Ejemplo: LEER_PROMOS: coto|hoy, LEER_PROMOS: todos|miércoles, LEER_PROMOS: carrefour|todos)
-4. Agregar promoción: Si el usuario quiere guardar una nueva promoción, responde EXACTAMENTE así:
+   (Donde Supermercado puede ser coto, carrefour, día, o todos. DiaDeLaSemana puede ser hoy, lunes, martes, miércoles, jueves, viernes, sábado, domingo, o todos. Ejemplo: LEER_PROMOS: coto|hoy, LEER_PROMOS: todos|miércoles)
+4. Agregar promoción/descuento: Si el usuario quiere guardar una nueva promoción bancaria, responde EXACTAMENTE así:
    AGREGAR_PROMO: Supermercado|Banco o Tarjeta|Descuento|DiaDeLaSemana|Condiciones
    (Ejemplo: AGREGAR_PROMO: Carrefour|Mercado Pago|10% de ahorro|martes|Con tarjeta prepaga)
+5. Consultar ofertas en productos: Si el usuario pregunta por ofertas de productos específicos (ej. leche, aceite, fideos, yerba, qué mercadería está barata), responde EXACTAMENTE así:
+   LEER_PRODUCTOS: Supermercado
+   (Donde Supermercado puede ser coto, carrefour, día, o todos. Ejemplo: LEER_PRODUCTOS: coto, LEER_PRODUCTOS: todos)
+6. Agregar oferta de producto: Si el usuario quiere registrar un precio u oferta de un producto (ej. 'anotá que la leche en Día está a $920'), responde EXACTAMENTE así:
+   AGREGAR_PRODUCTO: Supermercado|Producto|Precio|Condiciones
+   (Ejemplo: AGREGAR_PRODUCTO: Día|Leche Sachet|$920|Club Dia)
 
 REGLAS PARA CONVERSACIÓN GENERAL:
-5. Si no coincide con ningún comando, responde de forma atenta, simpática y natural como su asistente personal, sin usar formato markdown sofisticado y en español.
-6. Si te pide el Facebook, el Instagram o la página oficial de ofertas de Coto, Carrefour o Día, proporciónaselos amablemente con estos enlaces oficiales:
+7. Si no coincide con ningún comando, responde de forma atenta, simpática y natural como su asistente personal, sin usar formato markdown sofisticado y en español.
+8. Si te pide el Facebook, el Instagram o la página oficial de ofertas de Coto, Carrefour o Día, proporciónaselos amablemente con estos enlaces oficiales:
    - Coto: Web (https://www.coto.com.ar/descuentos/), Instagram (https://www.instagram.com/coto_ar/), Facebook (https://www.facebook.com/coto/)
    - Carrefour: Web (https://www.carrefour.com.ar/promociones), Instagram (https://www.instagram.com/carrefourargentina/), Facebook (https://www.facebook.com/CarrefourArgentina/)
    - Día: Web (https://diaonline.supermercadosdia.com.ar/), Instagram (https://www.instagram.com/diaargentina/), Facebook (https://www.facebook.com/DiaArgentina/)"""
@@ -514,8 +520,10 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                 
                 match_agendar = re.search(r"AGENDAR:\s*(.*)", ia_text)
                 match_leer_dia = re.search(r"LEER_DIA:\s*([\d-]+)", ia_text)
-                match_leer_promos = re.search(r"LEER_PROMOS:\s*([a-zA-ZáéíóúñÑ]+)", ia_text)
+                match_leer_promos = re.search(r"LEER_PROMOS:\s*([a-zA-ZáéíóúñÑ|]+)", ia_text)
                 match_agregar_promo = re.search(r"AGREGAR_PROMO:\s*(.*)", ia_text)
+                match_leer_productos = re.search(r"LEER_PRODUCTOS:\s*([a-zA-ZáéíóúñÑ]+)", ia_text)
+                match_agregar_producto = re.search(r"AGREGAR_PRODUCTO:\s*(.*)", ia_text)
                 
                 if match_agendar:
                     parts = match_agendar.group(1).strip().split("|")
@@ -576,6 +584,26 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                             reply_text = "❌ Error al guardar la promoción."
                     else:
                         reply_text = "❌ Error al interpretar la promoción."
+                        
+                elif match_leer_productos:
+                    supermercado = match_leer_productos.group(1).strip()
+                    productos = bo.buscar_productos_filtrados(supermercado)
+                    reply_text = bo.formatear_productos_mensaje(productos, supermercado)
+                    
+                elif match_agregar_producto:
+                    parts = match_agregar_producto.group(1).strip().split("|")
+                    if len(parts) >= 3:
+                        super_name = parts[0].strip()
+                        prod = parts[1].strip()
+                        precio = parts[2].strip()
+                        cond = parts[3].strip() if len(parts) > 3 else ""
+                        exito = bo.agregar_nuevo_producto(super_name, prod, precio, cond)
+                        if exito:
+                            reply_text = f"✅ ¡Oferta de producto guardada!\n🛍️ {super_name}\n📦 {prod}: {precio}"
+                        else:
+                            reply_text = "❌ Error al guardar la oferta de producto."
+                    else:
+                        reply_text = "❌ Error al interpretar la oferta del producto."
                         
                 else:
                     reply_text = ia_text

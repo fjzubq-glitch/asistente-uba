@@ -8,6 +8,7 @@ import urllib.parse
 # Directorio base del proyecto
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROMOS_FILE = os.path.join(BASE_DIR, "promociones.json")
+PRODUCTS_FILE = os.path.join(BASE_DIR, "productos_oferta.json")
 
 def cargar_promos():
     """Carga las promociones del archivo JSON."""
@@ -180,3 +181,77 @@ def obtener_enlaces_oficiales():
             "facebook": "https://www.facebook.com/DiaArgentina/"
         }
     }
+
+def cargar_productos():
+    """Carga los productos de oferta desde el archivo JSON."""
+    if not os.path.exists(PRODUCTS_FILE):
+        return []
+    try:
+        with open(PRODUCTS_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Error cargando productos de oferta: {e}")
+        return []
+
+def guardar_productos(productos):
+    """Guarda los productos de oferta en el archivo JSON."""
+    try:
+        with open(PRODUCTS_FILE, "w", encoding="utf-8") as f:
+            json.dump(productos, f, indent=2, ensure_ascii=False)
+        return True
+    except Exception as e:
+        print(f"Error guardando productos de oferta: {e}")
+        return False
+
+def buscar_productos_filtrados(supermercado=None):
+    """Filtra productos de oferta por supermercado."""
+    productos = cargar_productos()
+    if supermercado and supermercado.lower().strip() != "todos":
+        super_name = supermercado.lower().strip()
+        if super_name == "dia":
+            super_name = "día"
+        productos = [p for p in productos if p.get("supermercado", "").lower().strip() == super_name]
+    return productos
+
+def agregar_nuevo_producto(supermercado, producto, precio, condiciones=None):
+    """Agrega una oferta de producto al archivo local."""
+    productos = cargar_productos()
+    
+    super_name = supermercado.strip().capitalize()
+    if super_name.lower() == "dia":
+        super_name = "Día"
+        
+    nuevo = {
+        "supermercado": super_name,
+        "producto": producto.strip(),
+        "precio": precio.strip(),
+        "condiciones": condiciones.strip() if condiciones else ""
+    }
+    productos.append(nuevo)
+    return guardar_productos(productos)
+
+def formatear_productos_mensaje(productos, supermercado=None):
+    """Formatea la lista de productos de oferta para Telegram."""
+    label_super = f" de {supermercado.upper()}" if supermercado and supermercado.lower() != "todos" else ""
+    
+    if not productos:
+        return f"🎉 ¡No encontré ofertas de productos{label_super} cargadas! Puedes agregar una diciendo: 'Agregá oferta Coto Yerba Playadito a $3400'."
+        
+    msg = f"🛍️ *Ofertas en Productos{label_super}:*\n\n"
+    
+    grouped = {}
+    for p in productos:
+        super_name = p.get("supermercado", "Otros")
+        if super_name not in grouped:
+            grouped[super_name] = []
+        grouped[super_name].append(p)
+        
+    for super_key, lista in grouped.items():
+        msg += f"🔸 *{super_key.upper()}*\n"
+        for p in lista:
+            msg += f"  • *{p.get('producto')}*: {p.get('precio')}\n"
+            if p.get("condiciones"):
+                msg += f"    _({p.get('condiciones')})_\n"
+        msg += "\n"
+        
+    return msg.strip()
