@@ -1,0 +1,79 @@
+[
+  {
+    "supermercado": "Coto",
+    "banco_tarjeta": "Banco Nación (MODO)",
+    "descuento": "30% de ahorro",
+    "dias": ["miércoles"],
+    "condiciones": "Tope de reintegro de $10.000 por semana pagando con MODO BNA+."
+  },
+  {
+    "supermercado": "Coto",
+    "banco_tarjeta": "Banco Galicia",
+    "descuento": "20% de ahorro (o 25% clientes Eminent)",
+    "dias": ["jueves"],
+    "condiciones": "Válido con tarjetas de crédito Galicia físicas o vía MODO."
+  },
+  {
+    "supermercado": "Coto",
+    "banco_tarjeta": "Comunidad COTO",
+    "descuento": "15% de ahorro",
+    "dias": ["lunes", "miércoles"],
+    "condiciones": "Exclusivo miembros Comunidad Coto. En un pago, excluye electrodomésticos."
+  },
+  {
+    "supermercado": "Coto",
+    "banco_tarjeta": "Tarjeta Santander (MODO)",
+    "descuento": "20% de ahorro (o 25% Select)",
+    "dias": ["miércoles"],
+    "condiciones": "Pagando con tarjetas de crédito Santander adheridas a través de MODO."
+  },
+  {
+    "supermercado": "Carrefour",
+    "banco_tarjeta": "Banco Nación (MODO)",
+    "descuento": "30% de ahorro",
+    "dias": ["miércoles"],
+    "condiciones": "Con MODO BNA+, tarjetas de crédito participantes."
+  },
+  {
+    "supermercado": "Carrefour",
+    "banco_tarjeta": "Cuenta DNI",
+    "descuento": "20% de ahorro",
+    "dias": ["lunes", "martes"],
+    "condiciones": "En sucursales adheridas pagando con clave DNI. Tope unificado por semana."
+  },
+  {
+    "supermercado": "Carrefour",
+    "banco_tarjeta": "Mi Carrefour Prepaga",
+    "descuento": "10% de ahorro diario",
+    "dias": ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"],
+    "condiciones": "Válido todos los días pagando con la tarjeta prepaga Mi Carrefour."
+  },
+  {
+    "supermercado": "Carrefour",
+    "banco_tarjeta": "Tarjeta Carrefour (BSF)",
+    "descuento": "15% de ahorro",
+    "dias": ["martes"],
+    "condiciones": "Con tarjeta de crédito Carrefour emitida por el Banco de Servicios Financieros."
+  },
+  {
+    "supermercado": "Día",
+    "banco_tarjeta": "Banco Nación (MODO)",
+    "descuento": "30% de ahorro",
+    "dias": ["miércoles"],
+    "condiciones": "Pagando con crédito/débito BNA a través de MODO."
+  },
+  {
+    "supermercado": "Día",
+    "banco_tarjeta": "Cuenta DNI",
+    "descuento": "20% de ahorro",
+    "dias": ["lunes", "martes"],
+    "condiciones": "Con la billetera Cuenta DNI en sucursales Dia participantes."
+  },
+  {
+    "supermercado": "Día",
+    "banco_tarjeta": "Club Dia (App)",
+    "descuento": "Cupones exclusivos y hasta 40% en productos seleccionados",
+    "dias": ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"],
+    "condiciones": "Presentando la app de Club Dia al pasar por caja."
+  }
+]

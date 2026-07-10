@@ -1,0 +1,305 @@
+from flask import Flask, request, jsonify
+import sys
+import os
+import time
+import datetime
+import requests
+import traceback
+import re
+import threading
+from dotenv import load_dotenv
+
+# Cargar variables de entorno del archivo .env local
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(BASE_DIR, ".env"))
+
+app = Flask(__name__)
+
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+
+# Archivos de persistencia local
+CHAT_ID_FILE = os.path.join(BASE_DIR, "chat_id.txt")
+LOG_FILE = os.path.join(BASE_DIR, "bot_errors.log")
+
+# Agregar BASE_DIR al path para importar módulos locales
+sys.path.append(BASE_DIR)
+import google_calendar as gc
+import buscador_ofertas as bo
+
+# Cargar Chat ID
+MI_CHAT_ID = "0"
+if os.path.exists(CHAT_ID_FILE):
+    try:
+        with open(CHAT_ID_FILE, "r") as f:
+            MI_CHAT_ID = f.read().strip()
+    except Exception:
+        pass
+
+SEND_URL = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
+GROQ_MODEL = "llama-3.3-70b-versatile"
+
+session = requests.Session()
+
+def registrar_error(seccion):
+    """Registra el traceback de un error en un archivo local para depuración."""
+    try:
+        ahora = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open(LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(f"\n[{ahora}] ERROR EN SECCIÓN (WEBHOOK): {seccion}\n")
+            traceback.print_exc(file=f)
+            f.write("----------------------------------------\n")
+    except Exception:
+        pass
+
+def guardar_chat_id(chat_id):
+    """Guarda el Chat ID de forma persistente."""
+    global MI_CHAT_ID
+    if MI_CHAT_ID != chat_id:
+        MI_CHAT_ID = chat_id
+        try:
+            with open(CHAT_ID_FILE, "w") as f:
+                f.write(MI_CHAT_ID)
+        except Exception:
+            registrar_error("guardar_chat_id")
+
+def transcribir_audio(file_id):
+    """Descarga un audio de Telegram y lo transcribe usando Groq Whisper."""
+    try:
+        r1 = session.get(f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/getFile?file_id={file_id}", timeout=15).json()
+        file_path = r1["result"]["file_path"]
+        r2 = session.get(f"https://api.telegram.org/file/bot{TELEGRAM_TOKEN}/{file_path}", timeout=20)
+        temp_file = os.path.join(BASE_DIR, "audio_temp.ogg")
+        with open(temp_file, "wb") as f:
+            f.write(r2.content)
+            
+        url_audio = "https://api.groq.com/openai/v1/audio/transcriptions"
+        headers_audio = {"Authorization": f"Bearer {GROQ_API_KEY}"}
+        with open(temp_file, "rb") as f:
+            files = {"file": ("audio_temp.ogg", f, "audio/ogg")}
+            data = {"model": "whisper-large-v3-turbo"}
+            r3 = session.post(url_audio, headers=headers_audio, files=files, data=data, timeout=30)
+            
+        if os.path.exists(temp_file):
+            os.remove(temp_file)
+        return r3.json().get("text", "")
+    except Exception:
+        registrar_error("transcribir_audio")
+        return ""
+
+def llamar_llm(prompt_sistema, texto_usuario):
+    """Realiza una consulta a Groq LLM."""
+    payload = {
+        "model": GROQ_MODEL,
+        "messages": [
+            {"role": "system", "content": prompt_sistema},
+            {"role": "user", "content": texto_usuario}
+        ],
+        "temperature": 0.3
+    }
+    r = session.post(GROQ_URL, headers={"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}, json=payload, timeout=20)
+    return r.json()["choices"][0]["message"]["content"].strip()
+
+def revisar_alarmas():
+    """Hilo de segundo plano para enviar notificaciones automáticas en la mañana."""
+    global MI_CHAT_ID
+    buenos_dias_enviado = False
+    while True:
+        # Recargar Chat ID del archivo por si otro hilo lo actualizó
+        if os.path.exists(CHAT_ID_FILE):
+            try:
+                with open(CHAT_ID_FILE, "r") as f:
+                    MI_CHAT_ID = f.read().strip()
+            except Exception:
+                pass
+
+        if MI_CHAT_ID != "0":
+            try:
+                ahora = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=3)
+                hoy_str = ahora.strftime("%Y-%m-%d")
+                
+                # Reporte Diario de Buenos Días a las 08:00 AM
+                if ahora.hour == 8 and ahora.minute == 0 and not buenos_dias_enviado:
+                    try:
+                        eventos = gc.listar_eventos_dia(hoy_str)
+                        if eventos is None:
+                            agenda_text = "❌ (No pude conectar a Google Calendar)"
+                        elif not eventos:
+                            agenda_text = "🎉 ¡Hoy no tienes ningún evento agendado!"
+                        else:
+                            agenda_text = "📅 *Tu agenda para hoy:*\n"
+                            for ev in eventos:
+                                start = ev['start'].get('dateTime', ev['start'].get('date'))
+                                summary = ev.get('summary', 'Sin título')
+                                hora = ""
+                                if 'T' in start:
+                                    hora = " a las " + start.split('T')[1][:5]
+                                agenda_text += f" • {summary}{hora}\n"
+                    except Exception:
+                        agenda_text = "❌ (Error leyendo Google Calendar)"
+                        
+                    dia_semana = bo.obtener_dia_espanol(ahora)
+                    promos = bo.obtener_promos_dia(dia_semana)
+                    promos_text = bo.formatear_promos_mensaje(promos, dia_semana)
+                    
+                    msg = f"🌅 *¡BUENOS DÍAS VERO!*\n\n{agenda_text}\n\n-----------------------------------\n\n{promos_text}"
+                    session.post(SEND_URL, json={"chat_id": MI_CHAT_ID, "text": msg, "parse_mode": "Markdown"}, timeout=10)
+                    buenos_dias_enviado = True
+                    
+                if ahora.hour == 1:
+                    buenos_dias_enviado = False
+                    
+            except Exception:
+                registrar_error("revisar_alarmas")
+        time.sleep(60)
+
+hilo_iniciado = False
+def asegurar_hilo_alarmas():
+    """Asegura que el hilo de alarmas esté corriendo en segundo plano."""
+    global hilo_iniciado
+    if not hilo_iniciado:
+        hilo = threading.Thread(target=revisar_alarmas, daemon=True)
+        hilo.start()
+        hilo_iniciado = True
+
+@app.route(f"/{TELEGRAM_TOKEN}", methods=["POST"])
+def webhook_handler():
+    """Manejador principal del Webhook enviado por Telegram."""
+    asegurar_hilo_alarmas()
+    try:
+        update = request.get_json()
+        if not update:
+            return "No data", 400
+            
+        if "message" in update:
+            msg = update["message"]
+            if "chat" in msg:
+                chat_id = str(msg["chat"]["id"])
+                guardar_chat_id(chat_id)
+                
+                text = ""
+                if "voice" in msg:
+                    session.post(SEND_URL, json={"chat_id": MI_CHAT_ID, "text": "🎙️ Escuchando tu audio..."}, timeout=10)
+                    text = transcribir_audio(msg["voice"]["file_id"])
+                else:
+                    text = msg.get("text", "")
+                    
+                if not text:
+                    return "No text", 200
+                    
+                ahora = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=3)
+                
+                SYSTEM_PROMPT = f"""Eres un asistente personal inteligente, cálido y eficiente para Vero. Fecha y hora actuales: {ahora.strftime("%Y-%m-%dT%H:%M:00-03:00")}.
+Tu objetivo es ayudarla a gestionar su agenda en Google Calendar y recordar las ofertas de supermercados.
+
+REGLAS DE RESPUESTA EXCLUSIVA PARA COMANDOS (Si detectas una acción, responde ÚNICAMENTE el comando correspondiente):
+1. Agendar evento: Si el usuario quiere guardar algo en el calendario, responde EXACTAMENTE así:
+   AGENDAR: Asunto|YYYY-MM-DDTHH:MM:00-03:00|DuracionMinutos|Descripcion
+   (Ejemplo: AGENDAR: Turno Dentista|2026-07-15T10:00:00-03:00|60|Turno con el Dr. Pérez)
+2. Leer agenda de un día: Si el usuario quiere saber sus eventos de un día específico, responde EXACTAMENTE así:
+   LEER_DIA: YYYY-MM-DD
+   (Ejemplo para hoy: LEER_DIA: {ahora.strftime("%Y-%m-%d")})
+3. Consultar promociones/ofertas: Si el usuario pregunta por ofertas o promociones de supermercados, responde EXACTAMENTE así:
+   LEER_PROMOS: DiaDeLaSemana
+   (Donde DiaDeLaSemana es hoy, lunes, martes, miércoles, jueves, viernes, sábado o domingo. Ejemplo: LEER_PROMOS: hoy)
+4. Agregar promoción: Si el usuario quiere guardar una nueva promoción, responde EXACTAMENTE así:
+   AGREGAR_PROMO: Supermercado|Banco o Tarjeta|Descuento|DiaDeLaSemana|Conditions
+   (Ejemplo: AGREGAR_PROMO: Carrefour|Mercado Pago|10% de ahorro|martes|Con tarjeta prepaga)
+
+REGLAS PARA CONVERSACIÓN GENERAL:
+5. Si no coincide con ningún comando, responde de forma atenta, simpática y natural como su asistente personal, sin usar formato markdown sofisticado y en español.
+6. Si te pide el Facebook, el Instagram o la página oficial de ofertas de Coto, Carrefour o Día, proporciónaselos amablemente con estos enlaces oficiales:
+   - Coto: Web (https://www.coto.com.ar/descuentos/), Instagram (https://www.instagram.com/coto_oficial/), Facebook (https://www.facebook.com/coto/)
+   - Carrefour: Web (https://www.carrefour.com.ar/promociones), Instagram (https://www.instagram.com/carrefourargentina/), Facebook (https://www.facebook.com/CarrefourArgentina/)
+   - Día: Web (https://diaonline.supermercadosdia.com.ar/), Instagram (https://www.instagram.com/supermercadosdiaoficial/), Facebook (https://www.facebook.com/SupermercadosDiaArgentina/)"""
+                
+                try:
+                    ia_text = llamar_llm(SYSTEM_PROMPT, text)
+                    reply_text = ""
+                    
+                    if "AGENDAR:" in ia_text:
+                        parts = ia_text.replace("AGENDAR:", "").strip().split("|")
+                        if len(parts) >= 2:
+                            asunto = parts[0].strip()
+                            fecha = parts[1].strip()
+                            duracion = int(parts[2].strip()) if len(parts) > 2 and parts[2].strip().isdigit() else 60
+                            desc = parts[3].strip() if len(parts) > 3 else "Agendado por Asistente Vero"
+                            
+                            link = gc.agendar_evento(asunto, fecha, duracion, desc)
+                            if link:
+                                reply_text = f"✅ ¡Anotado en tu calendario!\n📌 {asunto}\n🕒 Para: {fecha}\n🔗 Enlace: {link}"
+                            else:
+                                reply_text = "❌ Hubo un error al intentar agendar en Google Calendar. ¿Tienes el archivo credentials.json configurado?"
+                        else:
+                            reply_text = "❌ No pude entender el formato para agendar."
+                            
+                    elif "LEER_DIA:" in ia_text:
+                        fecha_dia = ia_text.replace("LEER_DIA:", "").strip()
+                        eventos = gc.listar_eventos_dia(fecha_dia)
+                        if eventos is None:
+                            reply_text = "❌ Error al leer Google Calendar."
+                        elif not eventos:
+                            reply_text = f"🎉 ¡Día libre! No tienes nada agendado para el {fecha_dia}."
+                        else:
+                            reply_text = f"📅 *Tu agenda para el {fecha_dia}:*\n\n"
+                            for ev in eventos:
+                                start = ev['start'].get('dateTime', ev['start'].get('date'))
+                                summary = ev.get('summary', 'Sin título')
+                                hora = ""
+                                if 'T' in start:
+                                    hora = " a las " + start.split('T')[1][:5]
+                                reply_text += f"🔹 {summary}{hora}\n"
+                                
+                    elif "LEER_PROMOS:" in ia_text:
+                        dia_semana = ia_text.replace("LEER_PROMOS:", "").strip()
+                        if dia_semana == "hoy":
+                            dia_semana = bo.obtener_dia_espanol()
+                        promos = bo.obtener_promos_dia(dia_semana)
+                        reply_text = bo.formatear_promos_mensaje(promos, dia_semana)
+                        
+                    elif "AGREGAR_PROMO:" in ia_text:
+                        parts = ia_text.replace("AGREGAR_PROMO:", "").strip().split("|")
+                        if len(parts) >= 4:
+                            super_name = parts[0].strip()
+                            banco_tarjeta = parts[1].strip()
+                            descuento = parts[2].strip()
+                            dias = parts[3].strip()
+                            condiciones = parts[4].strip() if len(parts) > 4 else ""
+                            
+                            exito = bo.agregar_nueva_promo(super_name, banco_tarjeta, descuento, dias, condiciones)
+                            if exito:
+                                reply_text = f"✅ ¡Promoción guardada!\n🛍️ {super_name}\n💳 {banco_tarjeta} ({descuento})\n📅 Días: {dias}"
+                            else:
+                                reply_text = "❌ Error al guardar la promoción."
+                        else:
+                            reply_text = "❌ Error al interpretar la promoción."
+                            
+                    else:
+                        reply_text = ia_text
+                        
+                except Exception:
+                    registrar_error("procesar_mensaje_ia")
+                    reply_text = "❌ Ups, tuve un pequeño problema procesando tu mensaje."
+                    
+                session.post(SEND_URL, json={"chat_id": chat_id, "text": reply_text, "parse_mode": "Markdown"}, timeout=10)
+    except Exception:
+        registrar_error("webhook_handler")
+    return "OK", 200
+
+@app.route("/ping", methods=["GET"])
+def ping_handler():
+    """Ruta para mantener activa la Web App en PythonAnywhere usando pings."""
+    asegurar_hilo_alarmas()
+    return f"OK - Thread active: {hilo_iniciado} - Chat ID: {MI_CHAT_ID}", 200
+
+@app.route("/set_webhook", methods=["GET"])
+def set_webhook():
+    """Ruta de utilidad para registrar este webhook en Telegram."""
+    webhook_url = f"https://franklinzg.pythonanywhere.com/{TELEGRAM_TOKEN}"
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/setWebhook?url={webhook_url}"
+    try:
+        r = requests.get(url, timeout=10)
+        return jsonify(r.json()), r.status_code
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

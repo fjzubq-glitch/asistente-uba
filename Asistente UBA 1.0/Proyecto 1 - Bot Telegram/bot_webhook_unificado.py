@@ -1,0 +1,578 @@
+from flask import Flask, request, jsonify
+import sys
+import os
+import time
+import datetime
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+import traceback
+import re
+import threading
+from dotenv import load_dotenv
+
+# Cargar variables de entorno desde el archivo .env del directorio raíz
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Buscar .env en el directorio raíz (padre del directorio del Proyecto 1)
+PARENT_DIR = os.path.dirname(BASE_DIR)
+load_dotenv(os.path.join(PARENT_DIR, ".env"))
+
+app = Flask(__name__)
+
+# ==========================================
+# CONFIGURACIÓN GENERAL Y LLM
+# ==========================================
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
+GROQ_MODEL = "llama-3.3-70b-versatile"
+
+session = requests.Session()
+retry = Retry(connect=3, backoff_factor=1)
+adapter = HTTPAdapter(max_retries=retry)
+session.mount('http://', adapter)
+session.mount('https://', adapter)
+
+def llamar_llm(prompt_sistema, texto_usuario):
+    payload = {
+        "model": GROQ_MODEL,
+        "messages": [
+            {"role": "system", "content": prompt_sistema},
+            {"role": "user", "content": texto_usuario}
+        ],
+        "temperature": 0.3
+    }
+    r = session.post(GROQ_URL, headers={"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}, json=payload, timeout=20)
+    return r.json()["choices"][0]["message"]["content"].strip()
+
+
+# ==========================================
+# BOT 1: ASISTENTE UBA (NOTION)
+# ==========================================
+TELEGRAM_TOKEN_UBA = os.environ.get("TELEGRAM_TOKEN")
+NOTION_TOKEN = os.environ.get("NOTION_TOKEN")
+NOTION_DB_ID = os.environ.get("NOTION_DB_ID")
+
+CHAT_ID_FILE_UBA = os.path.join(BASE_DIR, "chat_id.txt")
+LOG_FILE_UBA = os.path.join(BASE_DIR, "bot_errors.log")
+
+MI_CHAT_ID_UBA = "0"
+if os.path.exists(CHAT_ID_FILE_UBA):
+    try:
+        with open(CHAT_ID_FILE_UBA, "r") as f:
+            MI_CHAT_ID_UBA = f.read().strip()
+    except Exception:
+        pass
+
+notion_headers = {
+    "Authorization": f"Bearer {NOTION_TOKEN}",
+    "Notion-Version": "2022-06-28",
+    "Content-Type": "application/json"
+}
+
+def registrar_error_uba(seccion):
+    try:
+        ahora = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open(LOG_FILE_UBA, "a", encoding="utf-8") as f:
+            f.write(f"\n[{ahora}] ERROR EN UBA: {seccion}\n")
+            traceback.print_exc(file=f)
+            f.write("----------------------------------------\n")
+    except Exception:
+        pass
+
+def guardar_chat_id_uba(chat_id):
+    global MI_CHAT_ID_UBA
+    if MI_CHAT_ID_UBA != chat_id:
+        MI_CHAT_ID_UBA = chat_id
+        try:
+            with open(CHAT_ID_FILE_UBA, "w") as f:
+                f.write(MI_CHAT_ID_UBA)
+        except Exception:
+            registrar_error_uba("guardar_chat_id")
+
+def transcribir_audio_uba(file_id):
+    try:
+        r1 = session.get(f"https://api.telegram.org/bot{TELEGRAM_TOKEN_UBA}/getFile?file_id={file_id}", timeout=15).json()
+        file_path = r1["result"]["file_path"]
+        r2 = session.get(f"https://api.telegram.org/file/bot{TELEGRAM_TOKEN_UBA}/{file_path}", timeout=20)
+        temp_file = os.path.join(BASE_DIR, "audio_temp_uba.ogg")
+        with open(temp_file, "wb") as f:
+            f.write(r2.content)
+        url_audio = "https://api.groq.com/openai/v1/audio/transcriptions"
+        headers_audio = {"Authorization": f"Bearer {GROQ_API_KEY}"}
+        with open(temp_file, "rb") as f:
+            files = {"file": ("audio_temp_uba.ogg", f, "audio/ogg")}
+            data = {"model": "whisper-large-v3-turbo"}
+            r3 = session.post(url_audio, headers=headers_audio, files=files, data=data, timeout=30)
+        os.remove(temp_file)
+        return r3.json().get("text", "")
+    except Exception:
+        registrar_error_uba("transcribir_audio")
+        return ""
+
+def agendar_en_notion(asunto, fecha_iso):
+    try:
+        data = {
+            "parent": {"database_id": NOTION_DB_ID},
+            "properties": {
+                "Asunto": {"title": [{"text": {"content": asunto}}]},
+                "Fecha y Hora": {"date": {"start": fecha_iso}},
+                "Estado": {"status": {"name": "Pendiente"}},
+                "Prioridad": {"select": {"name": "Normal"}}
+            }
+        }
+        resp = session.post("https://api.notion.com/v1/pages", headers=notion_headers, json=data, timeout=10)
+        return resp.status_code == 200
+    except Exception:
+        registrar_error_uba("agendar_en_notion")
+        return False
+
+def programar_active_recall(tema):
+    try:
+        ahora = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=3)
+        fechas_estudio = [(3, 2), (7, 6), (21, 20)]
+        exitos = 0
+        for (dia_estudio, dia_previo) in fechas_estudio:
+            fecha_noche_previa = ahora + datetime.timedelta(days=dia_previo)
+            iso_noche = fecha_noche_previa.strftime(f"%Y-%m-%dT21:00:00-03:00")
+            asunto_noche = f"¡Mañana toca repasar!: {tema} (Repaso Día {dia_estudio})"
+            if agendar_en_notion(asunto_noche, iso_noche): exitos += 1
+            fecha_manana = ahora + datetime.timedelta(days=dia_estudio)
+            iso_manana = fecha_manana.strftime(f"%Y-%m-%dT08:00:00-03:00")
+            asunto_manana = f"📚 A ESTUDIAR HOY: {tema} (Repaso Día {dia_estudio})"
+            if agendar_en_notion(asunto_manana, iso_manana): exitos += 1
+        return exitos == 6
+    except Exception:
+        registrar_error_uba("programar_active_recall")
+        return False
+
+def leer_pendientes_hoy():
+    try:
+        hoy = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=3)).strftime("%Y-%m-%d")
+        data = {
+            "filter": {"property": "Fecha y Hora", "date": {"equals": hoy}},
+            "sorts": [{"property": "Fecha y Hora", "direction": "ascending"}]
+        }
+        resp = session.post(f"https://api.notion.com/v1/databases/{NOTION_DB_ID}/query", headers=notion_headers, json=data, timeout=10)
+        if resp.status_code != 200: return "❌ Hubo un error leyendo tu Notion."
+        resultados = resp.json().get("results", [])
+        if not resultados: return "🎉 ¡Día libre! No tienes nada agendado para hoy."
+        texto = "📅 *Tu Agenda para Hoy:*\n\n"
+        for item in resultados:
+            props = item["properties"]
+            asunto = props["Asunto"]["title"][0]["text"]["content"] if props["Asunto"]["title"] else "Sin nombre"
+            estado = props["Estado"]["status"]["name"] if props["Estado"]["status"] else "Pendiente"
+            fecha_str = props["Fecha y Hora"]["date"]["start"]
+            hora = " a las " + fecha_str.split("T")[1][:5] if "T" in fecha_str else ""
+            icono = "✅" if estado == "Completado" else "🔹"
+            texto += f"{icono} {asunto}{hora}\n"
+        return texto
+    except Exception:
+        registrar_error_uba("leer_pendientes_hoy")
+        return "❌ Error al intentar leer la agenda de Notion."
+
+def revisar_alarmas_uba():
+    global MI_CHAT_ID_UBA
+    buenos_dias_enviado = False
+    send_url_uba = f"https://api.telegram.org/bot{TELEGRAM_TOKEN_UBA}/sendMessage"
+    while True:
+        # Cargar chat id actualizado
+        if os.path.exists(CHAT_ID_FILE_UBA):
+            try:
+                with open(CHAT_ID_FILE_UBA, "r") as f:
+                    MI_CHAT_ID_UBA = f.read().strip()
+            except Exception:
+                pass
+                
+        if MI_CHAT_ID_UBA != "0":
+            try:
+                ahora = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=3)
+                hoy_str = ahora.strftime("%Y-%m-%d")
+                
+                if ahora.hour == 8 and ahora.minute == 0 and not buenos_dias_enviado:
+                    msg = f"🌅 *¡BUENOS DÍAS!*\n\n{leer_pendientes_hoy()}"
+                    session.post(send_url_uba, json={"chat_id": MI_CHAT_ID_UBA, "text": msg}, timeout=10)
+                    buenos_dias_enviado = True
+                if ahora.hour == 1:
+                    buenos_dias_enviado = False
+                
+                # Proceso de Alertas
+                data = {
+                    "filter": {"property": "Fecha y Hora", "date": {"equals": hoy_str}},
+                    "sorts": [{"property": "Fecha y Hora", "direction": "ascending"}]
+                }
+                resp = session.post(f"https://api.notion.com/v1/databases/{NOTION_DB_ID}/query", headers=notion_headers, json=data, timeout=10)
+                if resp.status_code == 200:
+                    for item in resp.json().get("results", []):
+                        props = item["properties"]
+                        estado = props["Estado"]["status"]["name"] if props["Estado"]["status"] else "Pendiente"
+                        if estado != "Completado":
+                            fecha_str = props["Fecha y Hora"]["date"]["start"]
+                            if "T" in fecha_str:
+                                hora_evento = datetime.datetime.strptime(fecha_str[:16], "%Y-%m-%dT%H:%M")
+                                diff = hora_evento - ahora.replace(tzinfo=None)
+                                if 0 <= diff.total_seconds() <= 600:
+                                    asunto = props["Asunto"]["title"][0]["text"]["content"]
+                                    session.post(send_url_uba, json={"chat_id": MI_CHAT_ID_UBA, "text": f"🚨 *¡RECORDATORIO!* 🚨\n\n👉 {asunto}"}, timeout=10)
+                                    session.patch(f"https://api.notion.com/v1/pages/{item['id']}", headers=notion_headers, json={"properties": {"Estado": {"status": {"name": "Completado"}}}})
+            except Exception:
+                registrar_error_uba("revisar_alarmas_uba")
+        time.sleep(60)
+
+
+# ==========================================
+# BOT 2: ASISTENTE PARA VERO (GOOGLE CALENDAR & PROMOS)
+# ==========================================
+# Buscar variables de Vero en el .env o usar el de la subcarpeta
+VERO_DIR = os.path.join(PARENT_DIR, "Proyecto 3 - Asistente Vero")
+# Importar módulos locales del Proyecto 3
+sys.path.append(VERO_DIR)
+import google_calendar as gc
+import buscador_ofertas as bo
+
+# Cargar variables locales de Vero del .env específico si existen
+load_dotenv(os.path.join(VERO_DIR, ".env"))
+TELEGRAM_TOKEN_VERO = os.environ.get("VERO_TELEGRAM_TOKEN") or os.environ.get("TELEGRAM_TOKEN")
+# Nota: Si en el root .env pones VERO_TELEGRAM_TOKEN, usará ese, de lo contrario usará el del subproyecto
+
+CHAT_ID_FILE_VERO = os.path.join(VERO_DIR, "chat_id.txt")
+LOG_FILE_VERO = os.path.join(VERO_DIR, "bot_errors.log")
+
+MI_CHAT_ID_VERO = "0"
+if os.path.exists(CHAT_ID_FILE_VERO):
+    try:
+        with open(CHAT_ID_FILE_VERO, "r") as f:
+            MI_CHAT_ID_VERO = f.read().strip()
+    except Exception:
+        pass
+
+def registrar_error_vero(seccion):
+    try:
+        ahora = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open(LOG_FILE_VERO, "a", encoding="utf-8") as f:
+            f.write(f"\n[{ahora}] ERROR EN VERO: {seccion}\n")
+            traceback.print_exc(file=f)
+            f.write("----------------------------------------\n")
+    except Exception:
+        pass
+
+def guardar_chat_id_vero(chat_id):
+    global MI_CHAT_ID_VERO
+    if MI_CHAT_ID_VERO != chat_id:
+        MI_CHAT_ID_VERO = chat_id
+        try:
+            with open(CHAT_ID_FILE_VERO, "w") as f:
+                f.write(MI_CHAT_ID_VERO)
+        except Exception:
+            registrar_error_vero("guardar_chat_id")
+
+def transcribir_audio_vero(file_id):
+    try:
+        r1 = session.get(f"https://api.telegram.org/bot{TELEGRAM_TOKEN_VERO}/getFile?file_id={file_id}", timeout=15).json()
+        file_path = r1["result"]["file_path"]
+        r2 = session.get(f"https://api.telegram.org/file/bot{TELEGRAM_TOKEN_VERO}/{file_path}", timeout=20)
+        temp_file = os.path.join(VERO_DIR, "audio_temp_vero.ogg")
+        with open(temp_file, "wb") as f:
+            f.write(r2.content)
+        url_audio = "https://api.groq.com/openai/v1/audio/transcriptions"
+        headers_audio = {"Authorization": f"Bearer {GROQ_API_KEY}"}
+        with open(temp_file, "rb") as f:
+            files = {"file": ("audio_temp_vero.ogg", f, "audio/ogg")}
+            data = {"model": "whisper-large-v3-turbo"}
+            r3 = session.post(url_audio, headers=headers_audio, files=files, data=data, timeout=30)
+        os.remove(temp_file)
+        return r3.json().get("text", "")
+    except Exception:
+        registrar_error_vero("transcribir_audio")
+        return ""
+
+def revisar_alarmas_vero():
+    global MI_CHAT_ID_VERO
+    buenos_dias_enviado = False
+    send_url_vero = f"https://api.telegram.org/bot{TELEGRAM_TOKEN_VERO}/sendMessage"
+    while True:
+        if os.path.exists(CHAT_ID_FILE_VERO):
+            try:
+                with open(CHAT_ID_FILE_VERO, "r") as f:
+                    MI_CHAT_ID_VERO = f.read().strip()
+            except Exception:
+                pass
+                
+        if MI_CHAT_ID_VERO != "0":
+            try:
+                ahora = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=3)
+                hoy_str = ahora.strftime("%Y-%m-%d")
+                
+                if ahora.hour == 8 and ahora.minute == 0 and not buenos_dias_enviado:
+                    try:
+                        eventos = gc.listar_eventos_dia(hoy_str)
+                        if eventos is None:
+                            agenda_text = "❌ (No pude conectar a Google Calendar)"
+                        elif not eventos:
+                            agenda_text = "🎉 ¡Hoy no tienes ningún evento agendado!"
+                        else:
+                            agenda_text = "📅 *Tu agenda para hoy:*\n"
+                            for ev in eventos:
+                                start = ev['start'].get('dateTime', ev['start'].get('date'))
+                                summary = ev.get('summary', 'Sin título')
+                                hora = ""
+                                if 'T' in start:
+                                    hora = " a las " + start.split('T')[1][:5]
+                                agenda_text += f" • {summary}{hora}\n"
+                    except Exception:
+                        agenda_text = "❌ (Error leyendo Google Calendar)"
+                        
+                    dia_semana = bo.obtener_dia_espanol(ahora)
+                    promos = bo.obtener_promos_dia(dia_semana)
+                    promos_text = bo.formatear_promos_mensaje(promos, dia_semana)
+                    
+                    msg = f"🌅 *¡BUENOS DÍAS VERO!*\n\n{agenda_text}\n\n-----------------------------------\n\n{promos_text}"
+                    session.post(send_url_vero, json={"chat_id": MI_CHAT_ID_VERO, "text": msg, "parse_mode": "Markdown"}, timeout=10)
+                    buenos_dias_enviado = True
+                    
+                if ahora.hour == 1:
+                    buenos_dias_enviado = False
+                    
+            except Exception:
+                registrar_error_vero("revisar_alarmas_vero")
+        time.sleep(60)
+
+
+# ==========================================
+# MANEJADOR DE HILOS UNIFICADO
+# ==========================================
+hilo_uba_iniciado = False
+hilo_vero_iniciado = False
+
+def asegurar_hilos_alarmas():
+    global hilo_uba_iniciado, hilo_vero_iniciado
+    if not hilo_uba_iniciado:
+        hilo_uba = threading.Thread(target=revisar_alarmas_uba, daemon=True)
+        hilo_uba.start()
+        hilo_uba_iniciado = True
+    if not hilo_vero_iniciado:
+        hilo_vero = threading.Thread(target=revisar_alarmas_vero, daemon=True)
+        hilo_vero.start()
+        hilo_vero_iniciado = True
+
+
+# ==========================================
+# RUTAS DE FLASK
+# ==========================================
+
+# 1. Ruta para el bot UBA
+@app.route(f"/{TELEGRAM_TOKEN_UBA}", methods=["POST"])
+def webhook_handler_uba():
+    asegurar_hilos_alarmas()
+    try:
+        update = request.get_json()
+        if not update or "message" not in update:
+            return "OK", 200
+            
+        msg = update["message"]
+        if "chat" not in msg:
+            return "OK", 200
+            
+        chat_id = str(msg["chat"]["id"])
+        guardar_chat_id_uba(chat_id)
+        
+        text = ""
+        send_url_uba = f"https://api.telegram.org/bot{TELEGRAM_TOKEN_UBA}/sendMessage"
+        if "voice" in msg:
+            session.post(send_url_uba, json={"chat_id": MI_CHAT_ID_UBA, "text": "🎙️ Escuchando audio..."}, timeout=10)
+            text = transcribir_audio_uba(msg["voice"]["file_id"])
+        else:
+            text = msg.get("text", "")
+            
+        if text:
+            ahora = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=3)
+            SYSTEM_PROMPT = f"""Eres un asistente personal y de estudios inteligente y eficiente. Fecha actual: {ahora.strftime("%Y-%m-%dT%H:%M:00-03:00")}.
+REGLAS:
+1. Agendar evento: Responde EXCLUSIVAMENTE: AGENDAR: Asunto|YYYY-MM-DDTHH:MM:00-03:00
+2. Leer agenda: Responde EXCLUSIVAMENTE: LEER_HOY
+3. Active Recall: Responde EXCLUSIVAMENTE: ACTIVE_RECALL: Tema
+4. Asistencia personal: Responde a cualquier otra consulta de forma concisa y servicial, ayudando al usuario con sus estudios y tareas diarias.
+5. NO uses formato markdown."""
+            
+            try:
+                ia_text = llamar_llm(SYSTEM_PROMPT, text)
+                if "AGENDAR:" in ia_text:
+                    match = re.search(r"AGENDAR:\s*(.*?)\|(.*?)(?:>|$)", ia_text)
+                    if match:
+                        asunto = match.group(1).strip()
+                        fecha = match.group(2).strip().rstrip(">").strip()
+                        exito = agendar_en_notion(asunto, fecha)
+                        reply_text = f"✅ ¡Anotado!\n📌 {asunto}\n🕒 Para: {fecha}" if exito else "❌ Error guardando en Notion."
+                    else: reply_text = "❌ Error entendiendo la fecha."
+                elif "ACTIVE_RECALL:" in ia_text:
+                    match = re.search(r"ACTIVE_RECALL:\s*(.*?)(?:>|$)", ia_text)
+                    if match:
+                        tema = match.group(1).strip().rstrip(">").strip()
+                        session.post(send_url_uba, json={"chat_id": MI_CHAT_ID_UBA, "text": f"🧠 ¡Activando Repetición Espaciada para '{tema}'!"}, timeout=10)
+                        reply_text = f"✅ ¡Listo! Alertas programadas para Día 3, 7 y 21." if programar_active_recall(tema) else "❌ Error en Notion."
+                    else: reply_text = "❌ Error procesando el active recall."
+                elif "LEER_HOY" in ia_text: reply_text = leer_pendientes_hoy()
+                else: reply_text = f"⚖️ {ia_text}"
+            except Exception:
+                registrar_error_uba("procesar_mensaje_ia")
+                reply_text = "❌ Error procesando el mensaje."
+                
+            session.post(send_url_uba, json={"chat_id": MI_CHAT_ID_UBA, "text": reply_text}, timeout=10)
+    except Exception:
+        registrar_error_uba("webhook_handler_uba")
+    return "OK", 200
+
+
+# 2. Ruta para el bot de Vero
+@app.route(f"/{TELEGRAM_TOKEN_VERO}", methods=["POST"])
+def webhook_handler_vero():
+    asegurar_hilos_alarmas()
+    try:
+        update = request.get_json()
+        if not update or "message" not in update:
+            return "OK", 200
+            
+        msg = update["message"]
+        if "chat" not in msg:
+            return "OK", 200
+            
+        chat_id = str(msg["chat"]["id"])
+        guardar_chat_id_vero(chat_id)
+        
+        text = ""
+        send_url_vero = f"https://api.telegram.org/bot{TELEGRAM_TOKEN_VERO}/sendMessage"
+        if "voice" in msg:
+            session.post(send_url_vero, json={"chat_id": MI_CHAT_ID_VERO, "text": "🎙️ Escuchando tu audio..."}, timeout=10)
+            text = transcribir_audio_vero(msg["voice"]["file_id"])
+        else:
+            text = msg.get("text", "")
+            
+        if text:
+            ahora = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=3)
+            
+            SYSTEM_PROMPT = f"""Eres un asistente personal inteligente, cálido y eficiente para Vero. Fecha y hora actuales: {ahora.strftime("%Y-%m-%dT%H:%M:00-03:00")}.
+Tu objetivo es ayudarla a gestionar su agenda en Google Calendar y recordar las ofertas de supermercados.
+
+REGLAS DE RESPUESTA EXCLUSIVA PARA COMANDOS (Si detectas una acción, responde ÚNICAMENTE el comando correspondiente):
+1. Agendar evento: Si el usuario quiere guardar algo en el calendario, responde EXACTAMENTE así:
+   AGENDAR: Asunto|YYYY-MM-DDTHH:MM:00-03:00|DuracionMinutos|Descripcion
+   (Ejemplo: AGENDAR: Turno Dentista|2026-07-15T10:00:00-03:00|60|Turno con el Dr. Pérez)
+2. Leer agenda de un día: Si el usuario quiere saber sus eventos de un día específico, responde EXACTAMENTE así:
+   LEER_DIA: YYYY-MM-DD
+   (Ejemplo para hoy: LEER_DIA: {ahora.strftime("%Y-%m-%d")})
+3. Consultar promociones/ofertas: Si el usuario pregunta por ofertas o promociones de supermercados, responde EXACTAMENTE así:
+   LEER_PROMOS: DiaDeLaSemana
+   (Donde DiaDeLaSemana es hoy, lunes, martes, miércoles, jueves, viernes, sábado o domingo. Ejemplo: LEER_PROMOS: hoy)
+4. Agregar promoción: Si el usuario quiere guardar una nueva promoción, responde EXACTAMENTE así:
+   AGREGAR_PROMO: Supermercado|Banco o Tarjeta|Descuento|DiaDeLaSemana|Condiciones
+   (Ejemplo: AGREGAR_PROMO: Carrefour|Mercado Pago|10% de ahorro|martes|Con tarjeta prepaga)
+
+REGLAS PARA CONVERSACIÓN GENERAL:
+5. Si no coincide con ningún comando, responde de forma atenta, simpática y natural como su asistente personal, sin usar formato markdown sofisticado y en español.
+6. Si te pide el Facebook, el Instagram o la página oficial de ofertas de Coto, Carrefour o Día, proporciónaselos amablemente con estos enlaces oficiales:
+   - Coto: Web (https://www.coto.com.ar/descuentos/), Instagram (https://www.instagram.com/coto_oficial/), Facebook (https://www.facebook.com/coto/)
+   - Carrefour: Web (https://www.carrefour.com.ar/promociones), Instagram (https://www.instagram.com/carrefourargentina/), Facebook (https://www.facebook.com/CarrefourArgentina/)
+   - Día: Web (https://diaonline.supermercadosdia.com.ar/), Instagram (https://www.instagram.com/supermercadosdiaoficial/), Facebook (https://www.facebook.com/SupermercadosDiaArgentina/)"""
+            
+            try:
+                ia_text = llamar_llm(SYSTEM_PROMPT, text)
+                reply_text = ""
+                
+                if "AGENDAR:" in ia_text:
+                    parts = ia_text.replace("AGENDAR:", "").strip().split("|")
+                    if len(parts) >= 2:
+                        asunto = parts[0].strip()
+                        fecha = parts[1].strip()
+                        duracion = int(parts[2].strip()) if len(parts) > 2 and parts[2].strip().isdigit() else 60
+                        desc = parts[3].strip() if len(parts) > 3 else "Agendado por Asistente Vero"
+                        
+                        link = gc.agendar_evento(asunto, fecha, duracion, desc)
+                        if link:
+                            reply_text = f"✅ ¡Anotado en tu calendario!\n📌 {asunto}\n🕒 Para: {fecha}\n🔗 Enlace: {link}"
+                        else:
+                            reply_text = "❌ Hubo un error al intentar agendar en Google Calendar. ¿Tienes el archivo credentials.json configurado?"
+                    else:
+                        reply_text = "❌ No pude entender el formato para agendar."
+                        
+                elif "LEER_DIA:" in ia_text:
+                    fecha_dia = ia_text.replace("LEER_DIA:", "").strip()
+                    eventos = gc.listar_eventos_dia(fecha_dia)
+                    if eventos is None:
+                        reply_text = "❌ Error al leer Google Calendar."
+                    elif not eventos:
+                        reply_text = f"🎉 ¡Día libre! No tienes nada agendado para el {fecha_dia}."
+                    else:
+                        reply_text = f"📅 *Tu agenda para el {fecha_dia}:*\n\n"
+                        for ev in eventos:
+                            start = ev['start'].get('dateTime', ev['start'].get('date'))
+                            summary = ev.get('summary', 'Sin título')
+                            hora = ""
+                            if 'T' in start:
+                                hora = " a las " + start.split('T')[1][:5]
+                            reply_text += f"🔹 {summary}{hora}\n"
+                            
+                elif "LEER_PROMOS:" in ia_text:
+                    dia_semana = ia_text.replace("LEER_PROMOS:", "").strip()
+                    if dia_semana == "hoy":
+                        dia_semana = bo.obtener_dia_espanol()
+                    promos = bo.obtener_promos_dia(dia_semana)
+                    reply_text = bo.formatear_promos_mensaje(promos, dia_semana)
+                    
+                elif "AGREGAR_PROMO:" in ia_text:
+                    parts = ia_text.replace("AGREGAR_PROMO:", "").strip().split("|")
+                    if len(parts) >= 4:
+                        super_name = parts[0].strip()
+                        banco_tarjeta = parts[1].strip()
+                        descuento = parts[2].strip()
+                        dias = parts[3].strip()
+                        condiciones = parts[4].strip() if len(parts) > 4 else ""
+                        
+                        exito = bo.agregar_nueva_promo(super_name, banco_tarjeta, descuento, dias, condiciones)
+                        if exito:
+                            reply_text = f"✅ ¡Promoción guardada!\n🛍️ {super_name}\n💳 {banco_tarjeta} ({descuento})\n📅 Días: {dias}"
+                        else:
+                            reply_text = "❌ Error al guardar la promoción."
+                    else:
+                        reply_text = "❌ Error al interpretar la promoción."
+                        
+                else:
+                    reply_text = ia_text
+                    
+            except Exception:
+                registrar_error_vero("procesar_mensaje_ia")
+                reply_text = "❌ Ups, tuve un pequeño problema procesando tu mensaje."
+                
+            session.post(send_url_vero, json={"chat_id": chat_id, "text": reply_text, "parse_mode": "Markdown"}, timeout=10)
+    except Exception:
+        registrar_error_vero("webhook_handler_vero")
+    return "OK", 200
+
+
+# 3. Ruta de Ping (Mantiene activos los hilos de alarmas)
+@app.route("/ping", methods=["GET"])
+def ping_handler():
+    asegurar_hilos_alarmas()
+    return f"OK - UBA Thread: {hilo_uba_iniciado} - Vero Thread: {hilo_vero_iniciado}", 200
+
+
+# 4. Ruta para registrar el Webhook de UBA
+@app.route("/set_webhook", methods=["GET"])
+def set_webhook_uba():
+    webhook_url = f"https://franklinzg.pythonanywhere.com/{TELEGRAM_TOKEN_UBA}"
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN_UBA}/setWebhook?url={webhook_url}"
+    try:
+        r = requests.get(url, timeout=10)
+        return jsonify(r.json()), r.status_code
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# 5. Ruta para registrar el Webhook de Vero
+@app.route("/set_webhook_vero", methods=["GET"])
+def set_webhook_vero():
+    webhook_url = f"https://franklinzg.pythonanywhere.com/{TELEGRAM_TOKEN_VERO}"
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN_VERO}/setWebhook?url={webhook_url}"
+    try:
+        r = requests.get(url, timeout=10)
+        return jsonify(r.json()), r.status_code
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
