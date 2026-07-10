@@ -426,8 +426,8 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                         
                     elif match_buscar_producto:
                         termino = match_buscar_producto.group(1).strip()
-                        productos = bo.buscar_productos_por_nombre(termino)
-                        reply_text = bo.formatear_productos_mensaje(productos, f"que coinciden con '{termino}'")
+                        locales, online = bo.buscar_productos_por_nombre(termino)
+                        reply_text = bo.formatear_resultado_busqueda(locales, online, termino)
                         
                     elif match_leer_enlaces:
                         filtro = match_leer_enlaces.group(1).strip()

@@ -345,21 +345,146 @@ def formatear_productos_mensaje(productos, supermercado=None):
         
     return msg.strip()
 
+def buscar_precios_online(termino):
+    """Busca en superprecio.ar los precios comparativos en tiempo real de un producto."""
+    import requests
+    from bs4 import BeautifulSoup
+    import urllib.parse
+    
+    try:
+        term_encoded = urllib.parse.quote(termino)
+        url = f"https://superprecio.ar/searchgrouped?search={term_encoded}"
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+        }
+        r = requests.get(url, headers=headers, timeout=5)
+        if r.status_code != 200:
+            return []
+            
+        soup = BeautifulSoup(r.text, 'html.parser')
+        products = []
+        for row in soup.find_all(class_='product-row'):
+            title_el = row.find(class_='product-title')
+            if not title_el:
+                continue
+            title = title_el.get_text(strip=True)
+            
+            market_prices = []
+            for box in row.find_all(class_='price-box'):
+                market_name = box.get('data-market-name', '').strip()
+                price_el = box.find(class_='price-box-price')
+                price = price_el.get_text(strip=True) if price_el else ''
+                link = box.get('data-bs-link', '').strip()
+                
+                # Normalizar nombres de super a los que usa Vero
+                market_lower = market_name.lower()
+                if "coto" in market_lower:
+                    market_name = "Coto"
+                elif "carrefour" in market_lower:
+                    market_name = "Carrefour"
+                elif "dia" in market_lower or "día" in market_lower:
+                    market_name = "Día"
+                elif "jumbo" in market_lower:
+                    market_name = "Jumbo"
+                elif "disco" in market_lower:
+                    market_name = "Disco"
+                elif "vea" in market_lower:
+                    market_name = "Vea"
+                elif "chango" in market_lower or "mas" in market_lower:
+                    market_name = "Chango Más"
+                
+                if market_name and price:
+                    market_prices.append({
+                        "supermercado": market_name,
+                        "precio": price,
+                        "link": link
+                    })
+            
+            if market_prices:
+                products.append({
+                    "producto": title,
+                    "precios": market_prices
+                })
+                
+        return products
+    except Exception as e:
+        print(f"Error en buscar_precios_online: {e}")
+        return []
+
 def buscar_productos_por_nombre(termino):
-    """Busca productos en la base de datos que coincidan parcialmente con el término de búsqueda."""
+    """Busca productos en la base de datos local y en superprecio.ar en tiempo real."""
     import unicodedata
-    productos = cargar_productos()
-    termino = termino.lower().strip()
+    
+    # 1. Búsqueda local
+    productos_locales = cargar_productos()
+    termino_clean = termino.lower().strip()
     
     def normalizar(txt):
         return "".join(c for c in unicodedata.normalize('NFD', txt) if unicodedata.category(c) != 'Mn').lower()
         
-    termino_norm = normalizar(termino)
-    coincidencias = []
-    for p in productos:
+    termino_norm = normalizar(termino_clean)
+    coincidencias_locales = []
+    for p in productos_locales:
         prod_norm = normalizar(p.get("producto", ""))
         super_norm = normalizar(p.get("supermercado", ""))
         if termino_norm in prod_norm or termino_norm in super_norm:
-            coincidencias.append(p)
+            coincidencias_locales.append(p)
             
-    return coincidencias
+    # 2. Búsqueda online en superprecio.ar (con timeout corto)
+    coincidencias_online = buscar_precios_online(termino_clean)
+    
+    return coincidencias_locales, coincidencias_online
+
+def formatear_resultado_busqueda(locales, online, termino):
+    """Formatea la respuesta consolidada de búsqueda local y online en Markdown."""
+    if not locales and not online:
+        return f"🔍 No encontré ofertas cargadas ni precios online para *'{termino}'*."
+        
+    msg = f"🔍 *Resultados de búsqueda para '{termino}':*\n\n"
+    
+    # Ofertas cargadas manualmente (locales)
+    if locales:
+        msg += "📌 *Ofertas de Canasta Básica (Base de Datos):*\n"
+        grouped = {}
+        for p in locales:
+            s_name = p.get("supermercado", "Otros")
+            if s_name not in grouped:
+                grouped[s_name] = []
+            grouped[s_name].append(p)
+            
+        for s_name, lista in grouped.items():
+            msg += f"🔸 *{s_name.upper()}*\n"
+            for p in lista:
+                msg += f"  • *{p.get('producto')}*: {p.get('precio')}\n"
+                if p.get("condiciones"):
+                    msg += f"    _({p.get('condiciones')})_\n"
+        msg += "\n"
+        
+    # Precios comparativos online (online)
+    if online:
+        msg += "🌐 *Precios comparados en tiempo real (online):*\n"
+        # Mostrar los primeros 5 productos para no saturar Telegram
+        for idx, p in enumerate(online[:5]):
+            msg += f"🔹 *{p['producto']}*\n"
+            
+            # Ordenar precios de menor a mayor
+            try:
+                def get_val(pr):
+                    val_str = pr["precio"].replace("$", "").replace(".", "").replace(",", ".").strip()
+                    return float(val_str)
+                precios_ordenados = sorted(p["precios"], key=get_val)
+            except Exception:
+                precios_ordenados = p["precios"]
+                
+            for pr in precios_ordenados:
+                super_display = pr["supermercado"]
+                if super_display in ["Coto", "Carrefour", "Día"]:
+                    super_display = f"*{super_display}*"
+                    
+                if pr["link"]:
+                    msg += f"  • {super_display}: [{pr['precio']}]({pr['link']})\n"
+                else:
+                    msg += f"  • {super_display}: {pr['precio']}\n"
+            msg += "\n"
+            
+    return msg.strip()
