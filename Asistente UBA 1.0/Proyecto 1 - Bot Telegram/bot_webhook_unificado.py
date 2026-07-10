@@ -19,6 +19,20 @@ load_dotenv(os.path.join(PARENT_DIR, ".env"))
 
 app = Flask(__name__)
 
+def formatear_fecha_humana(fecha_str):
+    """Convierte una fecha ISO (YYYY-MM-DD o YYYY-MM-DDTHH:MM) al formato legible DD/MM/YYYY."""
+    if not fecha_str:
+        return ""
+    try:
+        if "T" in fecha_str:
+            dt_obj = datetime.datetime.strptime(fecha_str[:16], "%Y-%m-%dT%H:%M")
+            return dt_obj.strftime("%d/%m/%Y a las %H:%M hs")
+        else:
+            dt_obj = datetime.datetime.strptime(fecha_str.strip(), "%Y-%m-%d")
+            return dt_obj.strftime("%d/%m/%Y")
+    except Exception:
+        return fecha_str
+
 # ==========================================
 # CONFIGURACIÓN GENERAL Y LLM
 # ==========================================
@@ -156,8 +170,9 @@ def leer_pendientes_dia(fecha_str=None):
         resp = session.post(f"https://api.notion.com/v1/databases/{NOTION_DB_ID}/query", headers=notion_headers, json=data, timeout=10)
         if resp.status_code != 200: return "❌ Hubo un error leyendo tu Notion."
         resultados = resp.json().get("results", [])
-        if not resultados: return f"🎉 ¡Día libre! No tienes nada agendado para el {fecha_str}."
-        texto = f"📅 *Tu Agenda para el {fecha_str}:*\n\n"
+        fecha_formateada = formatear_fecha_humana(fecha_str)
+        if not resultados: return f"🎉 ¡Día libre! No tienes nada agendado para el {fecha_formateada}."
+        texto = f"📅 *Tu Agenda para el {fecha_formateada}:*\n\n"
         for item in resultados:
             props = item["properties"]
             asunto = props["Asunto"]["title"][0]["text"]["content"] if props["Asunto"]["title"] else "Sin nombre"
@@ -421,7 +436,8 @@ REGLAS:
                     asunto = match_agendar.group(1).strip()
                     fecha = match_agendar.group(2).strip().rstrip(">").strip()
                     exito = agendar_en_notion(asunto, fecha)
-                    reply_text = f"✅ ¡Anotado!\n📌 {asunto}\n🕒 Para: {fecha}" if exito else "❌ Error guardando en Notion."
+                    fecha_formateada = formatear_fecha_humana(fecha)
+                    reply_text = f"✅ ¡Anotado!\n📌 {asunto}\n🕒 Para: {fecha_formateada}" if exito else "❌ Error guardando en Notion."
                 elif match_leer_dia:
                     fecha_dia = match_leer_dia.group(1).strip()
                     reply_text = leer_pendientes_dia(fecha_dia)
@@ -511,7 +527,8 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                         
                         link = gc.agendar_evento(asunto, fecha, duracion, desc)
                         if link:
-                            reply_text = f"✅ ¡Anotado en tu calendario!\n📌 {asunto}\n🕒 Para: {fecha}\n🔗 Enlace: {link}"
+                            fecha_formateada = formatear_fecha_humana(fecha)
+                            reply_text = f"✅ ¡Anotado en tu calendario!\n📌 {asunto}\n🕒 Para: {fecha_formateada}\n🔗 Enlace: {link}"
                         else:
                             reply_text = "❌ Hubo un error al intentar agendar en Google Calendar. ¿Tienes el archivo credentials.json configurado?"
                     else:
@@ -523,9 +540,11 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                     if eventos is None:
                         reply_text = "❌ Error al leer Google Calendar."
                     elif not eventos:
-                        reply_text = f"🎉 ¡Día libre! No tienes nada agendado para el {fecha_dia}."
+                        fecha_formateada = formatear_fecha_humana(fecha_dia)
+                        reply_text = f"🎉 ¡Día libre! No tienes nada agendado para el {fecha_formateada}."
                     else:
-                        reply_text = f"📅 *Tu agenda para el {fecha_dia}:*\n\n"
+                        fecha_formateada = formatear_fecha_humana(fecha_dia)
+                        reply_text = f"📅 *Tu agenda para el {fecha_formateada}:*\n\n"
                         for ev in eventos:
                             start = ev['start'].get('dateTime', ev['start'].get('date'))
                             summary = ev.get('summary', 'Sin título')
