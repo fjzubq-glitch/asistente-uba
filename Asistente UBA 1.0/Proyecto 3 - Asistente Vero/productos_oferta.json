@@ -1,6 +1,30 @@
 [
   {
     "supermercado": "Coto",
+    "producto": "Asado de Novillito (por kg)",
+    "precio": "$7.200",
+    "condiciones": "Oferta especial de fin de semana."
+  },
+  {
+    "supermercado": "Coto",
+    "producto": "Vacío de Novillito (por kg)",
+    "precio": "$8.500",
+    "condiciones": "Oferta especial de fin de semana."
+  },
+  {
+    "supermercado": "Coto",
+    "producto": "Nalga para Milanesas (por kg)",
+    "precio": "$8.900",
+    "condiciones": "Corte seleccionado."
+  },
+  {
+    "supermercado": "Coto",
+    "producto": "Carne Picada Especial (por kg)",
+    "precio": "$5.400",
+    "condiciones": "Firme y fresca."
+  },
+  {
+    "supermercado": "Coto",
     "producto": "Leche Entera / Descremada Coto 1L (Sachet)",
     "precio": "$950",
     "condiciones": "Límite de 4 unidades por compra."
@@ -22,6 +46,42 @@
     "producto": "Queso Cremoso Coto (por kg)",
     "precio": "$5.800",
     "condiciones": "Exclusivo Comunidad Coto."
+  },
+  {
+    "supermercado": "Coto",
+    "producto": "Arroz Largo Fino Coto 1kg",
+    "precio": "$1.200",
+    "condiciones": "No se pasa, no se pega."
+  },
+  {
+    "supermercado": "Coto",
+    "producto": "Harina de Trigo 000 Coto 1kg",
+    "precio": "$750",
+    "condiciones": "Ideal para panadería."
+  },
+  {
+    "supermercado": "Coto",
+    "producto": "Azúcar Común Coto 1kg",
+    "precio": "$890",
+    "condiciones": "Límite 3 bolsas."
+  },
+  {
+    "supermercado": "Carrefour",
+    "producto": "Suprema de Pollo Fresca (por kg)",
+    "precio": "$5.900",
+    "condiciones": "Llevando 2 kg o más."
+  },
+  {
+    "supermercado": "Carrefour",
+    "producto": "Roast Beef / Paleta (por kg)",
+    "precio": "$6.800",
+    "condiciones": "Oferta en carnicería."
+  },
+  {
+    "supermercado": "Carrefour",
+    "producto": "Milanesas de Carne Preparadas (por kg)",
+    "precio": "$7.500",
+    "condiciones": "Listas para cocinar."
   },
   {
     "supermercado": "Carrefour",
@@ -48,6 +108,36 @@
     "condiciones": "2da unidad al 50%."
   },
   {
+    "supermercado": "Carrefour",
+    "producto": "Manteca Carrefour 200g",
+    "precio": "$1.450",
+    "condiciones": "Calidad extra."
+  },
+  {
+    "supermercado": "Carrefour",
+    "producto": "Arroz Doble Carolina Carrefour 1kg",
+    "precio": "$1.800",
+    "condiciones": "Ideal para guisos o risotto."
+  },
+  {
+    "supermercado": "Carrefour",
+    "producto": "Harina de Trigo Leudante Carrefour 1kg",
+    "precio": "$950",
+    "condiciones": "Para repostería."
+  },
+  {
+    "supermercado": "Día",
+    "producto": "Pollo Entero Fresco (por kg)",
+    "precio": "$2.400",
+    "condiciones": "Súper oferta en granja."
+  },
+  {
+    "supermercado": "Día",
+    "producto": "Hamburguesas Día de Carne (pack x 4 unidades)",
+    "precio": "$1.900",
+    "condiciones": "Ideal para zafar."
+  },
+  {
     "supermercado": "Día",
     "producto": "Leche Entera Día 1L (Sachet)",
     "precio": "$920",
@@ -70,5 +160,29 @@
     "producto": "Fideos Guiseros Día 500g",
     "precio": "$750",
     "condiciones": "3x2 llevando Club Dia."
+  },
+  {
+    "supermercado": "Día",
+    "producto": "Pan Lactal Día Familiar 560g",
+    "precio": "$1.800",
+    "condiciones": "Lactal blanco grande."
+  },
+  {
+    "supermercado": "Día",
+    "producto": "Puré de Tomate Día 520g",
+    "precio": "$620",
+    "condiciones": "Válido Club Dia."
+  },
+  {
+    "supermercado": "Día",
+    "producto": "Yogur Firme Día 120g",
+    "precio": "$480",
+    "condiciones": "Varios gustos."
+  },
+  {
+    "supermercado": "Día",
+    "producto": "Dulce de Leche Día 400g",
+    "precio": "$1.350",
+    "condiciones": "Clásico familiar."
   }
 ]
