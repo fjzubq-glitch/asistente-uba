@@ -163,24 +163,113 @@ def formatear_promos_mensaje(promos, supermercado=None, dia=None):
     return msg.strip()
 
 def obtener_enlaces_oficiales():
-    """Retorna los enlaces web, Instagram y Facebook oficiales de los supermercados."""
+    """Retorna los enlaces oficiales de los supermercados y billeteras virtuales."""
     return {
-        "Coto": {
-            "web": "https://www.coto.com.ar/descuentos/",
-            "instagram": "https://www.instagram.com/coto_ar/",
-            "facebook": "https://www.facebook.com/coto/"
+        "mercadopago": {
+            "nombre": "Mercado Pago",
+            "links": [
+                ("Sitio oficial", "https://www.mercadopago.com.ar"),
+                ("Promociones generales", "https://promociones.mercadopago.com.ar"),
+                ("Promos QR", "https://www.mercadopago.com.ar/c/promocionesqr")
+            ]
         },
-        "Carrefour": {
-            "web": "https://www.carrefour.com.ar/promociones",
-            "instagram": "https://www.instagram.com/carrefourargentina/",
-            "facebook": "https://www.facebook.com/CarrefourArgentina/"
+        "cuentadni": {
+            "nombre": "Cuenta DNI",
+            "links": [
+                ("Sitio oficial", "https://www.bancoprovincia.com.ar/cuentadni"),
+                ("Beneficios supermercados", "https://www.bancoprovincia.com.ar/cuentadni/contenidos/cdniBeneficios/detalle/supermercados"),
+                ("Nota oficial supermercados", "https://www.bancoprovincia.com.ar/Noticias/MasNoticias/todas-las-promociones-de-cuenta-dni-en-supermercados-3031")
+            ]
         },
-        "Día": {
-            "web": "https://diaonline.supermercadosdia.com.ar/",
-            "instagram": "https://www.instagram.com/diaargentina/",
-            "facebook": "https://www.facebook.com/DiaArgentina/"
+        "modo": {
+            "nombre": "MODO",
+            "links": [
+                ("Sitio oficial", "https://www.modo.com.ar")
+            ]
+        },
+        "uala": {
+            "nombre": "Ualá",
+            "links": [
+                ("Sitio oficial", "https://www.uala.com.ar"),
+                ("Promociones", "https://www.uala.com.ar/promociones"),
+                ("Programa Ualá Más", "https://www.uala.com.ar/uala-mas")
+            ]
+        },
+        "personalpay": {
+            "nombre": "Personal Pay",
+            "links": [
+                ("Sitio oficial", "https://www.personal.com.ar/pay"),
+                ("Google Play", "https://play.google.com/store/apps/details?id=ar.com.personalpay&hl=es_AR"),
+                ("App Store", "https://apps.apple.com/ar/app/personal-pay-billetera-virtual/id1548817439")
+            ]
+        },
+        "brubank": {
+            "nombre": "Brubank",
+            "links": [
+                ("Sitio oficial", "https://www.brubank.com"),
+                ("Promociones (help)", "https://help.brubank.com/es/collections/2846519-promociones"),
+                ("Promociones disponibles", "https://help.brubank.com/es/collections/3832828-promociones-disponibles"),
+                ("Promo Coto", "https://help.brubank.com/es/articles/13977196-30-de-descuento-los-jueves-en-supermercados-coto")
+            ]
+        },
+        "coto": {
+            "nombre": "Coto",
+            "links": [
+                ("Canales oficiales", "https://www.coto.com.ar/canales-de-contacto-oficiales/"),
+                ("Sitio Promociones", "https://www.coto.com.ar/descuentos/"),
+                ("Instagram", "https://www.instagram.com/coto_ar"),
+                ("Facebook", "https://www.facebook.com/coto")
+            ]
+        },
+        "carrefour": {
+            "nombre": "Carrefour",
+            "links": [
+                ("Sitio Promociones", "https://www.carrefour.com.ar/promociones"),
+                ("Instagram", "https://www.instagram.com/carrefourargentina"),
+                ("Facebook", "https://www.facebook.com/CarrefourArgentina")
+            ]
+        },
+        "dia": {
+            "nombre": "Día",
+            "links": [
+                ("Medios de pago y promos", "https://diaonline.supermercadosdia.com.ar/medios-de-pago-y-promociones"),
+                ("Sitio Promociones", "https://diaonline.supermercadosdia.com.ar/"),
+                ("Instagram", "https://www.instagram.com/diaargentina"),
+                ("Facebook", "https://www.facebook.com/DiaArgentina")
+            ]
         }
     }
+
+def formatear_enlaces_mensaje(filtro):
+    """Retorna los enlaces formateados en un mensaje Markdown según el filtro indicado."""
+    enlaces = obtener_enlaces_oficiales()
+    filtro_key = filtro.lower().strip().replace(" ", "").replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
+    
+    if filtro_key == "todos":
+        msg = "🔗 *Enlaces Oficiales de Billeteras y Supermercados:*\n\n"
+        for key, info in enlaces.items():
+            msg += f"🔸 *{info['nombre']}*\n"
+            for label, url in info["links"]:
+                msg += f"  • [{label}]({url})\n"
+            msg += "\n"
+        return msg.strip()
+        
+    if filtro_key in enlaces:
+        info = enlaces[filtro_key]
+        msg = f"🔗 *Enlaces oficiales de {info['nombre']}:*\n\n"
+        for label, url in info["links"]:
+            msg += f"• [{label}]({url})\n"
+        return msg.strip()
+        
+    # Búsqueda difusa
+    for key, info in enlaces.items():
+        if filtro_key in key or key in filtro_key:
+            msg = f"🔗 *Enlaces oficiales de {info['nombre']}:*\n\n"
+            for label, url in info["links"]:
+                msg += f"• [{label}]({url})\n"
+            return msg.strip()
+            
+    return f"❌ No encontré enlaces oficiales para '{filtro}'."
 
 def cargar_productos():
     """Carga los productos de oferta desde el archivo JSON."""

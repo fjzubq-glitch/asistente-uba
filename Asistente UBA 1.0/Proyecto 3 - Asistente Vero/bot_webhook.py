@@ -309,10 +309,13 @@ REGLAS DE RESPUESTA EXCLUSIVA PARA COMANDOS (Si detectas una acción, responde �
 8. Buscar producto específico en oferta: Si el usuario pregunta dónde hay oferta de un alimento o producto específico (ej: 'dónde hay asado barato?', 'buscá ofertas de leche', 'precios de fideos'), responde EXACTAMENTE así:
    BUSCAR_PRODUCTO: Termino
    (Donde Termino es la palabra clave del producto a buscar. Ejemplo: BUSCAR_PRODUCTO: asado, BUSCAR_PRODUCTO: leche)
+9. Consultar enlaces oficiales de billeteras o supermercados: Si el usuario pide enlaces, links, páginas web, Facebook o Instagram de billeteras virtuales (Mercado Pago, Cuenta DNI, MODO, Ualá, Personal Pay, Brubank) o supermercados (Coto, Carrefour, Día), responde EXACTAMENTE así:
+   LEER_ENLACES: BilleteraOSupermercado
+   (Donde BilleteraOSupermercado es la clave a buscar. Claves disponibles: mercadopago, cuentadni, modo, uala, personalpay, brubank, coto, carrefour, dia, o todos. Ejemplo: LEER_ENLACES: mercadopago, LEER_ENLACES: todos)
 
 REGLAS PARA CONVERSACIÓN GENERAL:
-9. Si no coincide con ningún comando, responde de forma atenta, simpática y natural como su asistente personal, sin usar formato markdown sofisticado y en español.
-10. Si te pide el Facebook, el Instagram o la página oficial de ofertas de Coto, Carrefour o Día, proporciónaselos amablemente con estos enlaces oficiales:
+10. Si no coincide con ningún comando, responde de forma atenta, simpática y natural como su asistente personal, sin usar formato markdown sofisticado y en español.
+11. Si te pide el Facebook, el Instagram o la página oficial de ofertas de Coto, Carrefour o Día, proporciónaselos amablemente con estos enlaces oficiales:
    - Coto: Web (https://www.coto.com.ar/descuentos/), Instagram (https://www.instagram.com/coto_ar/), Facebook (https://www.facebook.com/coto/)
    - Carrefour: Web (https://www.carrefour.com.ar/promociones), Instagram (https://www.instagram.com/carrefourargentina/), Facebook (https://www.facebook.com/CarrefourArgentina/)
    - Día: Web (https://diaonline.supermercadosdia.com.ar/), Instagram (https://www.instagram.com/diaargentina/), Facebook (https://www.facebook.com/DiaArgentina/)"""
@@ -329,6 +332,7 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                     match_agregar_producto = re.search(r"AGREGAR_PRODUCTO:\s*(.*)", ia_text)
                     match_mostrar_menu_inicial = re.search(r"MOSTRAR_MENU_INICIAL", ia_text)
                     match_buscar_producto = re.search(r"BUSCAR_PRODUCTO:\s*(.*)", ia_text)
+                    match_leer_enlaces = re.search(r"LEER_ENLACES:\s*([a-zA-ZáéíóúñÑ]+)", ia_text)
                     
                     if match_agendar:
                         parts = match_agendar.group(1).strip().split("|")
@@ -424,6 +428,10 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                         termino = match_buscar_producto.group(1).strip()
                         productos = bo.buscar_productos_por_nombre(termino)
                         reply_text = bo.formatear_productos_mensaje(productos, f"que coinciden con '{termino}'")
+                        
+                    elif match_leer_enlaces:
+                        filtro = match_leer_enlaces.group(1).strip()
+                        reply_text = bo.formatear_enlaces_mensaje(filtro)
                         
                     else:
                         reply_text = ia_text
