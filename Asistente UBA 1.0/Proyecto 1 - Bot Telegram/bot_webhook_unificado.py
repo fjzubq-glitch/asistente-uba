@@ -235,7 +235,10 @@ for ruta in posibles_rutas:
         break
 
 if not VERO_DIR:
-    VERO_DIR = os.path.join(BASE_DIR, "Proyecto 3 - Asistente Vero")
+    if os.path.exists(os.path.join(BASE_DIR, "google_calendar.py")):
+        VERO_DIR = BASE_DIR
+    else:
+        VERO_DIR = os.path.join(BASE_DIR, "Proyecto 3 - Asistente Vero")
 
 # Importar módulos locales del Proyecto 3
 sys.path.append(VERO_DIR)
