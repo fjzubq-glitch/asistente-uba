@@ -222,8 +222,21 @@ def revisar_alarmas_uba():
 # ==========================================
 # BOT 2: ASISTENTE PARA VERO (GOOGLE CALENDAR & PROMOS)
 # ==========================================
-# Buscar variables de Vero en el .env o usar el de la subcarpeta
-VERO_DIR = os.path.join(PARENT_DIR, "Proyecto 3 - Asistente Vero")
+# Buscar el directorio de Vero de forma robusta en local y en la nube
+VERO_DIR = None
+posibles_rutas = [
+    os.path.join(BASE_DIR, "Proyecto 3 - Asistente Vero"),
+    os.path.join(os.path.dirname(BASE_DIR), "Proyecto 3 - Asistente Vero"),
+    os.path.join(BASE_DIR, "Asistente UBA 1.0", "Proyecto 3 - Asistente Vero"),
+]
+for ruta in posibles_rutas:
+    if os.path.exists(ruta):
+        VERO_DIR = ruta
+        break
+
+if not VERO_DIR:
+    VERO_DIR = os.path.join(BASE_DIR, "Proyecto 3 - Asistente Vero")
+
 # Importar módulos locales del Proyecto 3
 sys.path.append(VERO_DIR)
 import google_calendar as gc
