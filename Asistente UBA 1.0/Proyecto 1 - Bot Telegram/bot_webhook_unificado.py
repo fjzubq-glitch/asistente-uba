@@ -145,29 +145,30 @@ def programar_active_recall(tema):
         registrar_error_uba("programar_active_recall")
         return False
 
-def leer_pendientes_hoy():
+def leer_pendientes_dia(fecha_str=None):
     try:
-        hoy = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=3)).strftime("%Y-%m-%d")
+        if not fecha_str:
+            fecha_str = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=3)).strftime("%Y-%m-%d")
         data = {
-            "filter": {"property": "Fecha y Hora", "date": {"equals": hoy}},
+            "filter": {"property": "Fecha y Hora", "date": {"equals": fecha_str}},
             "sorts": [{"property": "Fecha y Hora", "direction": "ascending"}]
         }
         resp = session.post(f"https://api.notion.com/v1/databases/{NOTION_DB_ID}/query", headers=notion_headers, json=data, timeout=10)
         if resp.status_code != 200: return "❌ Hubo un error leyendo tu Notion."
         resultados = resp.json().get("results", [])
-        if not resultados: return "🎉 ¡Día libre! No tienes nada agendado para hoy."
-        texto = "📅 *Tu Agenda para Hoy:*\n\n"
+        if not resultados: return f"🎉 ¡Día libre! No tienes nada agendado para el {fecha_str}."
+        texto = f"📅 *Tu Agenda para el {fecha_str}:*\n\n"
         for item in resultados:
             props = item["properties"]
             asunto = props["Asunto"]["title"][0]["text"]["content"] if props["Asunto"]["title"] else "Sin nombre"
             estado = props["Estado"]["status"]["name"] if props["Estado"]["status"] else "Pendiente"
-            fecha_str = props["Fecha y Hora"]["date"]["start"]
-            hora = " a las " + fecha_str.split("T")[1][:5] if "T" in fecha_str else ""
+            fecha_item = props["Fecha y Hora"]["date"]["start"]
+            hora = " a las " + fecha_item.split("T")[1][:5] if "T" in fecha_item else ""
             icono = "✅" if estado == "Completado" else "🔹"
             texto += f"{icono} {asunto}{hora}\n"
         return texto
     except Exception:
-        registrar_error_uba("leer_pendientes_hoy")
+        registrar_error_uba("leer_pendientes_dia")
         return "❌ Error al intentar leer la agenda de Notion."
 
 def revisar_alarmas_uba():
@@ -189,7 +190,7 @@ def revisar_alarmas_uba():
                 hoy_str = ahora.strftime("%Y-%m-%d")
                 
                 if ahora.hour == 8 and ahora.minute == 0 and not buenos_dias_enviado:
-                    msg = f"🌅 *¡BUENOS DÍAS!*\n\n{leer_pendientes_hoy()}"
+                    msg = f"🌅 *¡BUENOS DÍAS!*\n\n{leer_pendientes_dia()}"
                     session.post(send_url_uba, json={"chat_id": MI_CHAT_ID_UBA, "text": msg}, timeout=10)
                     buenos_dias_enviado = True
                 if ahora.hour == 1:
@@ -404,30 +405,32 @@ def webhook_handler_uba():
             SYSTEM_PROMPT = f"""Eres un asistente personal y de estudios inteligente y eficiente. Fecha actual: {ahora.strftime("%Y-%m-%dT%H:%M:00-03:00")}.
 REGLAS:
 1. Agendar evento: Responde EXCLUSIVAMENTE: AGENDAR: Asunto|YYYY-MM-DDTHH:MM:00-03:00
-2. Leer agenda: Responde EXCLUSIVAMENTE: LEER_HOY
+2. Leer agenda de un día: Responde EXCLUSIVAMENTE: LEER_DIA: YYYY-MM-DD
+   (Ejemplo para hoy, mañana o cualquier otro día, calcula la fecha correcta: LEER_DIA: 2026-07-11)
 3. Active Recall: Responde EXCLUSIVAMENTE: ACTIVE_RECALL: Tema
 4. Asistencia personal: Responde a cualquier otra consulta de forma concisa y servicial, ayudando al usuario con sus estudios y tareas diarias.
 5. NO uses formato markdown."""
             
             try:
                 ia_text = llamar_llm(SYSTEM_PROMPT, text)
-                if "AGENDAR:" in ia_text:
-                    match = re.search(r"AGENDAR:\s*(.*?)\|(.*?)(?:>|$)", ia_text)
-                    if match:
-                        asunto = match.group(1).strip()
-                        fecha = match.group(2).strip().rstrip(">").strip()
-                        exito = agendar_en_notion(asunto, fecha)
-                        reply_text = f"✅ ¡Anotado!\n📌 {asunto}\n🕒 Para: {fecha}" if exito else "❌ Error guardando en Notion."
-                    else: reply_text = "❌ Error entendiendo la fecha."
-                elif "ACTIVE_RECALL:" in ia_text:
-                    match = re.search(r"ACTIVE_RECALL:\s*(.*?)(?:>|$)", ia_text)
-                    if match:
-                        tema = match.group(1).strip().rstrip(">").strip()
-                        session.post(send_url_uba, json={"chat_id": MI_CHAT_ID_UBA, "text": f"🧠 ¡Activando Repetición Espaciada para '{tema}'!"}, timeout=10)
-                        reply_text = f"✅ ¡Listo! Alertas programadas para Día 3, 7 y 21." if programar_active_recall(tema) else "❌ Error en Notion."
-                    else: reply_text = "❌ Error procesando el active recall."
-                elif "LEER_HOY" in ia_text: reply_text = leer_pendientes_hoy()
-                else: reply_text = f"⚖️ {ia_text}"
+                match_agendar = re.search(r"AGENDAR:\s*(.*?)\|(.*?)(?:>|$)", ia_text)
+                match_leer_dia = re.search(r"LEER_DIA:\s*([\d-]+)", ia_text)
+                match_active_recall = re.search(r"ACTIVE_RECALL:\s*(.*?)(?:>|$)", ia_text)
+                
+                if match_agendar:
+                    asunto = match_agendar.group(1).strip()
+                    fecha = match_agendar.group(2).strip().rstrip(">").strip()
+                    exito = agendar_en_notion(asunto, fecha)
+                    reply_text = f"✅ ¡Anotado!\n📌 {asunto}\n🕒 Para: {fecha}" if exito else "❌ Error guardando en Notion."
+                elif match_leer_dia:
+                    fecha_dia = match_leer_dia.group(1).strip()
+                    reply_text = leer_pendientes_dia(fecha_dia)
+                elif match_active_recall:
+                    tema = match_active_recall.group(1).strip().rstrip(">").strip()
+                    session.post(send_url_uba, json={"chat_id": MI_CHAT_ID_UBA, "text": f"🧠 ¡Activando Repetición Espaciada para '{tema}'!"}, timeout=10)
+                    reply_text = f"✅ ¡Listo! Alertas programadas para Día 3, 7 y 21." if programar_active_recall(tema) else "❌ Error en Notion."
+                else:
+                    reply_text = f"⚖️ {ia_text}"
             except Exception:
                 registrar_error_uba("procesar_mensaje_ia")
                 reply_text = "❌ Error procesando el mensaje."
