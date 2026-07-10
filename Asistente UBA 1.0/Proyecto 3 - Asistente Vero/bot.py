@@ -209,9 +209,9 @@ REGLAS DE RESPUESTA EXCLUSIVA PARA COMANDOS (Si detectas una acción, responde �
 REGLAS PARA CONVERSACIÓN GENERAL:
 5. Si no coincide con ningún comando, responde de forma atenta, simpática y natural como su asistente personal, sin usar formato markdown sofisticado y en español.
 6. Si te pide el Facebook, el Instagram o la página oficial de ofertas de Coto, Carrefour o Día, proporciónaselos amablemente con estos enlaces oficiales:
-   - Coto: Web (https://www.coto.com.ar/descuentos/), Instagram (https://www.instagram.com/coto_oficial/), Facebook (https://www.facebook.com/coto/)
+   - Coto: Web (https://www.coto.com.ar/descuentos/), Instagram (https://www.instagram.com/coto_ar/), Facebook (https://www.facebook.com/coto/)
    - Carrefour: Web (https://www.carrefour.com.ar/promociones), Instagram (https://www.instagram.com/carrefourargentina/), Facebook (https://www.facebook.com/CarrefourArgentina/)
-   - Día: Web (https://diaonline.supermercadosdia.com.ar/), Instagram (https://www.instagram.com/supermercadosdiaoficial/), Facebook (https://www.facebook.com/SupermercadosDiaArgentina/)"""
+   - Día: Web (https://diaonline.supermercadosdia.com.ar/), Instagram (https://www.instagram.com/diaargentina/), Facebook (https://www.facebook.com/DiaArgentina/)"""
                     
                     try:
                         ia_text = llamar_llm(SYSTEM_PROMPT, text)

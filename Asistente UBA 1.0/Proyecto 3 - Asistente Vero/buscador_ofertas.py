@@ -142,7 +142,7 @@ def obtener_enlaces_oficiales():
     return {
         "Coto": {
             "web": "https://www.coto.com.ar/descuentos/",
-            "instagram": "https://www.instagram.com/coto_oficial/",
+            "instagram": "https://www.instagram.com/coto_ar/",
             "facebook": "https://www.facebook.com/coto/"
         },
         "Carrefour": {
@@ -152,7 +152,7 @@ def obtener_enlaces_oficiales():
         },
         "Día": {
             "web": "https://diaonline.supermercadosdia.com.ar/",
-            "instagram": "https://www.instagram.com/supermercadosdiaoficial/",
-            "facebook": "https://www.facebook.com/SupermercadosDiaArgentina/"
+            "instagram": "https://www.instagram.com/diaargentina/",
+            "facebook": "https://www.facebook.com/DiaArgentina/"
         }
     }
