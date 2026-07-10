@@ -112,12 +112,35 @@ def buscar_promos_web(query):
         print(f"Error realizando búsqueda web: {e}")
         return []
 
-def formatear_promos_mensaje(promos, titulo_dia="hoy"):
-    """Formatea la lista de promociones a un formato legible para Telegram."""
-    if not promos:
-        return f"🎉 ¡No encontré promociones cargadas para {titulo_dia}! Puedes agregar una diciendo, por ejemplo: 'Agregá promo Coto Banco Nación 30% los miércoles'."
+def buscar_promociones_filtradas(supermercado=None, dia=None):
+    """
+    Busca promociones en la base de datos local filtrando por supermercado y/o día de la semana.
+    """
+    promos = cargar_promos()
+    
+    if supermercado and supermercado.lower().strip() != "todos":
+        super_name = supermercado.lower().strip()
+        if super_name == "dia":
+            super_name = "día"
+        promos = [p for p in promos if p.get("supermercado", "").lower().strip() == super_name]
         
-    msg = f"🛒 *Promociones de Supermercados para {titulo_dia.upper()}:*\n\n"
+    if dia and dia.lower().strip() != "todos":
+        dia_name = dia.lower().strip()
+        if dia_name == "hoy":
+            dia_name = obtener_dia_espanol()
+        promos = [p for p in promos if dia_name in [d.lower().strip() for d in p.get("dias", [])]]
+        
+    return promos
+
+def formatear_promos_mensaje(promos, supermercado=None, dia=None):
+    """Formatea la lista de promociones a un formato legible para Telegram."""
+    label_super = f" de {supermercado.upper()}" if supermercado and supermercado.lower() != "todos" else ""
+    label_dia = f" para el día {dia.upper()}" if dia and dia.lower() != "todos" else ""
+    
+    if not promos:
+        return f"🎉 ¡No encontré promociones cargadas{label_super}{label_dia}! Puedes agregar una diciendo, por ejemplo: 'Agregá promo Coto Banco Nación 30% los miércoles'."
+        
+    msg = f"🛒 *Promociones de Supermercados{label_super}{label_dia}:*\n\n"
     
     # Agrupar por supermercado
     grouped = {}
@@ -127,10 +150,11 @@ def formatear_promos_mensaje(promos, titulo_dia="hoy"):
             grouped[super_name] = []
         grouped[super_name].append(p)
         
-    for supermercado, lista in grouped.items():
-        msg += f"🔹 *{supermercado.upper()}*\n"
+    for super_key, lista in grouped.items():
+        msg += f"🔹 *{super_key.upper()}*\n"
         for p in lista:
-            msg += f"  • *{p.get('descuento')}* con *{p.get('banco_tarjeta')}*\n"
+            dias_str = ", ".join(p.get("dias", []))
+            msg += f"  • *{p.get('descuento')}* con *{p.get('banco_tarjeta')}* (Días: {dias_str})\n"
             if p.get("condiciones"):
                 msg += f"    _({p.get('condiciones')})_\n"
         msg += "\n"

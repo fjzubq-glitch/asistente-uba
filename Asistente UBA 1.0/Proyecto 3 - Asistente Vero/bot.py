@@ -200,8 +200,8 @@ REGLAS DE RESPUESTA EXCLUSIVA PARA COMANDOS (Si detectas una acción, responde �
    LEER_DIA: YYYY-MM-DD
    (Ejemplo para hoy: LEER_DIA: {ahora.strftime("%Y-%m-%d")})
 3. Consultar promociones/ofertas: Si el usuario pregunta por ofertas o promociones de supermercados, responde EXACTAMENTE así:
-   LEER_PROMOS: DiaDeLaSemana
-   (Donde DiaDeLaSemana es hoy, lunes, martes, miércoles, jueves, viernes, sábado o domingo. Ejemplo: LEER_PROMOS: hoy)
+   LEER_PROMOS: Supermercado|DiaDeLaSemana
+   (Donde Supermercado puede ser coto, carrefour, día, o todos. DiaDeLaSemana puede ser hoy, lunes, martes, miércoles, jueves, viernes, sábado, domingo, o todos. Ejemplo: LEER_PROMOS: coto|hoy, LEER_PROMOS: todos|miércoles, LEER_PROMOS: carrefour|todos)
 4. Agregar promoción: Si el usuario quiere guardar una nueva promoción, responde EXACTAMENTE así:
    AGREGAR_PROMO: Supermercado|Banco o Tarjeta|Descuento|DiaDeLaSemana|Condiciones
    (Ejemplo: AGREGAR_PROMO: Carrefour|Mercado Pago|10% de ahorro|martes|Con tarjeta prepaga)
@@ -217,9 +217,13 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                         ia_text = llamar_llm(SYSTEM_PROMPT, text)
                         reply_text = ""
                         
-                        if "AGENDAR:" in ia_text:
-                            # Formato: AGENDAR: Asunto|FechaISO|Duracion|Descripcion
-                            parts = ia_text.replace("AGENDAR:", "").strip().split("|")
+                        match_agendar = re.search(r"AGENDAR:\s*(.*)", ia_text)
+                        match_leer_dia = re.search(r"LEER_DIA:\s*([\d-]+)", ia_text)
+                        match_leer_promos = re.search(r"LEER_PROMOS:\s*([a-zA-ZáéíóúñÑ]+)", ia_text)
+                        match_agregar_promo = re.search(r"AGREGAR_PROMO:\s*(.*)", ia_text)
+                        
+                        if match_agendar:
+                            parts = match_agendar.group(1).strip().split("|")
                             if len(parts) >= 2:
                                 asunto = parts[0].strip()
                                 fecha = parts[1].strip()
@@ -234,8 +238,8 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                             else:
                                 reply_text = "❌ No pude entender el formato para agendar. Intenta de nuevo."
                                 
-                        elif "LEER_DIA:" in ia_text:
-                            fecha_dia = ia_text.replace("LEER_DIA:", "").strip()
+                        elif match_leer_dia:
+                            fecha_dia = match_leer_dia.group(1).strip()
                             eventos = gc.listar_eventos_dia(fecha_dia)
                             if eventos is None:
                                 reply_text = "❌ Error al leer Google Calendar. Verifica las credenciales."
@@ -251,16 +255,15 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                                         hora = " a las " + start.split('T')[1][:5]
                                     reply_text += f"🔹 {summary}{hora}\n"
                                     
-                        elif "LEER_PROMOS:" in ia_text:
-                            dia_semana = ia_text.replace("LEER_PROMOS:", "").strip()
-                            if dia_semana == "hoy":
-                                dia_semana = bo.obtener_dia_espanol()
-                            promos = bo.obtener_promos_dia(dia_semana)
-                            reply_text = bo.formatear_promos_mensaje(promos, dia_semana)
+                        elif match_leer_promos:
+                            parts = match_leer_promos.group(1).strip().split("|")
+                            supermercado = parts[0].strip() if len(parts) > 0 else "todos"
+                            dia_semana = parts[1].strip() if len(parts) > 1 else "todos"
+                            promos = bo.buscar_promociones_filtradas(supermercado, dia_semana)
+                            reply_text = bo.formatear_promos_mensaje(promos, supermercado, dia_semana)
                             
-                        elif "AGREGAR_PROMO:" in ia_text:
-                            # Formato: AGREGAR_PROMO: Supermercado|Banco o Tarjeta|Descuento|DiaDeLaSemana|Condiciones
-                            parts = ia_text.replace("AGREGAR_PROMO:", "").strip().split("|")
+                        elif match_agregar_promo:
+                            parts = match_agregar_promo.group(1).strip().split("|")
                             if len(parts) >= 4:
                                 super_name = parts[0].strip()
                                 banco_tarjeta = parts[1].strip()
