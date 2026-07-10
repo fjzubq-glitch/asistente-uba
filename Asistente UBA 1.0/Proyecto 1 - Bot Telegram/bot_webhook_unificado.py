@@ -11,10 +11,10 @@ import re
 import threading
 from dotenv import load_dotenv
 
-# Cargar variables de entorno desde el archivo .env del directorio raíz
+# Cargar variables de entorno de forma robusta en local y en la nube
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# Buscar .env en el directorio raíz (padre del directorio del Proyecto 1)
 PARENT_DIR = os.path.dirname(BASE_DIR)
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 load_dotenv(os.path.join(PARENT_DIR, ".env"))
 
 app = Flask(__name__)
