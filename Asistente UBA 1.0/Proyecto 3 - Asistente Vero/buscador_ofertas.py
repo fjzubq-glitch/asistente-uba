@@ -255,3 +255,22 @@ def formatear_productos_mensaje(productos, supermercado=None):
         msg += "\n"
         
     return msg.strip()
+
+def buscar_productos_por_nombre(termino):
+    """Busca productos en la base de datos que coincidan parcialmente con el término de búsqueda."""
+    import unicodedata
+    productos = cargar_productos()
+    termino = termino.lower().strip()
+    
+    def normalizar(txt):
+        return "".join(c for c in unicodedata.normalize('NFD', txt) if unicodedata.category(c) != 'Mn').lower()
+        
+    termino_norm = normalizar(termino)
+    coincidencias = []
+    for p in productos:
+        prod_norm = normalizar(p.get("producto", ""))
+        super_norm = normalizar(p.get("supermercado", ""))
+        if termino_norm in prod_norm or termino_norm in super_norm:
+            coincidencias.append(p)
+            
+    return coincidencias

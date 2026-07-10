@@ -28,6 +28,20 @@
     "condiciones": "Pagando con tarjetas de crédito Santander adheridas a través de MODO."
   },
   {
+    "supermercado": "Coto",
+    "banco_tarjeta": "Mercado Pago",
+    "descuento": "10% de ahorro",
+    "dias": ["martes"],
+    "condiciones": "Pagando con tarjeta prepaga o de crédito Mercado Pago, o mediante código QR."
+  },
+  {
+    "supermercado": "Coto",
+    "banco_tarjeta": "Cuenta DNI",
+    "descuento": "35% de ahorro",
+    "dias": ["sábado", "domingo"],
+    "condiciones": "Pagando con QR de Cuenta DNI. Válido en sucursales de Provincia de Bs As adheridas. Tope de reintegro semanal."
+  },
+  {
     "supermercado": "Carrefour",
     "banco_tarjeta": "Banco Nación (MODO)",
     "descuento": "30% de ahorro",
@@ -56,6 +70,13 @@
     "condiciones": "Con tarjeta de crédito Carrefour emitida por el Banco de Servicios Financieros."
   },
   {
+    "supermercado": "Carrefour",
+    "banco_tarjeta": "Mercado Pago",
+    "descuento": "10% de ahorro",
+    "dias": ["martes"],
+    "condiciones": "Exclusivo pagando con tarjeta prepaga física Mercado Pago Mastercard."
+  },
+  {
     "supermercado": "Día",
     "banco_tarjeta": "Banco Nación (MODO)",
     "descuento": "30% de ahorro",
@@ -75,5 +96,12 @@
     "descuento": "Cupones exclusivos y hasta 40% en productos seleccionados",
     "dias": ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"],
     "condiciones": "Presentando la app de Club Dia al pasar por caja."
+  },
+  {
+    "supermercado": "Día",
+    "banco_tarjeta": "Mercado Pago",
+    "descuento": "15% de ahorro",
+    "dias": ["miércoles"],
+    "condiciones": "Pagando con saldo en cuenta mediante código QR de Mercado Pago. Tope semanal."
   }
 ]

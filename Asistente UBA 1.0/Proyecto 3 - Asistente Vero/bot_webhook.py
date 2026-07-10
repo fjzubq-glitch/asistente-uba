@@ -172,6 +172,98 @@ def webhook_handler():
         if not update:
             return "No data", 400
             
+        if "callback_query" in update:
+            callback = update["callback_query"]
+            chat_id = str(callback["message"]["chat"]["id"])
+            callback_data = callback.get("data", "")
+            
+            answer_url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/answerCallbackQuery"
+            session.post(answer_url, json={"callback_query_id": callback["id"]}, timeout=10)
+            
+            if callback_data == "menu:agenda":
+                msg_text = "📅 *¿Qué día deseas consultar de tu agenda?*"
+                keyboard = {
+                    "inline_keyboard": [
+                        [
+                            {"text": "🌞 Ver Hoy", "callback_data": "agenda:hoy"},
+                            {"text": "🌅 Ver Mañana", "callback_data": "agenda:manana"}
+                        ]
+                    ]
+                }
+                session.post(SEND_URL, json={"chat_id": chat_id, "text": msg_text, "parse_mode": "Markdown", "reply_markup": keyboard}, timeout=10)
+                
+            elif callback_data == "menu:supermercados":
+                msg_text = "🛒 *Selecciona un supermercado para ver la información:*"
+                keyboard = {
+                    "inline_keyboard": [
+                        [
+                            {"text": "COTO 🛒", "callback_data": "super:coto"},
+                            {"text": "Carrefour 🛍️", "callback_data": "super:carrefour"},
+                            {"text": "Día 🔴", "callback_data": "super:dia"}
+                        ]
+                    ]
+                }
+                session.post(SEND_URL, json={"chat_id": chat_id, "text": msg_text, "parse_mode": "Markdown", "reply_markup": keyboard}, timeout=10)
+                
+            elif callback_data.startswith("agenda:"):
+                dia_tipo = callback_data.split(":")[1]
+                ahora = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=3)
+                if dia_tipo == "hoy":
+                    fecha_dia = ahora.strftime("%Y-%m-%d")
+                else:
+                    fecha_dia = (ahora + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+                    
+                eventos = gc.listar_eventos_dia(fecha_dia)
+                if eventos is None:
+                    reply_text = "❌ Error al leer Google Calendar. Verifica que la cuenta esté vinculada."
+                elif not eventos:
+                    fecha_formateada = formatear_fecha_humana(fecha_dia)
+                    reply_text = f"🎉 ¡Día libre! No tienes nada agendado para el {fecha_formateada}."
+                else:
+                    fecha_formateada = formatear_fecha_humana(fecha_dia)
+                    reply_text = f"📅 *Tu agenda para el {fecha_formateada}:*\n\n"
+                    for ev in eventos:
+                        start = ev['start'].get('dateTime', ev['start'].get('date'))
+                        summary = ev.get('summary', 'Sin título')
+                        hora = ""
+                        if 'T' in start:
+                            hora = " a las " + start.split('T')[1][:5]
+                        reply_text += f"🔹 {summary}{hora}\n"
+                session.post(SEND_URL, json={"chat_id": chat_id, "text": reply_text, "parse_mode": "Markdown"}, timeout=10)
+                
+            elif callback_data.startswith("super:"):
+                super_key = callback_data.split(":")[1]
+                super_display = super_key.capitalize()
+                if super_display.lower() == "dia":
+                    super_display = "Día"
+                msg_text = f"🛍️ *¿Qué información necesitas de {super_display}?*"
+                
+                keyboard = {
+                    "inline_keyboard": [
+                        [
+                            {"text": "💳 Descuentos Bancarios", "callback_data": f"info:{super_key}:promos"},
+                            {"text": "🛒 Ofertas de Productos", "callback_data": f"info:{super_key}:productos"}
+                        ]
+                    ]
+                }
+                session.post(SEND_URL, json={"chat_id": chat_id, "text": msg_text, "parse_mode": "Markdown", "reply_markup": keyboard}, timeout=10)
+                
+            elif callback_data.startswith("info:"):
+                parts = callback_data.split(":")
+                super_key = parts[1]
+                info_type = parts[2]
+                
+                if info_type == "promos":
+                    promos = bo.buscar_promociones_filtradas(super_key, "todos")
+                    reply_text = bo.formatear_promos_mensaje(promos, super_key, "todos")
+                else:
+                    productos = bo.buscar_productos_filtrados(super_key)
+                    reply_text = bo.formatear_productos_mensaje(productos, super_key)
+                    
+                session.post(SEND_URL, json={"chat_id": chat_id, "text": reply_text, "parse_mode": "Markdown"}, timeout=10)
+                
+            return "OK", 200
+            
         if "message" in update:
             msg = update["message"]
             if "chat" in msg:
@@ -212,10 +304,15 @@ REGLAS DE RESPUESTA EXCLUSIVA PARA COMANDOS (Si detectas una acción, responde �
 6. Agregar oferta de producto: Si el usuario quiere registrar un precio u oferta de un producto, responde EXACTAMENTE así:
    AGREGAR_PRODUCTO: Supermercado|Producto|Precio|Condiciones
    (Ejemplo: AGREGAR_PRODUCTO: Día|Leche Sachet|$920|Club Dia)
+7. Mostrar menú inicial de opciones: Si el usuario saluda, dice 'hola', 'buenas', 'menú', 'start', o pregunta de forma genérica qué puede hacer, responde EXACTAMENTE así:
+   MOSTRAR_MENU_INICIAL
+8. Buscar producto específico en oferta: Si el usuario pregunta dónde hay oferta de un alimento o producto específico (ej: 'dónde hay asado barato?', 'buscá ofertas de leche', 'precios de fideos'), responde EXACTAMENTE así:
+   BUSCAR_PRODUCTO: Termino
+   (Donde Termino es la palabra clave del producto a buscar. Ejemplo: BUSCAR_PRODUCTO: asado, BUSCAR_PRODUCTO: leche)
 
 REGLAS PARA CONVERSACIÓN GENERAL:
-5. Si no coincide con ningún comando, responde de forma atenta, simpática y natural como su asistente personal, sin usar formato markdown sofisticado y en español.
-6. Si te pide el Facebook, el Instagram o la página oficial de ofertas de Coto, Carrefour o Día, proporciónaselos amablemente con estos enlaces oficiales:
+9. Si no coincide con ningún comando, responde de forma atenta, simpática y natural como su asistente personal, sin usar formato markdown sofisticado y en español.
+10. Si te pide el Facebook, el Instagram o la página oficial de ofertas de Coto, Carrefour o Día, proporciónaselos amablemente con estos enlaces oficiales:
    - Coto: Web (https://www.coto.com.ar/descuentos/), Instagram (https://www.instagram.com/coto_ar/), Facebook (https://www.facebook.com/coto/)
    - Carrefour: Web (https://www.carrefour.com.ar/promociones), Instagram (https://www.instagram.com/carrefourargentina/), Facebook (https://www.facebook.com/CarrefourArgentina/)
    - Día: Web (https://diaonline.supermercadosdia.com.ar/), Instagram (https://www.instagram.com/diaargentina/), Facebook (https://www.facebook.com/DiaArgentina/)"""
@@ -230,6 +327,8 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                     match_agregar_promo = re.search(r"AGREGAR_PROMO:\s*(.*)", ia_text)
                     match_leer_productos = re.search(r"LEER_PRODUCTOS:\s*([a-zA-ZáéíóúñÑ]+)", ia_text)
                     match_agregar_producto = re.search(r"AGREGAR_PRODUCTO:\s*(.*)", ia_text)
+                    match_mostrar_menu_inicial = re.search(r"MOSTRAR_MENU_INICIAL", ia_text)
+                    match_buscar_producto = re.search(r"BUSCAR_PRODUCTO:\s*(.*)", ia_text)
                     
                     if match_agendar:
                         parts = match_agendar.group(1).strip().split("|")
@@ -308,6 +407,24 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                         else:
                             reply_text = "❌ Error al interpretar la oferta del producto."
                             
+                    elif match_mostrar_menu_inicial:
+                        msg_text = "👋 *¡Hola Vero! ¿En qué te puedo ayudar hoy?*"
+                        keyboard = {
+                            "inline_keyboard": [
+                                [
+                                    {"text": "📅 Mi Agenda", "callback_data": "menu:agenda"},
+                                    {"text": "🛒 Supermercados", "callback_data": "menu:supermercados"}
+                                ]
+                            ]
+                        }
+                        session.post(SEND_URL, json={"chat_id": chat_id, "text": msg_text, "parse_mode": "Markdown", "reply_markup": keyboard}, timeout=10)
+                        reply_text = ""
+                        
+                    elif match_buscar_producto:
+                        termino = match_buscar_producto.group(1).strip()
+                        productos = bo.buscar_productos_por_nombre(termino)
+                        reply_text = bo.formatear_productos_mensaje(productos, f"que coinciden con '{termino}'")
+                        
                     else:
                         reply_text = ia_text
                         
@@ -315,7 +432,8 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                     registrar_error("procesar_mensaje_ia")
                     reply_text = "❌ Ups, tuve un pequeño problema procesando tu mensaje."
                     
-                session.post(SEND_URL, json={"chat_id": chat_id, "text": reply_text, "parse_mode": "Markdown"}, timeout=10)
+                if reply_text:
+                    session.post(SEND_URL, json={"chat_id": chat_id, "text": reply_text, "parse_mode": "Markdown"}, timeout=10)
     except Exception:
         registrar_error("webhook_handler")
     return "OK", 200
