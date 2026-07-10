@@ -463,7 +463,54 @@ def webhook_handler_vero():
     asegurar_hilos_alarmas()
     try:
         update = request.get_json()
-        if not update or "message" not in update:
+        if not update:
+            return "OK", 200
+            
+        if "callback_query" in update:
+            callback = update["callback_query"]
+            chat_id = str(callback["message"]["chat"]["id"])
+            callback_data = callback.get("data", "")
+            
+            # Responder al callback para quitar el estado de carga en Telegram
+            answer_url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN_VERO}/answerCallbackQuery"
+            session.post(answer_url, json={"callback_query_id": callback["id"]}, timeout=10)
+            
+            send_url_vero = f"https://api.telegram.org/bot{TELEGRAM_TOKEN_VERO}/sendMessage"
+            
+            if callback_data.startswith("super:"):
+                super_key = callback_data.split(":")[1]
+                super_display = super_key.capitalize()
+                if super_display.lower() == "dia":
+                    super_display = "Día"
+                msg_text = f"🛍️ *¿Qué información necesitas de {super_display}?*"
+                
+                keyboard = {
+                    "inline_keyboard": [
+                        [
+                            {"text": "💳 Descuentos Bancarios", "callback_data": f"info:{super_key}:promos"},
+                            {"text": "🛒 Ofertas de Productos", "callback_data": f"info:{super_key}:productos"}
+                        ]
+                    ]
+                }
+                session.post(send_url_vero, json={"chat_id": chat_id, "text": msg_text, "parse_mode": "Markdown", "reply_markup": keyboard}, timeout=10)
+                
+            elif callback_data.startswith("info:"):
+                parts = callback_data.split(":")
+                super_key = parts[1]
+                info_type = parts[2]
+                
+                if info_type == "promos":
+                    promos = bo.buscar_promociones_filtradas(super_key, "todos")
+                    reply_text = bo.formatear_promos_mensaje(promos, super_key, "todos")
+                else:
+                    productos = bo.buscar_productos_filtrados(super_key)
+                    reply_text = bo.formatear_productos_mensaje(productos, super_key)
+                    
+                session.post(send_url_vero, json={"chat_id": chat_id, "text": reply_text, "parse_mode": "Markdown"}, timeout=10)
+                
+            return "OK", 200
+            
+        if "message" not in update:
             return "OK", 200
             
         msg = update["message"]
@@ -506,10 +553,12 @@ REGLAS DE RESPUESTA EXCLUSIVA PARA COMANDOS (Si detectas una acción, responde �
 6. Agregar oferta de producto: Si el usuario quiere registrar un precio u oferta de un producto (ej. 'anotá que la leche en Día está a $920'), responde EXACTAMENTE así:
    AGREGAR_PRODUCTO: Supermercado|Producto|Precio|Condiciones
    (Ejemplo: AGREGAR_PRODUCTO: Día|Leche Sachet|$920|Club Dia)
+7. Mostrar menú interactivo de supermercados: Si el usuario pide ver el menú, saluda, dice 'hola', 'qué podés hacer', 'menú', 'supermercados', o pregunta por promociones/ofertas de supermercados de forma general sin especificar cuál, responde EXACTAMENTE así:
+   MOSTRAR_MENU
 
 REGLAS PARA CONVERSACIÓN GENERAL:
-7. Si no coincide con ningún comando, responde de forma atenta, simpática y natural como su asistente personal, sin usar formato markdown sofisticado y en español.
-8. Si te pide el Facebook, el Instagram o la página oficial de ofertas de Coto, Carrefour o Día, proporciónaselos amablemente con estos enlaces oficiales:
+8. Si no coincide con ningún comando, responde de forma atenta, simpática y natural como su asistente personal, sin usar formato markdown sofisticado y en español.
+9. Si te pide el Facebook, el Instagram o la página oficial de ofertas de Coto, Carrefour o Día, proporciónaselos amablemente con estos enlaces oficiales:
    - Coto: Web (https://www.coto.com.ar/descuentos/), Instagram (https://www.instagram.com/coto_ar/), Facebook (https://www.facebook.com/coto/)
    - Carrefour: Web (https://www.carrefour.com.ar/promociones), Instagram (https://www.instagram.com/carrefourargentina/), Facebook (https://www.facebook.com/CarrefourArgentina/)
    - Día: Web (https://diaonline.supermercadosdia.com.ar/), Instagram (https://www.instagram.com/diaargentina/), Facebook (https://www.facebook.com/DiaArgentina/)"""
@@ -524,6 +573,7 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                 match_agregar_promo = re.search(r"AGREGAR_PROMO:\s*(.*)", ia_text)
                 match_leer_productos = re.search(r"LEER_PRODUCTOS:\s*([a-zA-ZáéíóúñÑ]+)", ia_text)
                 match_agregar_producto = re.search(r"AGREGAR_PRODUCTO:\s*(.*)", ia_text)
+                match_mostrar_menu = re.search(r"MOSTRAR_MENU", ia_text)
                 
                 if match_agendar:
                     parts = match_agendar.group(1).strip().split("|")
@@ -605,6 +655,20 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                     else:
                         reply_text = "❌ Error al interpretar la oferta del producto."
                         
+                elif match_mostrar_menu:
+                    msg_text = "🛒 *Selecciona un supermercado para ver la información:*"
+                    keyboard = {
+                        "inline_keyboard": [
+                            [
+                                {"text": "COTO 🛒", "callback_data": "super:coto"},
+                                {"text": "Carrefour 🛍️", "callback_data": "super:carrefour"},
+                                {"text": "Día 🔴", "callback_data": "super:dia"}
+                            ]
+                        ]
+                    }
+                    session.post(send_url_vero, json={"chat_id": chat_id, "text": msg_text, "parse_mode": "Markdown", "reply_markup": keyboard}, timeout=10)
+                    reply_text = ""
+                    
                 else:
                     reply_text = ia_text
                     
@@ -612,7 +676,8 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                 registrar_error_vero("procesar_mensaje_ia")
                 reply_text = "❌ Ups, tuve un pequeño problema procesando tu mensaje."
                 
-            session.post(send_url_vero, json={"chat_id": chat_id, "text": reply_text, "parse_mode": "Markdown"}, timeout=10)
+            if reply_text:
+                session.post(send_url_vero, json={"chat_id": chat_id, "text": reply_text, "parse_mode": "Markdown"}, timeout=10)
     except Exception:
         registrar_error_vero("webhook_handler_vero")
     return "OK", 200
