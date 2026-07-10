@@ -477,7 +477,58 @@ def webhook_handler_vero():
             
             send_url_vero = f"https://api.telegram.org/bot{TELEGRAM_TOKEN_VERO}/sendMessage"
             
-            if callback_data.startswith("super:"):
+            if callback_data == "menu:agenda":
+                msg_text = "📅 *¿Qué día deseas consultar de tu agenda?*"
+                keyboard = {
+                    "inline_keyboard": [
+                        [
+                            {"text": "🌞 Ver Hoy", "callback_data": "agenda:hoy"},
+                            {"text": "🌅 Ver Mañana", "callback_data": "agenda:manana"}
+                        ]
+                    ]
+                }
+                session.post(send_url_vero, json={"chat_id": chat_id, "text": msg_text, "parse_mode": "Markdown", "reply_markup": keyboard}, timeout=10)
+                
+            elif callback_data == "menu:supermercados":
+                msg_text = "🛒 *Selecciona un supermercado para ver la información:*"
+                keyboard = {
+                    "inline_keyboard": [
+                        [
+                            {"text": "COTO 🛒", "callback_data": "super:coto"},
+                            {"text": "Carrefour 🛍️", "callback_data": "super:carrefour"},
+                            {"text": "Día 🔴", "callback_data": "super:dia"}
+                        ]
+                    ]
+                }
+                session.post(send_url_vero, json={"chat_id": chat_id, "text": msg_text, "parse_mode": "Markdown", "reply_markup": keyboard}, timeout=10)
+                
+            elif callback_data.startswith("agenda:"):
+                dia_tipo = callback_data.split(":")[1]
+                ahora = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=3)
+                if dia_tipo == "hoy":
+                    fecha_dia = ahora.strftime("%Y-%m-%d")
+                else:
+                    fecha_dia = (ahora + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+                    
+                eventos = gc.listar_eventos_dia(fecha_dia)
+                if eventos is None:
+                    reply_text = "❌ Error al leer Google Calendar. Verifica que la cuenta esté vinculada."
+                elif not eventos:
+                    fecha_formateada = formatear_fecha_humana(fecha_dia)
+                    reply_text = f"🎉 ¡Día libre! No tienes nada agendado para el {fecha_formateada}."
+                else:
+                    fecha_formateada = formatear_fecha_humana(fecha_dia)
+                    reply_text = f"📅 *Tu agenda para el {fecha_formateada}:*\n\n"
+                    for ev in eventos:
+                        start = ev['start'].get('dateTime', ev['start'].get('date'))
+                        summary = ev.get('summary', 'Sin título')
+                        hora = ""
+                        if 'T' in start:
+                            hora = " a las " + start.split('T')[1][:5]
+                        reply_text += f"🔹 {summary}{hora}\n"
+                session.post(send_url_vero, json={"chat_id": chat_id, "text": reply_text, "parse_mode": "Markdown"}, timeout=10)
+                
+            elif callback_data.startswith("super:"):
                 super_key = callback_data.split(":")[1]
                 super_display = super_key.capitalize()
                 if super_display.lower() == "dia":
@@ -553,8 +604,8 @@ REGLAS DE RESPUESTA EXCLUSIVA PARA COMANDOS (Si detectas una acción, responde �
 6. Agregar oferta de producto: Si el usuario quiere registrar un precio u oferta de un producto (ej. 'anotá que la leche en Día está a $920'), responde EXACTAMENTE así:
    AGREGAR_PRODUCTO: Supermercado|Producto|Precio|Condiciones
    (Ejemplo: AGREGAR_PRODUCTO: Día|Leche Sachet|$920|Club Dia)
-7. Mostrar menú interactivo de supermercados: Si el usuario pide ver el menú, saluda, dice 'hola', 'qué podés hacer', 'menú', 'supermercados', o pregunta por promociones/ofertas de supermercados de forma general sin especificar cuál, responde EXACTAMENTE así:
-   MOSTRAR_MENU
+7. Mostrar menú inicial de opciones: Si el usuario saluda, dice 'hola', 'buenas', 'menú', 'start', o pregunta de forma genérica qué puede hacer, responde EXACTAMENTE así:
+   MOSTRAR_MENU_INICIAL
 
 REGLAS PARA CONVERSACIÓN GENERAL:
 8. Si no coincide con ningún comando, responde de forma atenta, simpática y natural como su asistente personal, sin usar formato markdown sofisticado y en español.
@@ -573,7 +624,7 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                 match_agregar_promo = re.search(r"AGREGAR_PROMO:\s*(.*)", ia_text)
                 match_leer_productos = re.search(r"LEER_PRODUCTOS:\s*([a-zA-ZáéíóúñÑ]+)", ia_text)
                 match_agregar_producto = re.search(r"AGREGAR_PRODUCTO:\s*(.*)", ia_text)
-                match_mostrar_menu = re.search(r"MOSTRAR_MENU", ia_text)
+                match_mostrar_menu_inicial = re.search(r"MOSTRAR_MENU_INICIAL", ia_text)
                 
                 if match_agendar:
                     parts = match_agendar.group(1).strip().split("|")
@@ -655,14 +706,13 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                     else:
                         reply_text = "❌ Error al interpretar la oferta del producto."
                         
-                elif match_mostrar_menu:
-                    msg_text = "🛒 *Selecciona un supermercado para ver la información:*"
+                elif match_mostrar_menu_inicial:
+                    msg_text = "👋 *¡Hola Vero! ¿En qué te puedo ayudar hoy?*"
                     keyboard = {
                         "inline_keyboard": [
                             [
-                                {"text": "COTO 🛒", "callback_data": "super:coto"},
-                                {"text": "Carrefour 🛍️", "callback_data": "super:carrefour"},
-                                {"text": "Día 🔴", "callback_data": "super:dia"}
+                                {"text": "📅 Mi Agenda", "callback_data": "menu:agenda"},
+                                {"text": "🛒 Supermercados", "callback_data": "menu:supermercados"}
                             ]
                         ]
                     }
