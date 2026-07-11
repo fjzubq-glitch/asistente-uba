@@ -184,10 +184,8 @@ def webhook_handler():
                 msg_text = "📅 *¿Qué día deseas consultar de tu agenda?*"
                 keyboard = {
                     "inline_keyboard": [
-                        [
-                            {"text": "🌞 Ver Hoy", "callback_data": "agenda:hoy"},
-                            {"text": "🌅 Ver Mañana", "callback_data": "agenda:manana"}
-                        ]
+                        [{"text": "🌞 Ver Hoy", "callback_data": "agenda:hoy"}],
+                        [{"text": "🌅 Ver Mañana", "callback_data": "agenda:manana"}]
                     ]
                 }
                 session.post(SEND_URL, json={"chat_id": chat_id, "text": msg_text, "parse_mode": "Markdown", "reply_markup": keyboard}, timeout=10)
@@ -196,11 +194,9 @@ def webhook_handler():
                 msg_text = "🛒 *Selecciona un supermercado para ver la información:*"
                 keyboard = {
                     "inline_keyboard": [
-                        [
-                            {"text": "COTO 🛒", "callback_data": "super:coto"},
-                            {"text": "Carrefour 🛍️", "callback_data": "super:carrefour"},
-                            {"text": "Día 🔴", "callback_data": "super:dia"}
-                        ]
+                        [{"text": "COTO 🛒", "callback_data": "super:coto"}],
+                        [{"text": "Carrefour 🛍️", "callback_data": "super:carrefour"}],
+                        [{"text": "Día 🔴", "callback_data": "super:dia"}]
                     ]
                 }
                 session.post(SEND_URL, json={"chat_id": chat_id, "text": msg_text, "parse_mode": "Markdown", "reply_markup": keyboard}, timeout=10)
@@ -240,10 +236,8 @@ def webhook_handler():
                 
                 keyboard = {
                     "inline_keyboard": [
-                        [
-                            {"text": "💳 Descuentos Bancarios", "callback_data": f"info:{super_key}:promos"},
-                            {"text": "🛒 Ofertas de Productos", "callback_data": f"info:{super_key}:productos"}
-                        ]
+                        [{"text": "💳 Descuentos Bancarios", "callback_data": f"info:{super_key}:promos"}],
+                        [{"text": "🛒 Ofertas de Productos", "callback_data": f"info:{super_key}:productos"}]
                     ]
                 }
                 session.post(SEND_URL, json={"chat_id": chat_id, "text": msg_text, "parse_mode": "Markdown", "reply_markup": keyboard}, timeout=10)
@@ -432,10 +426,8 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                         msg_text = "👋 *¡Hola Vero! ¿En qué te puedo ayudar hoy?*"
                         keyboard = {
                             "inline_keyboard": [
-                                [
-                                    {"text": "📅 Mi Agenda", "callback_data": "menu:agenda"},
-                                    {"text": "🛒 Supermercados", "callback_data": "menu:supermercados"}
-                                ]
+                                [{"text": "📅 Mi Agenda", "callback_data": "menu:agenda"}],
+                                [{"text": "🛒 Supermercados", "callback_data": "menu:supermercados"}]
                             ]
                         }
                         session.post(SEND_URL, json={"chat_id": chat_id, "text": msg_text, "parse_mode": "Markdown", "reply_markup": keyboard}, timeout=10)
