@@ -134,7 +134,7 @@ def buscar_promociones_filtradas(supermercado=None, dia=None):
     return promos
 
 def formatear_promos_mensaje(promos, supermercado=None, dia=None):
-    """Formatea la lista de promociones a un formato legible para Telegram, priorizando el día actual."""
+    """Formatea la lista de promociones a un formato legible para Telegram, priorizando el día actual y optimizado para celular."""
     label_super = f" de {supermercado.upper()}" if supermercado and supermercado.lower() != "todos" else ""
     label_dia = f" para el día {dia.upper()}" if dia and dia.lower() != "todos" else ""
     
@@ -154,9 +154,9 @@ def formatear_promos_mensaje(promos, supermercado=None, dia=None):
             msg += f"🔸 *{super_key.upper()}*\n"
             for p in lista:
                 dias_str = ", ".join(p.get("dias", []))
-                msg += f"  • *{p.get('descuento')}* con *{p.get('banco_tarjeta')}* (Días: {dias_str})\n"
+                msg += f"• *{p.get('descuento')}* | {p.get('banco_tarjeta')} (Días: {dias_str})\n"
                 if p.get("condiciones"):
-                    msg += f"    _({p.get('condiciones')})_\n"
+                    msg += f"  _({p.get('condiciones')})_\n"
         return msg.strip()
         
     dia_hoy = obtener_dia_espanol()
@@ -187,13 +187,12 @@ def formatear_promos_mensaje(promos, supermercado=None, dia=None):
         for super_key, lista in grouped_hoy.items():
             msg += f"🔸 *{super_key.upper()}*\n"
             for p in lista:
-                msg += f"  • *{p.get('descuento')}* con *{p.get('banco_tarjeta')}*\n"
+                msg += f"• *{p.get('descuento')}* | {p.get('banco_tarjeta')}\n"
                 if p.get("condiciones"):
-                    msg += f"    _({p.get('condiciones')})_\n"
+                    msg += f"  _({p.get('condiciones')})_\n"
         msg += "\n"
         
     # 2. Mostrar las del resto de la semana
-    # Si el usuario solicitó específicamente "hoy" o "resto", no mostramos el resto general.
     if promos_otros and (dia is None or (dia.lower().strip() != "hoy" and dia.lower().strip() != "resto")):
         msg += "📅 *DESCUENTOS PARA EL RESTO DE LA SEMANA:*\n"
         grouped_otros = {}
@@ -207,9 +206,9 @@ def formatear_promos_mensaje(promos, supermercado=None, dia=None):
             msg += f"🔸 *{super_key.upper()}*\n"
             for p in lista:
                 dias_str = ", ".join(p.get("dias", []))
-                msg += f"  • *{p.get('descuento')}* con *{p.get('banco_tarjeta')}* (Días: {dias_str})\n"
+                msg += f"• *{p.get('descuento')}* | {p.get('banco_tarjeta')} (Días: {dias_str})\n"
                 if p.get("condiciones"):
-                    msg += f"    _({p.get('condiciones')})_\n"
+                    msg += f"  _({p.get('condiciones')})_\n"
         msg += "\n"
         
     return msg.strip()
@@ -372,7 +371,7 @@ def agregar_nuevo_producto(supermercado, producto, precio, condiciones=None):
     return guardar_productos(productos)
 
 def formatear_productos_mensaje(productos, supermercado=None):
-    """Formatea la lista de productos de oferta para Telegram."""
+    """Formatea la lista de productos de oferta para Telegram, optimizado para celular."""
     label_super = f" de {supermercado.upper()}" if supermercado and supermercado.lower() != "todos" else ""
     
     if not productos:
@@ -390,9 +389,9 @@ def formatear_productos_mensaje(productos, supermercado=None):
     for super_key, lista in grouped.items():
         msg += f"🔸 *{super_key.upper()}*\n"
         for p in lista:
-            msg += f"  • *{p.get('producto')}*: {p.get('precio')}\n"
+            msg += f"• *{p.get('producto')}*: {p.get('precio')}\n"
             if p.get("condiciones"):
-                msg += f"    _({p.get('condiciones')})_\n"
+                msg += f"  _({p.get('condiciones')})_\n"
         msg += "\n"
         
     return msg.strip()
@@ -536,7 +535,7 @@ def buscar_productos_por_nombre(termino):
     return coincidencias_locales, coincidencias_online
 
 def formatear_resultado_busqueda(locales, online, termino):
-    """Formatea la respuesta consolidada de búsqueda local y online en Markdown."""
+    """Formatea la respuesta consolidada de búsqueda local y online en Markdown, optimizado para celular."""
     if not locales and not online:
         return f"🔍 No encontré ofertas cargadas ni precios online para *'{termino}'*."
         
@@ -555,19 +554,17 @@ def formatear_resultado_busqueda(locales, online, termino):
         for s_name, lista in grouped.items():
             msg += f"🔸 *{s_name.upper()}*\n"
             for p in lista:
-                msg += f"  • *{p.get('producto')}*: {p.get('precio')}\n"
+                msg += f"• *{p.get('producto')}*: {p.get('precio')}\n"
                 if p.get("condiciones"):
-                    msg += f"    _({p.get('condiciones')})_\n"
+                    msg += f"  _({p.get('condiciones')})_\n"
         msg += "\n"
         
     # Precios comparativos online (online)
     if online:
         msg += "🌐 *Precios comparados en tiempo real (online):*\n"
-        # Mostrar los primeros 5 productos para no saturar Telegram
         for idx, p in enumerate(online[:5]):
             msg += f"🔹 *{p['producto']}*\n"
             
-            # Ordenar precios de menor a mayor
             try:
                 def get_val(pr):
                     val_str = pr["precio"].replace("$", "").replace(".", "").replace(",", ".").strip()
@@ -582,9 +579,9 @@ def formatear_resultado_busqueda(locales, online, termino):
                     super_display = f"*{super_display}*"
                     
                 if pr["link"]:
-                    msg += f"  • {super_display}: [{pr['precio']}]({pr['link']})\n"
+                    msg += f"• {super_display}: [{pr['precio']}]({pr['link']})\n"
                 else:
-                    msg += f"  • {super_display}: {pr['precio']}\n"
+                    msg += f"• {super_display}: {pr['precio']}\n"
             msg += "\n"
             
     return msg.strip()
