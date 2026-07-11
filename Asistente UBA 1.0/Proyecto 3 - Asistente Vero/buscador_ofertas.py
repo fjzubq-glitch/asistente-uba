@@ -141,6 +141,24 @@ def formatear_promos_mensaje(promos, supermercado=None, dia=None):
     if not promos:
         return f"🎉 ¡No encontré promociones cargadas{label_super}{label_dia}! Puedes agregar una diciendo, por ejemplo: 'Agregá promo Coto Banco Nación 30% los miércoles'."
         
+    if dia == "resto":
+        msg = f"📅 *Descuentos{label_super} para el resto de la semana:*\n\n"
+        grouped_otros = {}
+        for p in promos:
+            s_name = p.get("supermercado", "Otros")
+            if s_name not in grouped_otros:
+                grouped_otros[s_name] = []
+            grouped_otros[s_name].append(p)
+            
+        for super_key, lista in grouped_otros.items():
+            msg += f"🔸 *{super_key.upper()}*\n"
+            for p in lista:
+                dias_str = ", ".join(p.get("dias", []))
+                msg += f"  • *{p.get('descuento')}* con *{p.get('banco_tarjeta')}* (Días: {dias_str})\n"
+                if p.get("condiciones"):
+                    msg += f"    _({p.get('condiciones')})_\n"
+        return msg.strip()
+        
     dia_hoy = obtener_dia_espanol()
     
     # Separar promociones de hoy y del resto de la semana
@@ -175,9 +193,8 @@ def formatear_promos_mensaje(promos, supermercado=None, dia=None):
         msg += "\n"
         
     # 2. Mostrar las del resto de la semana
-    # Si el usuario solicitó específicamente "hoy", no mostramos el resto.
-    # Pero si pidió de "todos" los días, o no especificó "hoy", mostramos el resto.
-    if promos_otros and (dia is None or dia.lower().strip() != "hoy"):
+    # Si el usuario solicitó específicamente "hoy" o "resto", no mostramos el resto general.
+    if promos_otros and (dia is None or (dia.lower().strip() != "hoy" and dia.lower().strip() != "resto")):
         msg += "📅 *DESCUENTOS PARA EL RESTO DE LA SEMANA:*\n"
         grouped_otros = {}
         for p in promos_otros:

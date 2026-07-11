@@ -254,12 +254,29 @@ def webhook_handler():
                 info_type = parts[2]
                 
                 if info_type == "promos":
-                    promos = bo.buscar_promociones_filtradas(super_key, "todos")
-                    reply_text = bo.formatear_promos_mensaje(promos, super_key, "todos")
+                    promos_hoy = bo.buscar_promociones_filtradas(super_key, "hoy")
+                    reply_text = bo.formatear_promos_mensaje(promos_hoy, super_key, "hoy")
+                    
+                    keyboard = {
+                        "inline_keyboard": [
+                            [
+                                {"text": "📅 Ver resto de la semana", "callback_data": f"rest_promos:{super_key}"}
+                            ]
+                        ]
+                    }
+                    session.post(SEND_URL, json={"chat_id": chat_id, "text": reply_text, "parse_mode": "Markdown", "reply_markup": keyboard}, timeout=10)
                 else:
                     productos = bo.buscar_productos_filtrados(super_key)
                     reply_text = bo.formatear_productos_mensaje(productos, super_key)
+                    session.post(SEND_URL, json={"chat_id": chat_id, "text": reply_text, "parse_mode": "Markdown"}, timeout=10)
                     
+            elif callback_data.startswith("rest_promos:"):
+                super_key = callback_data.split(":")[1]
+                promos = bo.buscar_promociones_filtradas(super_key, "todos")
+                dia_hoy = bo.obtener_dia_espanol()
+                promos_otros = [p for p in promos if dia_hoy not in [d.lower().strip() for d in p.get("dias", [])]]
+                
+                reply_text = bo.formatear_promos_mensaje(promos_otros, super_key, "resto")
                 session.post(SEND_URL, json={"chat_id": chat_id, "text": reply_text, "parse_mode": "Markdown"}, timeout=10)
                 
             return "OK", 200
