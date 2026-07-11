@@ -599,6 +599,31 @@ def webhook_handler_vero():
         if text:
             # Comando secreto de diagnóstico para probar el estado del proxy en caliente
             if text.lower().strip() == "diagnostico_proxy":
+                cwd = os.getcwd()
+                files_in_cwd = os.listdir(cwd)
+                
+                # Buscar .env
+                env_exists = os.path.exists(".env")
+                env_in_vero = os.path.exists("Proyecto 3 - Asistente Vero/.env")
+                
+                # Leer líneas de .env (anonimizado)
+                env_lines = []
+                if env_exists:
+                    try:
+                        with open(".env", "r", encoding="utf-8") as f:
+                            for l in f:
+                                l_strip = l.strip()
+                                if l_strip and not l_strip.startswith("#"):
+                                    parts = l_strip.split("=", 1)
+                                    key = parts[0].strip()
+                                    val = parts[1].strip() if len(parts) > 1 else ""
+                                    anon_val = val[:5] + "..." if len(val) > 5 else "***"
+                                    env_lines.append(f"• `{key}={anon_val}`")
+                    except Exception as ex:
+                        env_lines.append(f"Error leyendo .env: {ex}")
+                else:
+                    env_lines.append("No se encontró el archivo `.env` en la raíz.")
+                
                 proxy_url = os.environ.get("GOOGLE_SCRIPT_PROXY_URL")
                 has_proxy = bool(proxy_url)
                 proxy_snippet = proxy_url[:40] + "..." if has_proxy else "Ninguno"
@@ -609,19 +634,26 @@ def webhook_handler_vero():
                         r_test = requests.get(proxy_url.strip() + "?url=https%3A%2F%2Fsuperprecio.ar%2Fsearchgrouped%3Fsearch%3Dleche", timeout=12)
                         test_status = f"Status {r_test.status_code}, Length {len(r_test.text)}"
                         if "product-row" in r_test.text:
-                            test_status += " (HTML correcto con product-rows)"
+                            test_status += " (HTML con product-rows)"
                         else:
                             test_status += " (HTML sin product-rows)"
                     except Exception as ex:
                         test_status = f"Error: {ex}"
                 
+                # Filtrar archivos interesantes para no saturar el mensaje de Telegram
+                interesantes = [f for f in files_in_cwd if f.startswith(".") or "env" in f.lower() or f.endswith(".py") or f.endswith(".txt")]
+                
                 reply = (
                     f"⚙️ *Diagnóstico del Proxy de Vero:*\n\n"
-                    f"• *Cwd:* `{os.getcwd()}`\n"
+                    f"• *Cwd:* `{cwd}`\n"
                     f"• *Archivo:* `{__file__}`\n"
                     f"• *Proxy Configurado:* `{has_proxy}`\n"
                     f"• *URL del Proxy:* `{proxy_snippet}`\n"
-                    f"• *Prueba de conexión:* `{test_status}`\n"
+                    f"• *Prueba de conexión:* `{test_status}`\n\n"
+                    f"• *Archivos encontrados:* `{', '.join(interesantes)}`\n"
+                    f"• *¿Existe .env en raíz?:* `{env_exists}`\n"
+                    f"• *¿Existe .env en subcarpeta?:* `{env_in_vero}`\n\n"
+                    f"📋 *Contenido de .env (anonimizado):*\n" + "\n".join(env_lines)
                 )
                 session.post(send_url_vero, json={"chat_id": chat_id, "text": reply, "parse_mode": "Markdown"}, timeout=10)
                 return "OK", 200
