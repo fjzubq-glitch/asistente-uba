@@ -415,12 +415,36 @@ def buscar_precios_online(termino):
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
         }
         r = requests.get(proxy_url, headers=headers, cookies={"CONSENT": "YES+"}, timeout=10)
+        
+        # Log diagnóstico
+        log_path = "bot_errors.log"
+        try:
+            with open(log_path, "a", encoding="utf-8") as f:
+                f.write(f"\n[DIAGNOSTIC] Query: {termino} | Status: {r.status_code} | Length: {len(r.text)}\n")
+        except Exception:
+            pass
+            
         if r.status_code != 200:
+            try:
+                with open(log_path, "a", encoding="utf-8") as f:
+                    f.write(f"[DIAGNOSTIC] Non-200 response: {r.text[:300]}\n")
+            except Exception:
+                pass
             return []
             
         soup = BeautifulSoup(r.text, 'html.parser')
         products = []
-        for row in soup.find_all(class_='product-row'):
+        rows = soup.find_all(class_='product-row')
+        
+        try:
+            with open(log_path, "a", encoding="utf-8") as f:
+                f.write(f"[DIAGNOSTIC] Rows found in HTML: {len(rows)}\n")
+                if len(rows) == 0:
+                    f.write(f"[DIAGNOSTIC] First 500 chars of HTML: {r.text[:500]}\n")
+        except Exception:
+            pass
+            
+        for row in rows:
             title_el = row.find(class_='product-title')
             if not title_el:
                 continue
@@ -466,6 +490,11 @@ def buscar_precios_online(termino):
         return products
     except Exception as e:
         print(f"Error en buscar_precios_online: {e}")
+        try:
+            with open("bot_errors.log", "a", encoding="utf-8") as f:
+                f.write(f"[DIAGNOSTIC] Exception: {e}\n")
+        except Exception:
+            pass
         return []
 
 def buscar_productos_por_nombre(termino):
