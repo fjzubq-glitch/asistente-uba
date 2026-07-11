@@ -405,6 +405,13 @@ def buscar_precios_online(termino):
     import os
     
     try:
+        # Cargar variables de entorno de forma redundante desde los directorios posibles (.env en root o en el subproyecto)
+        from dotenv import load_dotenv
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        load_dotenv(os.path.join(BASE_DIR, ".env"))
+        load_dotenv(os.path.join(BASE_DIR, "Proyecto 3 - Asistente Vero", ".env"))
+        load_dotenv(os.path.join(os.path.dirname(BASE_DIR), ".env"))
+        
         # Reemplazar espacios por '+' para evitar problemas de formato
         term_formatted = termino.replace(" ", "+")
         target_url = f"https://superprecio.ar/searchgrouped?search={term_formatted}"
