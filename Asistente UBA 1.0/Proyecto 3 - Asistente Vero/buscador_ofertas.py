@@ -404,11 +404,12 @@ def buscar_precios_online(termino):
     import urllib.parse
     
     try:
-        term_encoded = urllib.parse.quote(termino)
-        target_url = f"https://superprecio.ar/searchgrouped?search={term_encoded}"
+        # Reemplazar espacios por '+' para evitar problemas de codificación doble en Google Translate
+        term_formatted = termino.replace(" ", "+")
+        target_url = f"https://superprecio.ar/searchgrouped?search={term_formatted}"
         
-        # Usar Google Translate como proxy para saltar el bloqueo de salida (whitelist) en cuentas gratuitas de PythonAnywhere
-        proxy_url = f"https://translate.google.com/translate?sl=auto&tl=es&u={urllib.parse.quote(target_url)}"
+        # Codificar completamente la URL del proxy (incluyendo barras inclinadas '/') usando safe=''
+        proxy_url = f"https://translate.google.com/translate?sl=auto&tl=es&u={urllib.parse.quote(target_url, safe='')}"
         
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
