@@ -134,30 +134,65 @@ def buscar_promociones_filtradas(supermercado=None, dia=None):
     return promos
 
 def formatear_promos_mensaje(promos, supermercado=None, dia=None):
-    """Formatea la lista de promociones a un formato legible para Telegram."""
+    """Formatea la lista de promociones a un formato legible para Telegram, priorizando el día actual."""
     label_super = f" de {supermercado.upper()}" if supermercado and supermercado.lower() != "todos" else ""
     label_dia = f" para el día {dia.upper()}" if dia and dia.lower() != "todos" else ""
     
     if not promos:
         return f"🎉 ¡No encontré promociones cargadas{label_super}{label_dia}! Puedes agregar una diciendo, por ejemplo: 'Agregá promo Coto Banco Nación 30% los miércoles'."
         
-    msg = f"🛒 *Promociones de Supermercados{label_super}{label_dia}:*\n\n"
+    dia_hoy = obtener_dia_espanol()
     
-    # Agrupar por supermercado
-    grouped = {}
+    # Separar promociones de hoy y del resto de la semana
+    promos_hoy = []
+    promos_otros = []
+    
     for p in promos:
-        super_name = p.get("supermercado", "Otros")
-        if super_name not in grouped:
-            grouped[super_name] = []
-        grouped[super_name].append(p)
+        dias_p = [d.lower().strip() for d in p.get("dias", [])]
+        if dia_hoy in dias_p:
+            promos_hoy.append(p)
+        else:
+            promos_otros.append(p)
+            
+    msg = f"🛒 *Promociones de Supermercados{label_super}:*\n\n"
+    
+    # 1. Mostrar las de hoy primero
+    if promos_hoy:
+        msg += f"📌 *DESCUENTOS PARA HOY ({dia_hoy.upper()}):*\n"
+        grouped_hoy = {}
+        for p in promos_hoy:
+            s_name = p.get("supermercado", "Otros")
+            if s_name not in grouped_hoy:
+                grouped_hoy[s_name] = []
+            grouped_hoy[s_name].append(p)
+            
+        for super_key, lista in grouped_hoy.items():
+            msg += f"🔸 *{super_key.upper()}*\n"
+            for p in lista:
+                msg += f"  • *{p.get('descuento')}* con *{p.get('banco_tarjeta')}*\n"
+                if p.get("condiciones"):
+                    msg += f"    _({p.get('condiciones')})_\n"
+        msg += "\n"
         
-    for super_key, lista in grouped.items():
-        msg += f"🔹 *{super_key.upper()}*\n"
-        for p in lista:
-            dias_str = ", ".join(p.get("dias", []))
-            msg += f"  • *{p.get('descuento')}* con *{p.get('banco_tarjeta')}* (Días: {dias_str})\n"
-            if p.get("condiciones"):
-                msg += f"    _({p.get('condiciones')})_\n"
+    # 2. Mostrar las del resto de la semana
+    # Si el usuario solicitó específicamente "hoy", no mostramos el resto.
+    # Pero si pidió de "todos" los días, o no especificó "hoy", mostramos el resto.
+    if promos_otros and (dia is None or dia.lower().strip() != "hoy"):
+        msg += "📅 *DESCUENTOS PARA EL RESTO DE LA SEMANA:*\n"
+        grouped_otros = {}
+        for p in promos_otros:
+            s_name = p.get("supermercado", "Otros")
+            if s_name not in grouped_otros:
+                grouped_otros[s_name] = []
+            grouped_otros[s_name].append(p)
+            
+        for super_key, lista in grouped_otros.items():
+            msg += f"🔸 *{super_key.upper()}*\n"
+            for p in lista:
+                dias_str = ", ".join(p.get("dias", []))
+                msg += f"  • *{p.get('descuento')}* con *{p.get('banco_tarjeta')}* (Días: {dias_str})\n"
+                if p.get("condiciones"):
+                    msg += f"    _({p.get('condiciones')})_\n"
         msg += "\n"
         
     return msg.strip()
