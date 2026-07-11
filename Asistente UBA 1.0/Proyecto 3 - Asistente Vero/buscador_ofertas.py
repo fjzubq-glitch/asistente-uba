@@ -398,29 +398,36 @@ def formatear_productos_mensaje(productos, supermercado=None):
     return msg.strip()
 
 def buscar_precios_online(termino):
-    """Busca en superprecio.ar los precios comparativos en tiempo real de un producto usando Google Translate como proxy."""
+    """Busca en superprecio.ar los precios comparativos en tiempo real de un producto (opcionalmente a través de Google Apps Script proxy)."""
     import requests
     from bs4 import BeautifulSoup
     import urllib.parse
+    import os
     
     try:
-        # Reemplazar espacios por '+' para evitar problemas de codificación doble en Google Translate
+        # Reemplazar espacios por '+' para evitar problemas de formato
         term_formatted = termino.replace(" ", "+")
         target_url = f"https://superprecio.ar/searchgrouped?search={term_formatted}"
         
-        # Codificar completamente la URL del proxy (incluyendo barras inclinadas '/') usando safe=''
-        proxy_url = f"https://translate.google.com/translate?sl=auto&tl=es&u={urllib.parse.quote(target_url, safe='')}"
+        # Leer URL de proxy de Google Apps Script (útil para el tier gratuito de PythonAnywhere)
+        proxy_base_url = os.environ.get("GOOGLE_SCRIPT_PROXY_URL")
         
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
         }
-        r = requests.get(proxy_url, headers=headers, cookies={"CONSENT": "YES+"}, timeout=10)
         
         # Log diagnóstico
         log_path = "bot_errors.log"
+        
+        if proxy_base_url:
+            request_url = f"{proxy_base_url.strip()}?url={urllib.parse.quote(target_url, safe='')}"
+            r = requests.get(request_url, headers=headers, timeout=15)
+        else:
+            r = requests.get(target_url, headers=headers, timeout=10)
+            
         try:
             with open(log_path, "a", encoding="utf-8") as f:
-                f.write(f"\n[DIAGNOSTIC] Query: {termino} | Status: {r.status_code} | Length: {len(r.text)}\n")
+                f.write(f"\n[DIAGNOSTIC] Query: {termino} | Status: {r.status_code} | Length: {len(r.text)} | Using Proxy: {bool(proxy_base_url)}\n")
         except Exception:
             pass
             
