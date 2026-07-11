@@ -597,6 +597,36 @@ def webhook_handler_vero():
             text = msg.get("text", "")
             
         if text:
+            # Comando secreto de diagnóstico para probar el estado del proxy en caliente
+            if text.lower().strip() == "diagnostico_proxy":
+                proxy_url = os.environ.get("GOOGLE_SCRIPT_PROXY_URL")
+                has_proxy = bool(proxy_url)
+                proxy_snippet = proxy_url[:40] + "..." if has_proxy else "Ninguno"
+                
+                test_status = "No testeado"
+                if has_proxy:
+                    try:
+                        r_test = requests.get(proxy_url.strip() + "?url=https%3A%2F%2Fsuperprecio.ar%2Fsearchgrouped%3Fsearch%3Dleche", timeout=12)
+                        test_status = f"Status {r_test.status_code}, Length {len(r_test.text)}"
+                        if "product-row" in r_test.text:
+                            test_status += " (HTML correcto con product-rows)"
+                        else:
+                            test_status += " (HTML sin product-rows)"
+                    except Exception as ex:
+                        test_status = f"Error: {ex}"
+                
+                reply = (
+                    f"⚙️ *Diagnóstico del Proxy de Vero:*\n\n"
+                    f"• *Cwd:* `{os.getcwd()}`\n"
+                    f"• *Archivo:* `{__file__}`\n"
+                    f"• *Proxy Configurado:* `{has_proxy}`\n"
+                    f"• *URL del Proxy:* `{proxy_snippet}`\n"
+                    f"• *Prueba de conexión:* `{test_status}`\n"
+                )
+                session.post(send_url_vero, json={"chat_id": chat_id, "text": reply, "parse_mode": "Markdown"}, timeout=10)
+                return "OK", 200
+
+        if text:
             ahora = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=3)
             
             SYSTEM_PROMPT = f"""Eres un asistente personal inteligente, cálido y eficiente para Vero. Fecha y hora actuales: {ahora.strftime("%Y-%m-%dT%H:%M:00-03:00")}.
