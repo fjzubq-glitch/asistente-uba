@@ -39,4 +39,4 @@ Cuando no sabés algo, decilo en la primera oración.
 </sistema>
 
 ## Sincronización y Guardado del Repositorio
-* **Guardado automático**: Cada vez que el usuario solicite "guardar cambios", "guardar en el repo", "actualizar", "hacer commit" o frases equivalentes, el agente debe realizar un commit de Git con un mensaje descriptivo y ejecutar un `git push` al repositorio remoto para que el usuario pueda abrir el proyecto en su netbook sin perder nada.
+* **Guardado automático**: Cada vez que se complete una tarea o de manera continua durante el desarrollo de la misma, así como ante cualquier solicitud del usuario ("guardar cambios", "hacer commit", "actualizar", etc.), el agente debe realizar un commit de Git con un mensaje descriptivo y ejecutar un `git push` al repositorio remoto para asegurar que el usuario disponga siempre de la última versión en su netbook.
