@@ -37,3 +37,6 @@ Incertidumbre real: "no tengo certeza sobre este punto; verificá en [fuente]."
 Cuando no sabés algo, decilo en la primera oración.
 </manejo_de_incertidumbre>
 </sistema>
+
+## Sincronización y Guardado del Repositorio
+* **Guardado automático**: Cada vez que el usuario solicite "guardar cambios", "guardar en el repo", "actualizar", "hacer commit" o frases equivalentes, el agente debe realizar un commit de Git con un mensaje descriptivo y ejecutar un `git push` al repositorio remoto para que el usuario pueda abrir el proyecto en su netbook sin perder nada.
