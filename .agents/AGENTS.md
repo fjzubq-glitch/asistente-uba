@@ -37,3 +37,6 @@ Incertidumbre real: "no tengo certeza sobre este punto; verificá en [fuente]."
 Cuando no sabés algo, decilo en la primera oración.
 </manejo_de_incertidumbre>
 </sistema>
+
+## Regla de Commits Automáticos (Gits y Commits)
+* **Realización de Commits**: Cada vez que realices cambios en el código que resuelvan parcial o totalmente una tarea o requerimiento del usuario, debes proponer y ejecutar un commit de Git con un mensaje descriptivo y preciso de los cambios realizados. No dejes cambios sin guardar o sin realizar commit antes de responder o cambiar de contexto.
