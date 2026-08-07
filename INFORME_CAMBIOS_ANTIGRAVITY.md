@@ -37,7 +37,9 @@
 11. `cron_alarmas_uba.py` — punto de entrada para PythonAnywhere (Tasks) / cron: ejecuta
     `ejecutar_ciclo_uba()` una vez y termina.
 12. `cron_alarmas_vero.py` — idem para Vero.
-13. `tests/test_core.py` — smoke tests de funciones puras (fechas, idempotencia, registro de chats,
+13. **`cron_alarmas_diarias.py`** — tarea única que ejecuta ambos ciclos en una corrida.
+    Es el script recomendado para el plan free de PythonAnywhere (que solo permite **1 tarea diaria**).
+14. `tests/test_core.py` — smoke tests de funciones puras (fechas, idempotencia, registro de chats,
     caché). Ver sección 4.
 
 ### 1.4 `.gitignore`
@@ -86,17 +88,23 @@ CACHE_TTL  = 1800  # 30 min
 
 ## 3. Configuración en PythonAnywhere (Tasks / cron)
 
+**Limitación del plan free**: permite **1 (una) tarea programada diaria** (no horaria). Por eso se
+creó `cron_alarmas_diarias.py`, que ejecuta UBA y Vero en la misma corrida.
+
 Pestaña *Tasks* → *Add scheduled task* (`python3.10`):
 
 | Tarea | Horario (UTC) | Equivale |
 |-------|---------------|----------|
-| `python3.10 /home/franklinzg/asistente-uba/cron_alarmas_uba.py` | 11:00 UTC | 08:00 Argentina (Buenos días + recordatorios) |
-| `python3.10 /home/franklinzg/asistente-uba/cron_alarmas_vero.py` | 11:00 UTC | 08:00 Argentina (Buenos días Vero) |
+| `python3.10 /home/franklinzg/asistente-uba/cron_alarmas_diarias.py` | 11:00 UTC (daily) | 08:00 Argentina — buenos días UBA y Vero |
 
-> **Recordatorios a tiempo real**: para cubrir la ventana de 10 min previos a cada evento, conviene
-> un cron cada 1-2 min del `cron_alarmas_uba.py`. El plan free de PythonAnywhere limita la cantidad de
-> tareas programadas; verificar el límite. Alternativa: mantener el hilo actual como fallback (sigue
-> funcionando) o pasar a plan de pago.
+> **Recordatorios "10 min antes"**: el plan free no permite tareas cada minuto. Los recordatorios
+> dentro del día siguen a cargo de los hilos de `server.py` (se activan cuando llega un webhook o se
+> llama a `/ping`, y viven mientras el worker está cargado). Si se quiere recordatorios garantizados
+> por cron, hay que pasar a un plan de pago (Hacker, ~USD 5, otorga 20 tareas horarias/diarias y
+> 1 always-on task) o mover a proveedor con scheduler de 1 min.
+
+Los scripts individuales `cron_alarmas_uba.py` / `cron_alarmas_vero.py` sirven si se usa un plan de
+pago con más slots o un cron externo.
 
 Variable opcional en `.env`:
 ```env
