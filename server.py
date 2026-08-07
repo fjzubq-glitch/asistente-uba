@@ -37,13 +37,11 @@ def formatear_fecha_humana(fecha_str):
         return fecha_str
 
 # ==========================================
+# CONFIGURACIÓN GENERAL Y LLM (GROQ)
 # ==========================================
-# CONFIGURACIÓN GENERAL Y LLM (GEMINI)
-# ==========================================
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-GEMINI_MODEL = "gemini-1.5-flash"
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-
+GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
+GROQ_MODEL = "llama-3.3-70b-versatile"
 
 session = requests.Session()
 retry = Retry(connect=3, backoff_factor=1)
@@ -52,29 +50,20 @@ session.mount('http://', adapter)
 session.mount('https://', adapter)
 
 def llamar_llm(prompt_sistema, texto_usuario):
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
     payload = {
-        "systemInstruction": {
-            "parts": [
-                {"text": prompt_sistema}
-            ]
-        },
-        "contents": [
-            {
-                "parts": [
-                    {"text": texto_usuario}
-                ]
-            }
+        "model": GROQ_MODEL,
+        "messages": [
+            {"role": "system", "content": prompt_sistema},
+            {"role": "user", "content": texto_usuario}
         ],
-        "generationConfig": {
-            "temperature": 0.3
-        }
+        "temperature": 0.3
     }
-    r = session.post(url, headers={"Content-Type": "application/json"}, json=payload, timeout=20)
+    r = session.post(GROQ_URL, headers={"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}, json=payload, timeout=20)
     data = r.json()
-    if "candidates" not in data:
-        raise Exception(f"Fallo en API de Gemini (Status {r.status_code}): {data}")
-    return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+    if "choices" not in data:
+        raise Exception(f"Fallo en API de Groq (Status {r.status_code}): {data}")
+    return data["choices"][0]["message"]["content"].strip()
+
 
 
 
