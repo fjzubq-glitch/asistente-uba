@@ -10,17 +10,19 @@ import re
 import threading
 from dotenv import load_dotenv
 
-# Cargar variables de entorno desde el archivo .env
-load_dotenv()
+# Archivos de persistencia y logs
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.dirname(BASE_DIR)
+
+# Cargar variables de entorno desde el archivo .env de forma robusta
+load_dotenv(os.path.join(BASE_DIR, ".env"))
+load_dotenv(os.path.join(PARENT_DIR, ".env"))
 
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 NOTION_TOKEN = os.environ.get("NOTION_TOKEN")
 NOTION_DB_ID = os.environ.get("NOTION_DB_ID")
 
-
-# Archivos de persistencia y logs
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CHAT_ID_FILE = os.path.join(BASE_DIR, "chat_id.txt")
 LOG_FILE = os.path.join(BASE_DIR, "bot_errors.log")
 

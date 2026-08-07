@@ -11,11 +11,14 @@ import re
 import threading
 from dotenv import load_dotenv
 
-# Cargar variables de entorno de forma robusta en local y en la nube
+# Cargar variables de entorno de forma robusta
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PARENT_DIR = os.path.dirname(BASE_DIR)
+UBA_DIR = os.path.join(BASE_DIR, "Bot Telegram")
+VERO_DIR = os.path.join(BASE_DIR, "Asistente Vero")
+
+# Cargar .env de la raíz y de Vero
 load_dotenv(os.path.join(BASE_DIR, ".env"))
-load_dotenv(os.path.join(PARENT_DIR, ".env"))
+load_dotenv(os.path.join(VERO_DIR, ".env"))
 
 app = Flask(__name__)
 
@@ -66,8 +69,8 @@ TELEGRAM_TOKEN_UBA = os.environ.get("TELEGRAM_TOKEN")
 NOTION_TOKEN = os.environ.get("NOTION_TOKEN")
 NOTION_DB_ID = os.environ.get("NOTION_DB_ID")
 
-CHAT_ID_FILE_UBA = os.path.join(BASE_DIR, "chat_id.txt")
-LOG_FILE_UBA = os.path.join(BASE_DIR, "bot_errors.log")
+CHAT_ID_FILE_UBA = os.path.join(UBA_DIR, "chat_id.txt")
+LOG_FILE_UBA = os.path.join(UBA_DIR, "bot_errors.log")
 
 MI_CHAT_ID_UBA = "0"
 if os.path.exists(CHAT_ID_FILE_UBA):
@@ -108,7 +111,7 @@ def transcribir_audio_uba(file_id):
         r1 = session.get(f"https://api.telegram.org/bot{TELEGRAM_TOKEN_UBA}/getFile?file_id={file_id}", timeout=15).json()
         file_path = r1["result"]["file_path"]
         r2 = session.get(f"https://api.telegram.org/file/bot{TELEGRAM_TOKEN_UBA}/{file_path}", timeout=20)
-        temp_file = os.path.join(BASE_DIR, "audio_temp_uba.ogg")
+        temp_file = os.path.join(UBA_DIR, "audio_temp_uba.ogg")
         with open(temp_file, "wb") as f:
             f.write(r2.content)
         url_audio = "https://api.groq.com/openai/v1/audio/transcriptions"
@@ -191,7 +194,6 @@ def revisar_alarmas_uba():
     buenos_dias_enviado = False
     send_url_uba = f"https://api.telegram.org/bot{TELEGRAM_TOKEN_UBA}/sendMessage"
     while True:
-        # Cargar chat id actualizado
         if os.path.exists(CHAT_ID_FILE_UBA):
             try:
                 with open(CHAT_ID_FILE_UBA, "r") as f:
@@ -238,33 +240,11 @@ def revisar_alarmas_uba():
 # ==========================================
 # BOT 2: ASISTENTE PARA VERO (GOOGLE CALENDAR & PROMOS)
 # ==========================================
-# Buscar el directorio de Vero de forma robusta en local y en la nube
-VERO_DIR = None
-posibles_rutas = [
-    os.path.join(BASE_DIR, "Proyecto 3 - Asistente Vero"),
-    os.path.join(os.path.dirname(BASE_DIR), "Proyecto 3 - Asistente Vero"),
-    os.path.join(BASE_DIR, "Asistente UBA 1.0", "Proyecto 3 - Asistente Vero"),
-]
-for ruta in posibles_rutas:
-    if os.path.exists(ruta):
-        VERO_DIR = ruta
-        break
-
-if not VERO_DIR:
-    if os.path.exists(os.path.join(BASE_DIR, "google_calendar.py")):
-        VERO_DIR = BASE_DIR
-    else:
-        VERO_DIR = os.path.join(BASE_DIR, "Proyecto 3 - Asistente Vero")
-
-# Importar módulos locales del Proyecto 3
 sys.path.append(VERO_DIR)
 import google_calendar as gc
 import buscador_ofertas as bo
 
-# Cargar variables locales de Vero del .env específico si existen
-load_dotenv(os.path.join(VERO_DIR, ".env"))
 TELEGRAM_TOKEN_VERO = os.environ.get("VERO_TELEGRAM_TOKEN") or os.environ.get("TELEGRAM_TOKEN")
-# Nota: Si en el root .env pones VERO_TELEGRAM_TOKEN, usará ese, de lo contrario usará el del subproyecto
 
 CHAT_ID_FILE_VERO = os.path.join(VERO_DIR, "chat_id.txt")
 LOG_FILE_VERO = os.path.join(VERO_DIR, "bot_errors.log")
@@ -596,15 +576,13 @@ def webhook_handler_vero():
                 cwd = os.getcwd()
                 files_in_cwd = os.listdir(cwd)
                 
-                # Buscar .env
-                env_exists = os.path.exists(".env")
-                env_in_vero = os.path.exists("Proyecto 3 - Asistente Vero/.env")
+                env_exists = os.path.exists(os.path.join(BASE_DIR, ".env"))
+                env_in_vero = os.path.exists(os.path.join(VERO_DIR, ".env"))
                 
-                # Leer líneas de .env (anonimizado)
                 env_lines = []
                 if env_exists:
                     try:
-                        with open(".env", "r", encoding="utf-8") as f:
+                        with open(os.path.join(BASE_DIR, ".env"), "r", encoding="utf-8") as f:
                             for l in f:
                                 l_strip = l.strip()
                                 if l_strip and not l_strip.startswith("#"):
@@ -634,7 +612,6 @@ def webhook_handler_vero():
                     except Exception as ex:
                         test_status = f"Error: {ex}"
                 
-                # Filtrar archivos interesantes para no saturar el mensaje de Telegram
                 interesantes = [f for f in files_in_cwd if f.startswith(".") or "env" in f.lower() or f.endswith(".py") or f.endswith(".txt")]
                 
                 reply = (
@@ -759,7 +736,7 @@ REGLAS PARA CONVERSACIÓN GENERAL:
                         dias = parts[3].strip()
                         condiciones = parts[4].strip() if len(parts) > 4 else ""
                         
-                        exito = bo.agregar_nueva_promo(super_name, banco_tarjeta, descuento, dias, condiciones)
+                        exito = bo.agregar_nueva_promo(super_name, banco_tarjeta, discount=descuento, dias=dias, condiciones=condiciones)
                         if exito:
                             reply_text = f"✅ ¡Promoción guardada!\n🛍️ {super_name}\n💳 {banco_tarjeta} ({descuento})\n📅 Días: {dias}"
                         else:
@@ -850,3 +827,7 @@ def set_webhook_vero():
         return jsonify(r.json()), r.status_code
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+if __name__ == "__main__":
+    app.run(port=5000)
