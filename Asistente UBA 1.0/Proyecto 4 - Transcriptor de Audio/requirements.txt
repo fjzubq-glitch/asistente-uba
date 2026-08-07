@@ -1,0 +1,5 @@
+flask
+deepgram-sdk
+google-genai
+python-dotenv
+requests

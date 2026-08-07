@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcriptor de Audio · UBA Derecho</title>
+    <!-- Importar tipografía moderna Outfit de Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos CSS Base y Variables de Diseño Premium */
+        :root {
+            --bg-color: #0b0f19;
+            --panel-bg: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: #818cf8;
+            --primary-hover: #6366f1;
+            --accent: #22d3ee;
+            --text-color: #f3f4f6;
+            --text-muted: #9ca3af;
+            --success: #34d399;
+            --warning: #fbbf24;
+            --danger: #f87171;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(34, 211, 238, 0.12) 0%, transparent 40%);
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Estructura del Contenedor Principal (Glassmorphism) */
+        .app-container {
+            width: 100%;
+            max-width: 850px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 30%, var(--primary) 70%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Zona de Arrastrar y Soltar Archivos (Drag & Drop) */
+        .dropzone-container {
+            position: relative;
+        }
+
+        .dropzone {
+            border: 2px dashed rgba(129, 140, 248, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 35px 20px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.02);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .dropzone:hover, .dropzone.dragover {
+            border-color: var(--primary);
+            background: rgba(129, 140, 248, 0.05);
+            box-shadow: 0 0 15px rgba(129, 140, 248, 0.1);
+        }
+
+        .dropzone svg {
+            width: 48px;
+            height: 48px;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .dropzone:hover svg {
+            transform: translateY(-4px);
+            color: var(--accent);
+        }
+
+        .dropzone p {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .dropzone span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Formulario de Metadatos */
+        .metadata-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .metadata-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-color);
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input, .input-group select {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 10px rgba(129, 140, 248, 0.15);
+        }
+
+        /* Opciones de Integración (Switches / Checkboxes) */
+        .options-section {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
+            font-size: 0.95rem;
+        }
+
+        .checkbox-container input {
+            display: none;
+        }
+
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 1.5px solid var(--text-muted);
+            border-radius: 5px;
+            display: inline-block;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .checkbox-container input:checked + .custom-checkbox {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .checkbox-container input:checked + .custom-checkbox::after {
+            content: "";
+            position: absolute;
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .checkbox-container.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Botón de Envío */
+        .submit-btn {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            border: none;
+            border-radius: var(--radius-md);
+            color: #fff;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 8px 16px rgba(99, 102, 241, 0.2);
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(99, 102, 241, 0.35);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Panel de Logs e Indicadores de Progreso */
+        .status-panel {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-title {
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top: 2px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .log-console {
+            background: #05070c;
+            border-radius: 6px;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: #38bdf8;
+            max-height: 180px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .log-entry {
+            line-height: 1.4;
+        }
+
+        .apuntes-log-container {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+
+        .apuntes-log-container h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .apuntes-console {
+            background: #0d0e14;
+            color: #e2e8f0;
+            border-radius: 6px;
+            padding: 12px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.8rem;
+            max-height: 150px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <h1>Transcriptor de Audio</h1>
+            <p>Procesamiento automatizado de clases mediante Deepgram Nova-3 e integración con la Fábrica de Apuntes UBA Derecho</p>
+        </header>
+
+        <!-- Dropzone de Audio -->
+        <div class="dropzone-container">
+            <input type="file" id="audio-input" accept="audio/*" style="display: none;">
+            <div class="dropzone" id="dropzone">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                <p id="file-name-display">Arrastre su archivo de audio aquí o haga clic para examinar</p>
+                <span>Formatos admitidos: .mp3, .m4a, .wav, .aac, entre otros (Máx. 2 GB)</span>
+            </div>
+        </div>
+
+        <!-- Formulario de Configuración -->
+        <form class="metadata-form" id="transcribe-form">
+            <div class="input-group">
+                <label for="materia">MATERIA</label>
+                <input type="text" id="materia" name="materia" placeholder="Ej. Contratos, Comercial" required>
+            </div>
+
+            <div class="input-group">
+                <label for="clase">NÚMERO DE CLASE</label>
+                <input type="number" id="clase" name="clase" placeholder="Ej. 1, 22" required min="1">
+            </div>
+
+            <div class="input-group">
+                <label for="fecha">FECHA DE LA CLASE</label>
+                <input type="text" id="fecha" name="fecha" placeholder="Formato: DD-MM-YY (Ej. 06-08-26)" required>
+            </div>
+
+            <div class="input-group">
+                <label for="tema">TEMA CENTRAL</label>
+                <input type="text" id="tema" name="tema" placeholder="Ej. Consentimiento, Objeto" required>
+            </div>
+
+            <!-- Opciones de Integración -->
+            <div class="options-section">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="auto_process" name="auto_process" checked>
+                    <span class="custom-checkbox"></span>
+                    Generar apuntes de estudio automáticamente en la Fábrica de Apuntes (Proyecto 2)
+                </label>
+
+                <label class="checkbox-container" id="notion-checkbox-lbl">
+                    <input type="checkbox" id="upload_notion" name="upload_notion" checked>
+                    <span class="custom-checkbox"></span>
+                    Subir apuntes generados directamente a la base de datos de Notion
+                </label>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submit-btn" disabled>
+                <span>Comenzar Transcripción</span>
+            </button>
+        </form>
+
+        <!-- Panel de Estado y Logs -->
+        <div class="status-panel" id="status-panel">
+            <div class="status-header">
+                <div class="status-title">
+                    <span class="spinner" id="status-spinner"></span>
+                    <span id="status-text">Procesando audio...</span>
+                </div>
+            </div>
+            <div class="log-console" id="log-console">
+                <!-- Se poblará con JS -->
+            </div>
+            
+            <!-- Logs específicos del script de apuntes si se activa -->
+            <div class="apuntes-log-container" id="apuntes-log-container">
+                <h4>Consola de Fábrica de Apuntes:</h4>
+                <div class="apuntes-console" id="apuntes-console"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lógica de Control del Frontend
+        const dropzone = document.getElementById('dropzone');
+        const audioInput = document.getElementById('audio-input');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        const submitBtn = document.getElementById('submit-btn');
+        const form = document.getElementById('transcribe-form');
+        const autoProcessCheck = document.getElementById('auto_process');
+        const uploadNotionCheck = document.getElementById('upload_notion');
+        const notionCheckboxLbl = document.getElementById('notion-checkbox-lbl');
+        
+        const statusPanel = document.getElementById('status-panel');
+        const statusText = document.getElementById('status-text');
+        const statusSpinner = document.getElementById('status-spinner');
+        const logConsole = document.getElementById('log-console');
+        const apuntesLogContainer = document.getElementById('apuntes-log-container');
+        const apuntesConsole = document.getElementById('apuntes-console');
+
+        let selectedFile = null;
+
+        // Autocompletar la fecha de hoy en formato DD-MM-YY
+        const hoy = new Date();
+        const dia = String(hoy.getDate()).padStart(2, '0');
+        const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+        const anio = String(hoy.getFullYear()).slice(-2);
+        document.getElementById('fecha').value = `${dia}-${mes}-${anio}`;
+
+        // Controlar habilitación de checkbox de Notion
+        autoProcessCheck.addEventListener('change', () => {
+            if (autoProcessCheck.checked) {
+                uploadNotionCheck.disabled = false;
+                notionCheckboxLbl.classList.remove('disabled');
+            } else {
+                uploadNotionCheck.checked = false;
+                uploadNotionCheck.disabled = true;
+                notionCheckboxLbl.classList.add('disabled');
+            }
+        });
+
+        // Eventos de Drag & Drop
+        dropzone.addEventListener('click', () => audioInput.click());
+
+        audioInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelection(e.target.files[0]);
+            }
+        });
+
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('dragover');
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('dragover');
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                handleFileSelection(e.dataTransfer.files[0]);
+            }
+        });
+
+        function handleFileSelection(file) {
+            // Verificar tipo de archivo (audio)
+            if (!file.type.startsWith('audio/') && !file.name.endsWith('.mp3') && !file.name.endsWith('.m4a') && !file.name.endsWith('.wav') && !file.name.endsWith('.aac')) {
+                alert('Por favor, seleccione un archivo de audio válido.');
+                return;
+            }
+            selectedFile = file;
+            fileNameDisplay.textContent = `Archivo cargado: ${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)`;
+            fileNameDisplay.style.color = 'var(--success)';
+            submitBtn.disabled = false;
+        }
+
+        // Envío del Formulario
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!selectedFile) return;
+
+            // Bloquear controles de la interfaz
+            submitBtn.disabled = true;
+            form.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+            
+            // Mostrar panel de estado
+            statusPanel.style.display = 'flex';
+            logConsole.innerHTML = '';
+            apuntesConsole.textContent = '';
+            apuntesLogContainer.style.display = 'none';
+            statusSpinner.style.display = 'inline-block';
+            statusText.textContent = 'Iniciando el proceso...';
+            
+            addLogEntry('ℹ️ Archivo y datos validados en el cliente.');
+            addLogEntry(`📤 Subiendo y transcribiendo audio (este proceso puede demorar unos minutos)...`);
+
+            // Preparar datos del formulario
+            const formData = new FormData();
+            formData.append('audio', selectedFile);
+            formData.append('materia', document.getElementById('materia').value);
+            formData.append('clase', document.getElementById('clase').value);
+            formData.append('fecha', document.getElementById('fecha').value);
+            formData.append('tema', document.getElementById('tema').value);
+            formData.append('auto_process', autoProcessCheck.checked);
+            formData.append('upload_notion', uploadNotionCheck.checked);
+
+            try {
+                const response = await fetch('/transcribir', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    statusText.textContent = '¡Proceso completado con éxito!';
+                    statusText.style.color = 'var(--success)';
+                    statusSpinner.style.display = 'none';
+                    
+                    // Mostrar logs del backend
+                    if (data.logs) {
+                        data.logs.forEach(log => addLogEntry(log));
+                    }
+                    
+                    addLogEntry(`🎉 Éxito: Transcrito con ${data.proveedor}. Archivo local: ${data.archivo_texto}`);
+                    
+                    // Mostrar logs del script de apuntes si se generaron
+                    if (data.apuntes_procesados) {
+                        apuntesLogContainer.style.display = 'flex';
+                        apuntesConsole.textContent = data.apuntes_logs || 'No se registraron logs adicionales.';
+                        if (data.apuntes_exito) {
+                            addLogEntry('🎓 Apuntes generados y subidos correctamente.');
+                        } else {
+                            addLogEntry('⚠️ La transcripción se completó, pero ocurrió un error generando los apuntes académicos.');
+                        }
+                    }
+                } else {
+                    handleFailure(data.error || 'Ocurrió un error inesperado.', data.logs);
+                }
+
+            } catch (err) {
+                handleFailure(`Error de comunicación con el servidor: ${err.message}`);
+            } finally {
+                // Habilitar nuevamente los campos
+                form.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
+                // Si la casilla está desactivada, el de Notion debe quedar deshabilitado
+                if (!autoProcessCheck.checked) {
+                    uploadNotionCheck.disabled = true;
+                }
+                submitBtn.disabled = false;
+            }
+        });
+
+        function addLogEntry(text) {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.textContent = text;
+            logConsole.appendChild(entry);
+            logConsole.scrollTop = logConsole.scrollHeight;
+        }
+
+        function handleFailure(errorMsg, logs = []) {
+            statusText.textContent = 'Fallo en el procesamiento.';
+            statusText.style.color = 'var(--danger)';
+            statusSpinner.style.display = 'none';
+            
+            if (logs && logs.length > 0) {
+                logs.forEach(log => addLogEntry(log));
+            }
+            
+            addLogEntry(`❌ ERROR: ${errorMsg}`);
+        }
+    </script>
+</body>
+</html>

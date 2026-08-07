@@ -38,5 +38,5 @@ Cuando no sabés algo, decilo en la primera oración.
 </manejo_de_incertidumbre>
 </sistema>
 
-## Regla de Commits Automáticos (Gits y Commits)
-* **Realización de Commits**: Cada vez que realices cambios en el código que resuelvan parcial o totalmente una tarea o requerimiento del usuario, debes proponer y ejecutar un commit de Git con un mensaje descriptivo y preciso de los cambios realizados. No dejes cambios sin guardar o sin realizar commit antes de responder o cambiar de contexto.
+## Regla de Commits y Sincronización Automática (Git)
+* **Guardado y Sincronización**: Cada vez que realices cambios en el código que resuelvan parcial o totalmente una tarea o requerimiento del usuario, así como ante cualquier solicitud del usuario ("guardar cambios", "hacer commit", "actualizar", etc.), debes realizar un commit de Git con un mensaje descriptivo y ejecutar un `git push` al repositorio remoto para asegurar que el usuario disponga siempre de la última versión y pueda trabajar de manera fluida en cualquier máquina.

@@ -805,6 +805,35 @@ def ping_handler():
     return f"OK - UBA Thread: {hilo_uba_iniciado} - Vero Thread: {hilo_vero_iniciado}", 200
 
 
+# Ruta de diagnóstico de logs
+@app.route("/logs", methods=["GET"])
+def ver_logs():
+    logs_uba = ""
+    logs_vero = ""
+    
+    if os.path.exists(LOG_FILE_UBA):
+        try:
+            with open(LOG_FILE_UBA, "r", encoding="utf-8") as f:
+                lineas = f.readlines()
+                logs_uba = "".join(lineas[-100:])
+        except Exception as e:
+            logs_uba = f"Error leyendo logs UBA: {e}"
+    else:
+        logs_uba = "No existe el archivo de logs de UBA."
+        
+    if os.path.exists(LOG_FILE_VERO):
+        try:
+            with open(LOG_FILE_VERO, "r", encoding="utf-8") as f:
+                lineas = f.readlines()
+                logs_vero = "".join(lineas[-100:])
+        except Exception as e:
+            logs_vero = f"Error leyendo logs Vero: {e}"
+    else:
+        logs_vero = "No existe el archivo de logs de Vero."
+        
+    return f"--- LOGS UBA ---\n{logs_uba}\n\n--- LOGS VERO ---\n{logs_vero}", 200, {'Content-Type': 'text/plain; charset=utf-8'}
+
+
 # 4. Ruta para registrar el Webhook de UBA
 @app.route("/set_webhook", methods=["GET"])
 def set_webhook_uba():
