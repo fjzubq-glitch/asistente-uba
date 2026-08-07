@@ -1,8 +1,9 @@
 # Informe de Cambios y Mejoras — Asistente UBA & Vero
 
-> Informe para antigravity. Cambios aplicados al proyecto `asistente-uba` para que se
-> incorporen al sistema que lleva. Afectan a `server.py`, `Asistente Vero/buscador_ofertas.py`,
-> `.gitignore` y dos scripts nuevos de cron.
+> **Para antigravity**: estos cambios **ya fueron realizados, testeados, commiteados y pusheados**.
+> Tu tarea es **revisarlos y actualizar tu conocimiento** del estado actual del proyecto.
+> No es necesario implementar nada nuevo; solo familiarizarte con las modificaciones para
+> que puedas continuar apoyando el desarrollo de forma coherente.
 
 ---
 
@@ -133,3 +134,14 @@ WEBHOOK_BASE_URL=https://franklinzg.pythonanywhere.com
    nombres de archivos). Útil en dev; evaluar restringirlo si el bot se comparte.
 4. **Pruebas de integración** con credenciales reales (webhook local vía túnel) para validar el flujo
    completo end-to-end antes de migrar a cron.
+
+---
+
+## Estado actual en producción (verificado 07/08/2026)
+
+Todos los cambios ya están **deployados y funcionando**:
+- `git pull` ejecutado en PythonAnywhere (commit `fdcc86e`).
+- Web app recargada y sirviendo el código nuevo.
+- cron-job.org ejecutando `/ping` cada 1 min → `OK - UBA Thread: True - Vero Thread: True`.
+- Webhooks de Telegram respondiendo normalmente.
+- `env_raiz.txt` y `env_vero.txt` (secretos) correctamente excluidos de git.
