@@ -59,7 +59,11 @@ def llamar_llm(prompt_sistema, texto_usuario):
         "temperature": 0.3
     }
     r = session.post(GROQ_URL, headers={"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}, json=payload, timeout=20)
-    return r.json()["choices"][0]["message"]["content"].strip()
+    data = r.json()
+    if "choices" not in data:
+        raise Exception(f"Fallo en API de Groq (Status {r.status_code}): {data}")
+    return data["choices"][0]["message"]["content"].strip()
+
 
 
 # ==========================================
