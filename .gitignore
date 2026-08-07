@@ -108,6 +108,10 @@ ENV/
 env.bak/
 venv.bak/
 
+# Backups planos de .env (contienen secretos)
+env_raiz.txt
+env_vero.txt
+
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -140,3 +144,6 @@ Thumbs.db
 **/bot_errors.log
 **/chat_id.txt
 **/audio_temp.ogg
+**/chats.json
+**/ultimo_buenos_dias.txt
+**/cache_precios.json

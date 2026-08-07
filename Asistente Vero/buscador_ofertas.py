@@ -1,5 +1,6 @@
 import os
 import json
+import time
 import datetime
 import requests
 from bs4 import BeautifulSoup
@@ -9,6 +10,32 @@ import urllib.parse
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROMOS_FILE = os.path.join(BASE_DIR, "promociones.json")
 PRODUCTS_FILE = os.path.join(BASE_DIR, "productos_oferta.json")
+CACHE_FILE = os.path.join(BASE_DIR, "cache_precios.json")
+CACHE_TTL = 1800  # 30 minutos
+
+
+def cargar_cache_precios():
+    """Carga el cache de precios online desde disco."""
+    if not os.path.exists(CACHE_FILE):
+        return {}
+    try:
+        with open(CACHE_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return data if isinstance(data, dict) else {}
+    except Exception as e:
+        print(f"Error cargando cache de precios: {e}")
+        return {}
+
+
+def guardar_cache_precios(cache):
+    """Persiste el cache de precios online en disco."""
+    try:
+        with open(CACHE_FILE, "w", encoding="utf-8") as f:
+            json.dump(cache, f, indent=2, ensure_ascii=False)
+        return True
+    except Exception as e:
+        print(f"Error guardando cache de precios: {e}")
+        return False
 
 def cargar_promos():
     """Carga las promociones del archivo JSON."""
@@ -409,26 +436,40 @@ def buscar_precios_online(termino):
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         load_dotenv(os.path.join(BASE_DIR, ".env"))
         load_dotenv(os.path.join(os.path.dirname(BASE_DIR), ".env"))
-        
+
         # Reemplazar espacios por '+' para evitar problemas de formato
         term_formatted = termino.replace(" ", "+")
+        cache_key = term_formatted.lower()
         target_url = f"https://superprecio.ar/searchgrouped?search={term_formatted}"
-        
+
+        # Cache: si hay un resultado fresco, evitamos la llamada de red (y el bloqueo del webhook)
+        ahora_ts = time.time()
+        cache = cargar_cache_precios()
+        cached = cache.get(cache_key)
+        if cached and isinstance(cached, dict) and (ahora_ts - cached.get("ts", 0)) < CACHE_TTL:
+            return cached.get("data", [])
+
         # Leer URL de proxy de Google Apps Script (útil para el tier gratuito de PythonAnywhere)
         proxy_base_url = os.environ.get("GOOGLE_SCRIPT_PROXY_URL")
-        
+
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
         }
-        
+
         # Log diagnóstico
         log_path = "bot_errors.log"
-        
-        if proxy_base_url:
-            request_url = f"{proxy_base_url.strip()}?url={urllib.parse.quote(target_url, safe='')}"
-            r = requests.get(request_url, headers=headers, timeout=15)
-        else:
-            r = requests.get(target_url, headers=headers, timeout=10)
+
+        try:
+            if proxy_base_url:
+                request_url = f"{proxy_base_url.strip()}?url={urllib.parse.quote(target_url, safe='')}"
+                r = requests.get(request_url, headers=headers, timeout=15)
+            else:
+                r = requests.get(target_url, headers=headers, timeout=10)
+        except Exception as e:
+            # Fallback al cache viejo si la red falló
+            if cached:
+                return cached.get("data", [])
+            raise e
             
         try:
             with open(log_path, "a", encoding="utf-8") as f:
@@ -442,6 +483,8 @@ def buscar_precios_online(termino):
                     f.write(f"[DIAGNOSTIC] Non-200 response: {r.text[:300]}\n")
             except Exception:
                 pass
+            if cached:
+                return cached.get("data", [])
             return []
             
         soup = BeautifulSoup(r.text, 'html.parser')
@@ -498,7 +541,11 @@ def buscar_precios_online(termino):
                     "producto": title,
                     "precios": market_prices
                 })
-                
+
+        # Actualizar cache con el resultado fresco
+        cache[cache_key] = {"ts": ahora_ts, "data": products}
+        guardar_cache_precios(cache)
+
         return products
     except Exception as e:
         print(f"Error en buscar_precios_online: {e}")
