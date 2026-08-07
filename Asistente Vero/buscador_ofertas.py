@@ -408,7 +408,6 @@ def buscar_precios_online(termino):
         from dotenv import load_dotenv
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         load_dotenv(os.path.join(BASE_DIR, ".env"))
-        load_dotenv(os.path.join(BASE_DIR, "Proyecto 3 - Asistente Vero", ".env"))
         load_dotenv(os.path.join(os.path.dirname(BASE_DIR), ".env"))
         
         # Reemplazar espacios por '+' para evitar problemas de formato
