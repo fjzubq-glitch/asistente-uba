@@ -129,6 +129,64 @@ def llamar_api(prompt_sistema, prompt_usuario, provider, model, api_key):
                 print(f"Detalle: {response.text}")
             sys.exit(1)
 
+
+def enviar_notificacion_telegram(materia, clase, fecha, tema):
+    """
+    Envía una notificación por Telegram al usuario informando de la subida exitosa.
+    """
+    telegram_token = os.environ.get("TELEGRAM_TOKEN")
+    if not telegram_token:
+        print("[WARN] No se encontró la variable de entorno TELEGRAM_TOKEN. Omisión de notificación.")
+        return False
+        
+    # 1. Intentar obtener el chat ID desde las variables de entorno
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+    
+    # 2. Si no está en el .env, intentar leer de la persistencia local del bot
+    if not chat_id:
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        chat_id_path = os.path.join(base_dir, "Bot Telegram", "chat_id.txt")
+        if os.path.exists(chat_id_path):
+            try:
+                with open(chat_id_path, "r", encoding="utf-8") as f:
+                    chat_id = f.read().strip()
+            except Exception as e:
+                print(f"[WARN] Error al leer el chat_id desde {chat_id_path}: {e}")
+            
+    if not chat_id or chat_id == "0":
+        print("[WARN] No se encontró un Chat ID válido (TELEGRAM_CHAT_ID en .env o chat_id.txt). Omisión de notificación.")
+        return False
+
+    mensaje = (
+        f"📚 *¡Fábrica de Apuntes UBA Derecho!*\n\n"
+        f"Se han procesado y subido correctamente los apuntes de clase a Notion:\n\n"
+        f"📖 *Materia:* {materia}\n"
+        f"🏫 *Clase:* {clase}\n"
+        f"📅 *Fecha:* {fecha}\n"
+        f"📌 *Tema:* {tema}\n\n"
+        f"✅ *Documentos disponibles en Notion:*\n"
+        f"1. Ficha + Handoff\n"
+        f"2. Sistema MIT\n"
+        f"3. Cuestionario + Casos\n"
+    )
+    
+    url = f"https://api.telegram.org/bot{telegram_token}/sendMessage"
+    payload = {
+        "chat_id": chat_id,
+        "text": mensaje,
+        "parse_mode": "Markdown"
+    }
+    
+    try:
+        r = session.post(url, json=payload, timeout=15)
+        r.raise_for_status()
+        print("[SUCCESS] Notificación enviada con éxito por Telegram.")
+        return True
+    except Exception as e:
+        print(f"[WARN] No se pudo enviar la notificación por Telegram: {e}")
+        return False
+
+
 def main():
     parser = argparse.ArgumentParser(description="Fábrica de Apuntes UBA Derecho - Procesador de Transcripciones")
     parser.add_argument("archivo_transcripcion", help="Ruta al archivo de texto (.txt) con la transcripción de la clase")
@@ -374,10 +432,14 @@ FICHA Y HANDOFF (PASO 1 GENERADO):
             
             db_id = obtener_o_crear_database(notion_token, args.parent_page)
             
-            subir_apuntes(args.materia, args.clase, args.fecha, "Ficha + Handoff", ficha_path, notion_token, db_id)
-            subir_apuntes(args.materia, args.clase, args.fecha, "Sistema MIT", mit_path, notion_token, db_id)
-            subir_apuntes(args.materia, args.clase, args.fecha, "Cuestionario + Casos", cuestionario_path, notion_token, db_id)
+            f1 = subir_apuntes(args.materia, args.clase, args.fecha, "Ficha + Handoff", ficha_path, notion_token, db_id)
+            f2 = subir_apuntes(args.materia, args.clase, args.fecha, "Sistema MIT", mit_path, notion_token, db_id)
+            f3 = subir_apuntes(args.materia, args.clase, args.fecha, "Cuestionario + Casos", cuestionario_path, notion_token, db_id)
             print("\n[SUCCESS] Carga a Notion finalizada con exito!")
+            
+            # Enviar notificación por Telegram si al menos un documento se subió correctamente
+            if f1 or f2 or f3:
+                enviar_notificacion_telegram(args.materia, args.clase, args.fecha, args.tema)
         except Exception as e:
             print(f"[ERROR] Error durante el proceso de carga a Notion: {e}")
 
