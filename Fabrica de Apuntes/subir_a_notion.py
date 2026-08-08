@@ -86,6 +86,88 @@ def obtener_o_crear_pagina_materia(notion_token, parent_page_id, materia):
             print(f"Detalle de la respuesta del servidor: {r.text}")
         sys.exit(1)
 
+
+def obtener_o_crear_carpeta_tipo(notion_token, materia_page_id, tipo_documento):
+    """
+    Busca una subpágina contenedora (carpeta) para el tipo de documento dentro de la materia.
+    Si no existe, la crea y devuelve su ID.
+    """
+    mapeo_nombres = {
+        "Ficha + Handoff": "Fichas",
+        "Sistema MIT": "Sistemas MIT",
+        "Cuestionario + Casos": "Cuestionarios"
+    }
+    
+    nombre_carpeta = mapeo_nombres.get(tipo_documento)
+    if not nombre_carpeta:
+        nombre_carpeta = tipo_documento
+        
+    headers = obtener_cabeceras(notion_token)
+    
+    # 1. Buscar si ya existe la carpeta (subpágina) dentro de la materia
+    search_url = "https://api.notion.com/v1/search"
+    search_payload = {
+        "query": nombre_carpeta,
+        "filter": {
+            "value": "page",
+            "property": "object"
+        }
+    }
+    
+    try:
+        r = requests.post(search_url, headers=headers, json=search_payload, timeout=15)
+        r.raise_for_status()
+        results = r.json().get("results", [])
+        
+        materia_normalized = materia_page_id.replace("-", "").lower()
+        
+        for page in results:
+            properties = page.get("properties", {})
+            title_prop = properties.get("title", {})
+            title_list = title_prop.get("title", [])
+            title_text = title_list[0].get("plain_text", "") if title_list else ""
+            
+            if title_text == nombre_carpeta and not page.get("archived", False):
+                parent = page.get("parent", {})
+                page_parent_id = parent.get("page_id", "").replace("-", "").lower()
+                if page_parent_id == materia_normalized:
+                    print(f"[INFO] Carpeta existente encontrada. Tipo: '{nombre_carpeta}', ID: {page['id']}")
+                    return page["id"]
+    except Exception as e:
+        print(f"[WARN] Error al buscar carpeta de tipo '{nombre_carpeta}': {e}")
+
+    # 2. Si no existe, crear la carpeta (subpágina)
+    print(f"[INFO] Creando carpeta contenedora '{nombre_carpeta}' dentro de la materia...")
+    create_url = "https://api.notion.com/v1/pages"
+    page_payload = {
+        "parent": {
+            "type": "page_id",
+            "page_id": materia_page_id
+        },
+        "properties": {
+            "title": {
+                "title": [
+                    {
+                        "text": {
+                            "content": nombre_carpeta
+                        }
+                    }
+                ]
+            }
+        }
+    }
+    
+    try:
+        r = requests.post(create_url, headers=headers, json=page_payload, timeout=20)
+        r.raise_for_status()
+        new_folder_id = r.json()["id"]
+        print(f"[SUCCESS] Carpeta '{nombre_carpeta}' creada con éxito. ID: {new_folder_id}")
+        return new_folder_id
+    except Exception as e:
+        print(f"[ERROR] Fallo al crear carpeta '{nombre_carpeta}' en Notion: {e}")
+        raise e
+
+
 def convertir_texto_enriquecido(texto):
     """
     Parsea las negritas (**) de Markdown y genera el formato de texto enriquecido de Notion.
@@ -302,7 +384,7 @@ def subir_pagina_notion(notion_token, parent_page_id, properties, blocks):
 
 def subir_apuntes(materia, clase, fecha, tipo_documento, filepath, notion_token, materia_page_id):
     """
-    Lee un archivo Markdown local y lo sube como una subpágina independiente bajo la página de la materia.
+    Lee un archivo Markdown local y lo sube como una subpágina independiente bajo la carpeta contenedora del tipo.
     """
     if not os.path.exists(filepath):
         print(f"[WARN] El archivo local '{filepath}' no se encuentra disponible para subir.")
@@ -310,6 +392,13 @@ def subir_apuntes(materia, clase, fecha, tipo_documento, filepath, notion_token,
         
     print(f"[INFO] Subiendo '{tipo_documento}' desde '{os.path.basename(filepath)}'...")
     
+    # 1. Obtener o crear la carpeta del tipo correspondiente dentro de la materia
+    try:
+        carpeta_id = obtener_o_crear_carpeta_tipo(notion_token, materia_page_id, tipo_documento)
+    except Exception as e:
+        print(f"[ERROR] No se pudo resolver la carpeta contenedora para '{tipo_documento}': {e}")
+        return False
+        
     with open(filepath, "r", encoding="utf-8") as f:
         content = f.read()
         
@@ -330,7 +419,7 @@ def subir_apuntes(materia, clase, fecha, tipo_documento, filepath, notion_token,
     }
     
     try:
-        page_id = subir_pagina_notion(notion_token, materia_page_id, properties, blocks)
+        page_id = subir_pagina_notion(notion_token, carpeta_id, properties, blocks)
         print(f"[SUCCESS] Subido con éxito. Página ID: {page_id}")
         return True
     except Exception as e:
