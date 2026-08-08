@@ -1,8 +1,24 @@
 import os
 import sys
+import time
 import argparse
 import requests
 from dotenv import load_dotenv
+from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
+
+# Reconfigurar salida estándar para UTF-8 en Windows y evitar UnicodeEncodeError con emojis
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
+
+# Configurar sesión global con reintentos para robustez ante fallas de red y límites de tasa (429)
+session = requests.Session()
+retries = Retry(total=5, backoff_factor=2, status_forcelist=[429, 500, 502, 503, 504], raise_on_status=False)
+adapter = HTTPAdapter(max_retries=retries)
+session.mount("http://", adapter)
+session.mount("https://", adapter)
 
 # Cargar variables de entorno desde el archivo .env
 load_dotenv()
@@ -18,7 +34,8 @@ DEFAULT_MODELS = {
 
 def llamar_api(prompt_sistema, prompt_usuario, provider, model, api_key):
     """
-    Realiza la llamada HTTP al proveedor seleccionado (OpenRouter, Gemini o Groq).
+    Realiza la llamada HTTP al proveedor seleccionado (OpenRouter, Gemini o Groq)
+    con reintentos manuales ante Rate Limits (429) y caídas de red intermitentes.
     """
     if provider == "gemini":
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
@@ -33,17 +50,6 @@ def llamar_api(prompt_sistema, prompt_usuario, provider, model, api_key):
                 "temperature": 0.2
             }
         }
-        try:
-            response = requests.post(url, headers=headers, json=payload, timeout=120)
-            response.raise_for_status()
-            data = response.json()
-            return data["candidates"][0]["content"]["parts"][0]["text"]
-        except Exception as e:
-            print(f"❌ Error al llamar a la API de Gemini: {e}")
-            if 'response' in locals() and response.text:
-                print(f"Detalle: {response.text}")
-            sys.exit(1)
-
     elif provider == "openrouter":
         url = "https://openrouter.ai/api/v1/chat/completions"
         headers = {
@@ -60,17 +66,6 @@ def llamar_api(prompt_sistema, prompt_usuario, provider, model, api_key):
             ],
             "temperature": 0.2
         }
-        try:
-            response = requests.post(url, headers=headers, json=payload, timeout=120)
-            response.raise_for_status()
-            data = response.json()
-            return data["choices"][0]["message"]["content"].strip()
-        except Exception as e:
-            print(f"❌ Error al llamar a la API de OpenRouter: {e}")
-            if 'response' in locals() and response.text:
-                print(f"Detalle: {response.text}")
-            sys.exit(1)
-
     elif provider == "groq":
         url = "https://api.groq.com/openai/v1/chat/completions"
         headers = {
@@ -85,14 +80,52 @@ def llamar_api(prompt_sistema, prompt_usuario, provider, model, api_key):
             ],
             "temperature": 0.2
         }
+    else:
+        print(f"❌ Proveedor no soportado: {provider}")
+        sys.exit(1)
+
+    max_intentos = 5
+    for intento in range(max_intentos):
+        response = None
         try:
-            response = requests.post(url, headers=headers, json=payload, timeout=120)
+            response = session.post(url, headers=headers, json=payload, timeout=120)
             response.raise_for_status()
             data = response.json()
-            return data["choices"][0]["message"]["content"].strip()
+            
+            if provider == "gemini":
+                return data["candidates"][0]["content"]["parts"][0]["text"]
+            else:
+                return data["choices"][0]["message"]["content"].strip()
+                
         except Exception as e:
-            print(f"❌ Error al llamar a la API de Groq: {e}")
-            if 'response' in locals() and response.text:
+            is_429 = False
+            if isinstance(e, requests.exceptions.HTTPError) and response is not None and response.status_code == 429:
+                is_429 = True
+            
+            if is_429 and intento < max_intentos - 1:
+                retry_after = 12  # Valor por defecto prudencial
+                if response is not None and "Retry-After" in response.headers:
+                    try:
+                        retry_after = int(response.headers["Retry-After"])
+                    except ValueError:
+                        pass
+                else:
+                    # Espera exponencial: 12s, 24s, 48s...
+                    retry_after = 12 * (2 ** intento)
+                
+                print(f"⚠️ Límite de tasa detectado (429). Reintentando en {retry_after} segundos (Intento {intento+1}/{max_intentos})...")
+                time.sleep(retry_after)
+                continue
+            
+            # En caso de fallas de red intermitentes (como NameResolutionError), también reintentamos
+            if isinstance(e, requests.exceptions.RequestException) and not is_429 and intento < max_intentos - 1:
+                retry_after = 5 * (intento + 1)
+                print(f"⚠️ Error de red/conexión: {e}. Reintentando en {retry_after} segundos (Intento {intento+1}/{max_intentos})...")
+                time.sleep(retry_after)
+                continue
+
+            print(f"❌ Error al llamar a la API de {provider.capitalize()}: {e}")
+            if response is not None and response.text:
                 print(f"Detalle: {response.text}")
             sys.exit(1)
 

@@ -286,9 +286,16 @@ def subir_pagina_notion(notion_token, db_id, properties, blocks):
         "children": initial_blocks
     }
     
-    response = requests.post(url, headers=headers, json=payload, timeout=20)
-    response.raise_for_status()
-    page_id = response.json()["id"]
+    response = None
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=20)
+        response.raise_for_status()
+        page_id = response.json()["id"]
+    except requests.exceptions.HTTPError as e:
+        print(f"❌ Error HTTP al crear página en Notion: {e}")
+        if response is not None and response.text:
+            print(f"Detalle del error de Notion: {response.text}")
+        raise e
     
     # Añadir bloques restantes en lotes de 100
     if remaining_blocks:
@@ -296,8 +303,15 @@ def subir_pagina_notion(notion_token, db_id, properties, blocks):
         for i in range(0, len(remaining_blocks), 100):
             chunk = remaining_blocks[i:i+100]
             append_payload = {"children": chunk}
-            append_resp = requests.patch(append_url, headers=headers, json=append_payload, timeout=20)
-            append_resp.raise_for_status()
+            append_resp = None
+            try:
+                append_resp = requests.patch(append_url, headers=headers, json=append_payload, timeout=20)
+                append_resp.raise_for_status()
+            except requests.exceptions.HTTPError as e:
+                print(f"❌ Error HTTP al añadir bloques en Notion: {e}")
+                if append_resp is not None and append_resp.text:
+                    print(f"Detalle del error de Notion: {append_resp.text}")
+                raise e
             
     return page_id
 
