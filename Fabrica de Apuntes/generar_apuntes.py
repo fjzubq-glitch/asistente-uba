@@ -25,10 +25,10 @@ load_dotenv()
 
 
 # Configuración de Proveedores y Modelos por defecto
-DEFAULT_PROVIDER = "openrouter"
+DEFAULT_PROVIDER = "gemini"
 DEFAULT_MODELS = {
     "openrouter": "anthropic/claude-3.5-sonnet",
-    "gemini": "gemini-2.5-pro",
+    "gemini": "gemini-2.5-flash",
     "groq": "llama-3.3-70b-versatile"
 }
 
@@ -88,7 +88,7 @@ def llamar_api(prompt_sistema, prompt_usuario, provider, model, api_key):
     for intento in range(max_intentos):
         response = None
         try:
-            response = session.post(url, headers=headers, json=payload, timeout=120)
+            response = session.post(url, headers=headers, json=payload, timeout=45)
             response.raise_for_status()
             data = response.json()
             
@@ -195,7 +195,7 @@ def main():
     parser.add_argument("--fecha", required=True, help="Fecha en formato DD-MM-YY")
     parser.add_argument("--tema", required=True, help="Tema principal de la clase (ej. Elementos del Contrato)")
     parser.add_argument("--provider", default=DEFAULT_PROVIDER, choices=["openrouter", "gemini", "groq"], 
-                        help="Proveedor de API a utilizar (por defecto: openrouter)")
+                        help="Proveedor de API a utilizar (por defecto: gemini)")
     parser.add_argument("--model", help="Modelo específico a utilizar (opcional, tiene valores por defecto por proveedor)")
     parser.add_argument("--upload", action="store_true", help="Sube automáticamente los archivos generados a Notion")
     parser.add_argument("--parent-page", default="2361618c-4b73-80cd-8a85-dfc5557c60d7", 
