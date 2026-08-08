@@ -5,6 +5,29 @@ import requests
 
 NOTION_VERSION = "2022-06-28"
 
+MAPEO_ESTETICA_MATERIAS = {
+    "Contratos II": {
+        "icono": "🤝",
+        "portada": "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=1200&q=80"
+    },
+    "Derecho Comercial": {
+        "icono": "💰",
+        "portada": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1200&q=80"
+    },
+    "Derecho Administrativo": {
+        "icono": "🏛️",
+        "portada": "https://images.unsplash.com/photo-1430855897351-127249b6d8a4?auto=format&fit=crop&w=1200&q=80"
+    },
+    "Contratos Civiles y Comerciales": {
+        "icono": "💡",
+        "portada": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1200&q=80"
+    },
+    "DEFAULT": {
+        "icono": "⚖️",
+        "portada": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=80"
+    }
+}
+
 def obtener_cabeceras(notion_token):
     return {
         "Authorization": f"Bearer {notion_token}",
@@ -15,7 +38,7 @@ def obtener_cabeceras(notion_token):
 def obtener_o_crear_pagina_materia(notion_token, parent_page_id, materia):
     """
     Busca una página con el título de la materia bajo la página padre de Notion.
-    Si no existe, la crea como subpágina y devuelve su ID.
+    Si no existe, la crea como subpágina con portada e icono estético, y devuelve su ID.
     """
     headers = obtener_cabeceras(notion_token)
     
@@ -39,7 +62,6 @@ def obtener_o_crear_pagina_materia(notion_token, parent_page_id, materia):
         
         for page in results:
             properties = page.get("properties", {})
-            # Las páginas tradicionales de Notion tienen la propiedad del título bajo la clave 'title'
             title_prop = properties.get("title", {})
             title_list = title_prop.get("title", [])
             title_text = title_list[0].get("plain_text", "") if title_list else ""
@@ -53,13 +75,26 @@ def obtener_o_crear_pagina_materia(notion_token, parent_page_id, materia):
     except Exception as e:
         print(f"[WARN] Error al buscar página de materia: {e}")
 
-    # 2. Si no existe, crear la página de la materia
-    print(f"[INFO] Creando nueva página para la materia '{materia}'...")
+    # 2. Si no existe, crear la página de la materia con portada e icono estético
+    print(f"[INFO] Creando nueva página para la materia '{materia}' con estética personalizada...")
     create_url = "https://api.notion.com/v1/pages"
+    
+    estetica = MAPEO_ESTETICA_MATERIAS.get(materia, MAPEO_ESTETICA_MATERIAS["DEFAULT"])
+    
     page_payload = {
         "parent": {
             "type": "page_id",
             "page_id": parent_page_id
+        },
+        "icon": {
+            "type": "emoji",
+            "emoji": estetica["icono"]
+        },
+        "cover": {
+            "type": "external",
+            "external": {
+                "url": estetica["portada"]
+            }
         },
         "properties": {
             "title": {
@@ -136,13 +171,25 @@ def obtener_o_crear_carpeta_tipo(notion_token, materia_page_id, tipo_documento):
     except Exception as e:
         print(f"[WARN] Error al buscar carpeta de tipo '{nombre_carpeta}': {e}")
 
-    # 2. Si no existe, crear la carpeta (subpágina)
+    # 2. Si no existe, crear la carpeta (subpágina) con un icono representativo
     print(f"[INFO] Creando carpeta contenedora '{nombre_carpeta}' dentro de la materia...")
     create_url = "https://api.notion.com/v1/pages"
+    
+    mapeo_iconos = {
+        "Ficha + Handoff": "📁",
+        "Sistema MIT": "🧠",
+        "Cuestionario + Casos": "❓"
+    }
+    icono_emoji = mapeo_iconos.get(tipo_documento, "📁")
+    
     page_payload = {
         "parent": {
             "type": "page_id",
             "page_id": materia_page_id
+        },
+        "icon": {
+            "type": "emoji",
+            "emoji": icono_emoji
         },
         "properties": {
             "title": {
@@ -332,10 +379,11 @@ def parsear_markdown_a_bloques(markdown_text):
         
     return blocks
 
-def subir_pagina_notion(notion_token, parent_page_id, properties, blocks):
+def subir_pagina_notion(notion_token, parent_page_id, properties, blocks, icono=None):
     """
     Crea una página independiente como subpágina de otra página en Notion.
     Maneja el límite máximo de 100 bloques por lote de la API de Notion.
+    Admite opcionalmente la inyección de un icono de emoji.
     """
     url = "https://api.notion.com/v1/pages"
     headers = obtener_cabeceras(notion_token)
@@ -352,6 +400,12 @@ def subir_pagina_notion(notion_token, parent_page_id, properties, blocks):
         "properties": properties,
         "children": initial_blocks
     }
+    
+    if icono:
+        payload["icon"] = {
+            "type": "emoji",
+            "emoji": icono
+        }
     
     response = None
     try:
@@ -418,8 +472,16 @@ def subir_apuntes(materia, clase, fecha, tipo_documento, filepath, notion_token,
         }
     }
     
+    # Determinar icono representativo para el apunte
+    mapeo_iconos_apuntes = {
+        "Ficha + Handoff": "📄",
+        "Sistema MIT": "🎯",
+        "Cuestionario + Casos": "📝"
+    }
+    icono_apunte = mapeo_iconos_apuntes.get(tipo_documento, "📄")
+    
     try:
-        page_id = subir_pagina_notion(notion_token, carpeta_id, properties, blocks)
+        page_id = subir_pagina_notion(notion_token, carpeta_id, properties, blocks, icono=icono_apunte)
         print(f"[SUCCESS] Subido con éxito. Página ID: {page_id}")
         return True
     except Exception as e:
