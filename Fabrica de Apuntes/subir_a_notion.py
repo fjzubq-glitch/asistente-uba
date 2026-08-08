@@ -12,19 +12,19 @@ def obtener_cabeceras(notion_token):
         "Content-Type": "application/json"
     }
 
-def obtener_o_crear_database(notion_token, parent_page_id):
+def obtener_o_crear_pagina_materia(notion_token, parent_page_id, materia):
     """
-    Busca la base de datos 'Fábrica de Apuntes - UBA Derecho' bajo la página padre.
-    Si no existe, la crea con las propiedades requeridas.
+    Busca una página con el título de la materia bajo la página padre de Notion.
+    Si no existe, la crea como subpágina y devuelve su ID.
     """
     headers = obtener_cabeceras(notion_token)
     
-    # 1. Buscar si ya existe la base de datos
+    # 1. Buscar si ya existe la página de la materia
     search_url = "https://api.notion.com/v1/search"
     search_payload = {
-        "query": "Fábrica de Apuntes - UBA Derecho",
+        "query": materia,
         "filter": {
-            "value": "database",
+            "value": "page",
             "property": "object"
         }
     }
@@ -34,72 +34,54 @@ def obtener_o_crear_database(notion_token, parent_page_id):
         r.raise_for_status()
         results = r.json().get("results", [])
         
-        # Verificar que la base de datos no esté archivada y coincida con el padre
-        for db in results:
-            if db.get("title", [{}])[0].get("plain_text", "") == "Fábrica de Apuntes - UBA Derecho" and not db.get("archived", False):
-                parent = db.get("parent", {})
-                if parent.get("page_id") == parent_page_id or parent.get("page_id") == parent_page_id.replace("-", ""):
-                    print(f"[INFO] Base de datos existente encontrada. ID: {db['id']}")
-                    return db["id"]
+        # Normalizar el ID del padre para comparación
+        parent_normalized = parent_page_id.replace("-", "").lower()
+        
+        for page in results:
+            properties = page.get("properties", {})
+            # Las páginas tradicionales de Notion tienen la propiedad del título bajo la clave 'title'
+            title_prop = properties.get("title", {})
+            title_list = title_prop.get("title", [])
+            title_text = title_list[0].get("plain_text", "") if title_list else ""
+            
+            if title_text == materia and not page.get("archived", False):
+                parent = page.get("parent", {})
+                page_parent_id = parent.get("page_id", "").replace("-", "").lower()
+                if page_parent_id == parent_normalized:
+                    print(f"[INFO] Página de materia existente encontrada. ID: {page['id']}")
+                    return page["id"]
     except Exception as e:
-        print(f"[WARN] Error al buscar base de datos: {e}")
+        print(f"[WARN] Error al buscar página de materia: {e}")
 
-    # 2. Si no existe, crear la base de datos
-    print("[INFO] Creando nueva base de datos 'Fabrica de Apuntes - UBA Derecho'...")
-    create_url = "https://api.notion.com/v1/databases"
-    db_payload = {
+    # 2. Si no existe, crear la página de la materia
+    print(f"[INFO] Creando nueva página para la materia '{materia}'...")
+    create_url = "https://api.notion.com/v1/pages"
+    page_payload = {
         "parent": {
             "type": "page_id",
             "page_id": parent_page_id
         },
-        "title": [
-            {
-                "type": "text",
-                "text": {
-                    "content": "Fábrica de Apuntes - UBA Derecho"
-                }
-            }
-        ],
         "properties": {
-            "Nombre": {
-                "title": {}
-            },
-            "Materia": {
-                "select": {
-                    "options": [
-                        {"name": "Contratos II", "color": "blue"},
-                        {"name": "Derecho Comercial", "color": "green"}
-                    ]
-                }
-            },
-            "Clase": {
-                "number": {
-                    "format": "number"
-                }
-            },
-            "Tipo": {
-                "select": {
-                    "options": [
-                        {"name": "Ficha + Handoff", "color": "orange"},
-                        {"name": "Sistema MIT", "color": "purple"},
-                        {"name": "Cuestionario + Casos", "color": "red"}
-                    ]
-                }
-            },
-            "Fecha": {
-                "date": {}
+            "title": {
+                "title": [
+                    {
+                        "text": {
+                            "content": materia
+                        }
+                    }
+                ]
             }
         }
     }
     
     try:
-        r = requests.post(create_url, headers=headers, json=db_payload, timeout=20)
+        r = requests.post(create_url, headers=headers, json=page_payload, timeout=20)
         r.raise_for_status()
-        new_db_id = r.json()["id"]
-        print(f"[SUCCESS] Base de datos creada con exito. ID: {new_db_id}")
-        return new_db_id
+        new_page_id = r.json()["id"]
+        print(f"[SUCCESS] Página de materia creada con éxito. ID: {new_page_id}")
+        return new_page_id
     except Exception as e:
-        print(f"[ERROR] Fallo critico al crear la base de datos en Notion: {e}")
+        print(f"[ERROR] Fallo crítico al crear la página de materia en Notion: {e}")
         if 'r' in locals() and r.text:
             print(f"Detalle de la respuesta del servidor: {r.text}")
         sys.exit(1)
@@ -268,9 +250,9 @@ def parsear_markdown_a_bloques(markdown_text):
         
     return blocks
 
-def subir_pagina_notion(notion_token, db_id, properties, blocks):
+def subir_pagina_notion(notion_token, parent_page_id, properties, blocks):
     """
-    Crea una página en la base de datos de Notion.
+    Crea una página independiente como subpágina de otra página en Notion.
     Maneja el límite máximo de 100 bloques por lote de la API de Notion.
     """
     url = "https://api.notion.com/v1/pages"
@@ -281,7 +263,10 @@ def subir_pagina_notion(notion_token, db_id, properties, blocks):
     remaining_blocks = blocks[100:]
     
     payload = {
-        "parent": {"database_id": db_id},
+        "parent": {
+            "type": "page_id",
+            "page_id": parent_page_id
+        },
         "properties": properties,
         "children": initial_blocks
     }
@@ -315,9 +300,9 @@ def subir_pagina_notion(notion_token, db_id, properties, blocks):
             
     return page_id
 
-def subir_apuntes(materia, clase, fecha, tipo_documento, filepath, notion_token, db_id):
+def subir_apuntes(materia, clase, fecha, tipo_documento, filepath, notion_token, materia_page_id):
     """
-    Lee un archivo Markdown local y lo sube como página a la base de datos de Notion.
+    Lee un archivo Markdown local y lo sube como una subpágina independiente bajo la página de la materia.
     """
     if not os.path.exists(filepath):
         print(f"[WARN] El archivo local '{filepath}' no se encuentra disponible para subir.")
@@ -330,22 +315,10 @@ def subir_apuntes(materia, clase, fecha, tipo_documento, filepath, notion_token,
         
     blocks = parsear_markdown_a_bloques(content)
     
-    # Convertir formato de fecha de DD-MM-YY a YYYY-MM-DD
-    # Asume año 2026 para cuatrimestre actual si viene en dos dígitos
-    fecha_split = fecha.split("-")
-    if len(fecha_split) == 3:
-        dia, mes, anio = fecha_split
-        # Si el año viene en formato corto (2 dígitos)
-        if len(anio) == 2:
-            anio = "20" + anio
-        fecha_iso = f"{anio}-{mes}-{dia}"
-    else:
-        fecha_iso = fecha # si ya viene formateada
-        
-    nombre_pagina = f"{tipo_documento} - {materia} - Clase {clase} ({fecha})"
+    nombre_pagina = f"{tipo_documento} - Clase {clase} ({fecha})"
     
     properties = {
-        "Nombre": {
+        "title": {
             "title": [
                 {
                     "text": {
@@ -353,33 +326,13 @@ def subir_apuntes(materia, clase, fecha, tipo_documento, filepath, notion_token,
                     }
                 }
             ]
-        },
-        "Materia": {
-            "select": {
-                "name": materia
-            }
-        },
-        "Clase": {
-            "number": int(clase)
-        },
-        "Tipo": {
-            "select": {
-                "name": tipo_documento
-            }
-        },
-        "Fecha": {
-            "date": {
-                "start": fecha_iso
-            }
         }
     }
     
     try:
-        page_id = subir_pagina_notion(notion_token, db_id, properties, blocks)
-        print(f"[SUCCESS] Subido con exito. Pagina ID: {page_id}")
+        page_id = subir_pagina_notion(notion_token, materia_page_id, properties, blocks)
+        print(f"[SUCCESS] Subido con éxito. Página ID: {page_id}")
         return True
     except Exception as e:
-        print(f"[ERROR] Error al subir la pagina a Notion: {e}")
-        if 'response' in locals() and response.text:
-            print(f"Detalle del error del servidor: {response.text}")
+        print(f"[ERROR] Error al subir la página a Notion: {e}")
         return False

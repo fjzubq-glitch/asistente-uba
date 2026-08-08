@@ -428,13 +428,13 @@ FICHA Y HANDOFF (PASO 1 GENERADO):
         print("\n[INFO] Iniciando subida automatica a Notion...")
         try:
             # Importación dinámica para evitar dependencias circulares
-            from subir_a_notion import obtener_o_crear_database, subir_apuntes
+            from subir_a_notion import obtener_o_crear_pagina_materia, subir_apuntes
             
-            db_id = obtener_o_crear_database(notion_token, args.parent_page)
+            materia_page_id = obtener_o_crear_pagina_materia(notion_token, args.parent_page, args.materia)
             
-            f1 = subir_apuntes(args.materia, args.clase, args.fecha, "Ficha + Handoff", ficha_path, notion_token, db_id)
-            f2 = subir_apuntes(args.materia, args.clase, args.fecha, "Sistema MIT", mit_path, notion_token, db_id)
-            f3 = subir_apuntes(args.materia, args.clase, args.fecha, "Cuestionario + Casos", cuestionario_path, notion_token, db_id)
+            f1 = subir_apuntes(args.materia, args.clase, args.fecha, "Ficha + Handoff", ficha_path, notion_token, materia_page_id)
+            f2 = subir_apuntes(args.materia, args.clase, args.fecha, "Sistema MIT", mit_path, notion_token, materia_page_id)
+            f3 = subir_apuntes(args.materia, args.clase, args.fecha, "Cuestionario + Casos", cuestionario_path, notion_token, materia_page_id)
             print("\n[SUCCESS] Carga a Notion finalizada con exito!")
             
             # Enviar notificación por Telegram si al menos un documento se subió correctamente
