@@ -187,6 +187,64 @@ def enviar_notificacion_telegram(materia, clase, fecha, tema):
         return False
 
 
+def agendar_active_recall_notion(asunto, fecha_iso, notion_token, database_id):
+    """
+    Crea una entrada de tarea en la base de datos de agenda de Notion para el bot Franklin.
+    """
+    headers = {
+        "Authorization": f"Bearer {notion_token}",
+        "Notion-Version": "2022-06-28",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "parent": {"database_id": database_id},
+        "properties": {
+            "Asunto": {"title": [{"text": {"content": asunto}}]},
+            "Fecha y Hora": {"date": {"start": fecha_iso}},
+            "Estado": {"status": {"name": "Pendiente"}},
+            "Prioridad": {"select": {"name": "Normal"}}
+        }
+    }
+    url = "https://api.notion.com/v1/pages"
+    try:
+        r = session.post(url, headers=headers, json=payload, timeout=10)
+        return r.status_code == 200
+    except Exception as e:
+        print(f"[WARN] Error al agendar recordatorio en Notion: {e}")
+        return False
+
+
+def programar_active_recall_en_notion(tema, notion_token, database_id):
+    """
+    Programa los recordatorios de Active Recall (días 3, 7 y 21) en la agenda de Notion.
+    Para cada día agenda una alerta la noche previa (21:00) y otra la mañana del estudio (08:00).
+    """
+    import datetime
+    try:
+        # Huso horario local aproximado (UTC-3)
+        ahora = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=3)
+        fechas_estudio = [(3, 2), (7, 6), (21, 20)]
+        exitos = 0
+        for (dia_estudio, dia_previo) in fechas_estudio:
+            # Notificación noche previa a las 21:00
+            fecha_noche_previa = ahora + datetime.timedelta(days=dia_previo)
+            iso_noche = fecha_noche_previa.strftime(f"%Y-%m-%dT21:00:00-03:00")
+            asunto_noche = f"¡Mañana toca repasar!: {tema} (Repaso Día {dia_estudio})"
+            if agendar_active_recall_notion(asunto_noche, iso_noche, notion_token, database_id):
+                exitos += 1
+                
+            # Notificación mañana del día a las 08:00
+            fecha_manana = ahora + datetime.timedelta(days=dia_estudio)
+            iso_manana = fecha_manana.strftime(f"%Y-%m-%dT08:00:00-03:00")
+            asunto_manana = f"📚 A ESTUDIAR HOY: {tema} (Repaso Día {dia_estudio})"
+            if agendar_active_recall_notion(asunto_manana, iso_manana, notion_token, database_id):
+                exitos += 1
+        return exitos == 6
+    except Exception as e:
+        print(f"[WARN] Falló la programación de Active Recall: {e}")
+        return False
+
+
 def ejecutar_con_fallback(prompt_sistema, prompt_usuario, provider_principal, model_override=None):
     """
     Intenta ejecutar la llamada a la API con el proveedor principal.
@@ -566,6 +624,16 @@ Instrucciones de Auditoría:
             # Enviar notificación por Telegram si al menos un documento se subió correctamente
             if f1 or f2 or f3:
                 enviar_notificacion_telegram(args.materia, args.clase, args.fecha, args.tema)
+                
+                # Programar recordatorios de Active Recall para el bot Franklin
+                db_agenda_id = os.environ.get("NOTION_DB_ID")
+                if db_agenda_id:
+                    print("\n[INFO] Programando recordatorios de Active Recall (días 3, 7 y 21) en la agenda de Franklin...")
+                    tema_estudio = f"{args.materia} - Clase {args.clase}: {args.tema}"
+                    if programar_active_recall_en_notion(tema_estudio, notion_token, db_agenda_id):
+                        print("[SUCCESS] Recordatorios de Active Recall agendados con éxito en Notion.")
+                    else:
+                        print("[WARN] No se pudieron agendar todos los recordatorios en Notion.")
         except Exception as e:
             print(f"[ERROR] Error durante el proceso de carga a Notion: {e}")
 
