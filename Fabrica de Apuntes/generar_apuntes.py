@@ -303,6 +303,13 @@ Probabilidad razonable: "la posición dominante es…"
 Incertidumbre real: "no tengo certeza sobre este punto; verificá en [fuente]."
 Cuando no sabés algo, decilo en la primera oración.
 
+Regla de Marcadores de Incertidumbre:
+Antes de clasificar cualquier elemento (Concepto de Oro, Satelital, cita normativa, jurisprudencial o doctrinaria) debés cruzar el fragmento correspondiente de la transcripción con estos marcadores si están presentes en la transcripción cruda:
+- [dudoso], [nombre dudoso], [artículo dudoso], [número dudoso]: el dato no fue transcripto con seguridad. No puede ser la única fuente de un Concepto de Oro, ni de una cita textual atribuida al profesor. Si es la única fuente disponible para ese contenido, degradalo a Concepto Satelital y aclarará la incertidumbre explícitamente en el texto (ej. "el profesor menciona un artículo cuyo número no se pudo identificar con certeza; verificar").
+- [inaudible]: el tramo no tiene contenido recuperable. Nunca se rellena por inferencia; si el tramo inaudible coincide con la única explicación de un concepto central de la clase, señalalo como vacío de información en el Handoff en vez de inventar contenido para completar la ficha.
+- [REVISAR] (en la auditoría de transcripción externa): tratalo con el mismo criterio que [dudoso] — no lo uses como fuente única de un dato crítico sin aclarar la incertidumbre.
+- [CONSISTENTE] (en la auditoría de transcripción externa): no equivale a "confirmado contra el audio real", solo significa que el texto no muestra señales internas de error. Podés citarlo con la certeza normal de esta guía, pero sin tratarlo como verificación externa definitiva.
+
 Idioma de salida:
 Todas las respuestas deben ser redactadas en español.
 """
@@ -353,6 +360,8 @@ Materia: {args.materia} · Clase: {args.clase} · Fecha: {args.fecha} · Tema: {
 **Distinciones clave:** D1, D2...
 **Fuentes centrales:** A1, F1...
 
+Generado con: {model} · Modo: Script
+
 ✅ Paso 1 completo.
 
 TRANSCRIPCIÓN DE LA CLASE:
@@ -366,7 +375,7 @@ TRANSCRIPCIÓN DE LA CLASE:
     print(f"✅ Ficha académica creada en: {ficha_path}")
     
     print("\n--- [2/3] Generando Paso 2: SISTEMA MIT ---")
-    prompt_mit_sistema = perfil_asistente + "\nObjetivo: Generar el puente entre el resumen y el cuestionario duro. Trabaja directamente sobre la transcripción de la clase."
+    prompt_mit_sistema = perfil_asistente + "\nObjetivo: Generar el puente entre el resumen y el cuestionario duro. Trabaja directamente sobre la transcripción de la clase, cruzando la consistencia con el Paso 1."
     prompt_mit_usuario = f"""Materia: {args.materia}
 Tema: {args.tema}
 
@@ -382,6 +391,9 @@ Identificar los 5 conceptos centrales. Para cada uno:
 - **Error frecuente:** qué confunde el estudiante.
 - **Alerta de clase:** advertencia explícita textual si la hay.
 
+Regla de Consistencia de Conceptos:
+Antes de definir los 5 conceptos del Mapa Nuclear del MIT, debés revisar los Conceptos de Oro (O1–O4) ya identificados en el Handoff del Paso 1 (provisto abajo). Debés priorizarlos y usarlos como base para estos 5 conceptos del MIT. Solo incorporá un concepto nuevo (no listado como Oro) si la relectura de la transcripción revela algo estructuralmente relevante que el Paso 1 omitió. En tal caso, agregá una línea aclaratoria al final del concepto: "Concepto añadido en Paso 2, no estaba en el Handoff: [motivo]".
+
 **MATRIZ DE CONEXIONES:** 3-5 líneas mostrando cómo se relacionan los 5 conceptos como sistema.
 
 ## ETAPA 2 — TABLA DE ALERTAS DE EXAMEN
@@ -392,10 +404,13 @@ Identificar los 5 conceptos centrales. Para cada uno:
 Actuar como profesor exigente. Combinar teoría, normativa y caso.
 **PREGUNTA N° [n]**
 [Texto de la pregunta]
-▸ RESPUESTA ESPERADA: [3 a 6 líneas]
-▸ ERROR TÍPICO: [Qué contesta un estudiante que memorizó pero no entendió]
-▸ FUENTE PARA REPASAR SI FALLÁS: [Qué parte del cuaderno leer]
+* ▸ RESPUESTA ESPERADA: [3 a 6 líneas]
+* ▸ ERROR TÍPICO: [Qué contesta un estudiante que memorizó pero no entendió]
+* ▸ FUENTE PARA REPASAR SI FALLÁS: [Qué parte del cuaderno leer]
 (La pregunta 10 debe ser integradora)
+
+CONTENIDO GENERADO EN EL PASO 1 (FICHA Y HANDOFF):
+{ficha_content}
 
 TRANSCRIPCIÓN DE LA CLASE:
 {transcripcion}
@@ -462,7 +477,72 @@ FICHA Y HANDOFF (PASO 1 GENERADO):
         f.write(cuestionario_content)
     print(f"[SUCCESS] Cuestionario y Casos creados en: {cuestionario_path}")
     
-    print(f"\n[SUCCESS] Procesamiento completado con exito! Todos los archivos se han guardado en la carpeta Universidad.")
+    print("\n--- [4/4] Ejecutando Paso 4: AUDITORÍA DOCUMENTAL ---")
+    prompt_auditoria_sistema = perfil_asistente + "\nObjetivo: Actuar como auditor documental de control de calidad. Contrastar minuciosamente los apuntes generados contra la transcripción original de la clase para verificar el respaldo y la veracidad de las citas y aserciones."
+    prompt_auditoria_usuario = f"""Tenés que auditar los siguientes tres apuntes que fueron generados a partir de la transcripción original:
+
+1. FICHA Y HANDOFF GENERADO:
+{ficha_content}
+
+2. SISTEMA MIT GENERADO:
+{mit_content}
+
+3. CUESTIONARIO Y CASOS GENERADO:
+{cuestionario_content}
+
+TRANSCRIPCIÓN ORIGINAL DE LA CLASE:
+{transcripcion}
+
+Instrucciones de Auditoría:
+1. Analizá cada cita de leyes, artículos del Código Civil y Comercial (CCC), la Constitución Nacional (CN), fallos/jurisprudencia y posiciones doctrinarias que aparezcan en los tres apuntes.
+2. Cruzalas contra la Transcripción Original. Confirmá si tienen respaldo literal o razonable en ella.
+3. Si encontrás aserciones jurídicas o citas específicas que NO se mencionen en la transcripción ni tengan un sustento obvio de certeza razonable en la materia, identificalas como discrepancias.
+4. Generá un reporte de salida estructurado usando EXACTAMENTE estas etiquetas de sección. Si no encontrás discrepancias en algún documento, poné "Ninguna". No agregues preámbulos ni explicaciones fuera de las etiquetas:
+
+<<<AUDITORIA_FICHA>>>
+[Detallá los puntos con discrepancia o "Ninguna"]
+
+<<<AUDITORIA_MIT>>>
+[Detallá los puntos con discrepancia o "Ninguna"]
+
+<<<AUDITORIA_CUESTIONARIO>>>
+[Detallá los puntos con discrepancia o "Ninguna"]
+"""
+    
+    import re
+    auditoria_content = ejecutar_con_fallback(prompt_auditoria_sistema, prompt_auditoria_usuario, args.provider, args.model)
+    
+    def extraer_seccion(texto, tag):
+        pattern = f"<<<{tag}>>>\\n(.*?)(?=\\n<<<|$)"
+        match = re.search(pattern, texto, re.DOTALL)
+        if match:
+            return match.group(1).strip()
+        return "Ninguna"
+        
+    auditoria_ficha = extraer_seccion(auditoria_content, "AUDITORIA_FICHA")
+    auditoria_mit = extraer_seccion(auditoria_content, "AUDITORIA_MIT")
+    auditoria_cuestionario = extraer_seccion(auditoria_content, "AUDITORIA_CUESTIONARIO")
+    
+    # Inyectar advertencias si existen y reescribir los archivos locales
+    if auditoria_ficha and auditoria_ficha.lower() != "ninguna":
+        print("[AUDITORÍA] Se detectaron discrepancias en la Ficha. Inyectando advertencias...")
+        ficha_content += f"\n\n## ⚠️ Auditoría Documental — revisar\n{auditoria_ficha}"
+        with open(ficha_path, "w", encoding="utf-8") as f:
+            f.write(ficha_content)
+            
+    if auditoria_mit and auditoria_mit.lower() != "ninguna":
+        print("[AUDITORÍA] Se detectaron discrepancias en el Sistema MIT. Inyectando advertencias...")
+        mit_content += f"\n\n## ⚠️ Auditoría Documental — revisar\n{auditoria_mit}"
+        with open(mit_path, "w", encoding="utf-8") as f:
+            f.write(mit_content)
+            
+    if auditoria_cuestionario and auditoria_cuestionario.lower() != "ninguna":
+        print("[AUDITORÍA] Se detectaron discrepancias en el Cuestionario y Casos. Inyectando advertencias...")
+        cuestionario_content += f"\n\n## ⚠️ Auditoría Documental — revisar\n{auditoria_cuestionario}"
+        with open(cuestionario_path, "w", encoding="utf-8") as f:
+            f.write(cuestionario_content)
+            
+    print(f"\n[SUCCESS] Procesamiento y Auditoría completados con exito! Archivos actualizados en la carpeta Universidad.")
 
     # Carga automática a Notion si se solicita
     if args.upload:

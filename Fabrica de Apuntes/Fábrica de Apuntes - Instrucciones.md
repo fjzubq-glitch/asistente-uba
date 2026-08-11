@@ -60,8 +60,8 @@ Materia: X · Clase: N · Fecha: DD-MM-YY · Tema: Y
 
 ---
 
-## PROMPT MIT COMPLETO: MAPA, TRAMPAS Y SIMULACRO
-**Objetivo**: Generar el puente entre el resumen y el cuestionario duro. Trabaja directamente sobre la transcripción.
+## PROMPT MIT COMPLETO: MAPA, TRAMPAS Y SIMULACRO (Paso 2 — MIT)
+**Objetivo**: Generar el puente entre el resumen y el cuestionario duro. Trabaja directamente sobre la transcripción de la clase cruzando consistencia con el Paso 1.
 
 ### Estructura de salida:
 ```markdown
@@ -69,12 +69,13 @@ Materia: X · Clase: N · Fecha: DD-MM-YY · Tema: Y
 **Tema:** [Tema]
 
 ## ETAPA 1 — MAPA NUCLEAR (máximo 1 página)
-Identificar los 5 conceptos centrales. Para cada uno:
+Identificar los 5 conceptos centrales (priorizando los Conceptos de Oro O1-O4 del Handoff del Paso 1). Para cada uno:
 * **Definición precisa:** según el material.
 * **Función práctica:** para qué sirve en un caso real.
 * **Conexión:** con cuál otro concepto se relaciona.
 * **Error frecuente:** qué confunde el estudiante.
 * **Alerta de clase:** advertencia explícita textual si la hay.
+*[Si se añade un concepto no listado en el Handoff del Paso 1, agregar al final: "Concepto añadido en Paso 2, no estaba en el Handoff: [motivo]"]*
 
 **MATRIZ DE CONEXIONES:** 3-5 líneas mostrando cómo se relacionan los 5 conceptos como sistema.
 
@@ -181,5 +182,24 @@ Actuar como profesor exigente. Combinar teoría, normativa y caso.
 1. La naturaleza jurídica del negocio surge del contenido real de las obligaciones pactadas, no de la denominación elegida por las partes.
 2. Un instrumento titulado "boleto de compraventa" puede constituir en realidad un contrato de mutuo si la sustancia del negocio es un préstamo de dinero con obligación de restitución más interés.
 3. La calificación errónea del título no exime de las consecuencias jurídicas propias de la figura real.
-*❌ Error típico: confundir el título del contrato con su naturaleza jurídica real (T1).*
+* **❌ Error típico: confundir el título del contrato con su naturaleza jurídica real (T1).**
 * **Textual del profesor:** *"No importa que yo le puse 'boleto de compraventa', porque el 'boleto de compraventa' no me va a definir qué tipo de contrato es, sino la naturaleza de todo el negocio."*
+
+---
+
+## REGLA DE MARCADORES DE INCERTIDUMBRE (APLICAR SIEMPRE)
+Antes de clasificar cualquier dato en la Ficha, MIT o Cuestionario, cruzá el fragmento de la transcripción cruda con estos marcadores:
+- `[dudoso]`, `[nombre dudoso]`, `[artículo dudoso]`, `[número dudoso]`: El dato no fue oído con claridad. No puede ser fuente única de un Concepto de Oro ni de una cita textual. Debés degradarlo a Concepto Satelital indicando la incertidumbre en el texto (ej. *"el profesor hace referencia a un artículo de número no verificado; verificar"*).
+- `[inaudible]`: El tramo no es recuperable. Nunca infieras o inventes contenido para rellenarlo. Si coincide con una definición clave, reportala en el Handoff como vacío de información.
+- `[REVISAR]` (Auditoría de Transcripción): Tratalo bajo el mismo criterio que los marcadores dudosos.
+- `[CONSISTENTE]` (Auditoría de Transcripción): Significa que el texto no presenta errores sintácticos internos, pero no equivale a una verificación externa definitiva. Utilizalo con la precaución habitual del perfil.
+
+---
+
+## ETAPA 4: AUDITORÍA DOCUMENTAL (PRE-NOTION)
+Es el paso final del pipeline, a ejecutarse tras el Prompt 3. Consiste en contrastar minuciosamente las citas normativas, doctrinarias o de fallos de los apuntes generados contra la transcripción original. Si detectás alguna cita que carece de base en la transcripción, no la borres en silencio: añadí una sección al pie del apunte correspondiente titulada:
+```markdown
+## ⚠️ Auditoría Documental — revisar
+- **[Concepto/Cita bajo duda]:** [Motivo por el cual la cita o aserción carece de sustento directo en la transcripción o es inconsistente].
+```
+Si el documento está libre de discrepancias, no se inyecta ninguna advertencia y se procede a guardar y subir normalmente.

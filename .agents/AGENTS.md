@@ -40,3 +40,46 @@ Cuando no sabés algo, decilo en la primera oración.
 
 ## Regla de Commits y Sincronización Automática (Git)
 * **Guardado y Sincronización**: Cada vez que realices cambios en el código que resuelvan parcial o totalmente una tarea o requerimiento del usuario, así como ante cualquier solicitud del usuario ("guardar cambios", "hacer commit", "actualizar", etc.), debes realizar un commit de Git con un mensaje descriptivo y ejecutar un `git push` al repositorio remoto para asegurar que el usuario disponga siempre de la última versión y pueda trabajar de manera fluida en cualquier máquina.
+
+## Protocolo Operativo: Fábrica de Apuntes (Modo Interactivo)
+
+Cuando el usuario te solicite procesar una clase directamente en el chat interactivo (seleccionando a **Claude Sonnet 4.6** o **Claude Opus 4.6**), debés seguir obligatoriamente este protocolo de cuatro etapas para generar y auditar el material, asegurando la consistencia y la excelencia del resultado.
+
+### 1. Nomenclatura del Pipeline
+Debés adherir estrictamente a los siguientes términos en todas tus respuestas, logs y nombres de archivos:
+- **Auditoría de Transcripción**: Proceso externo (upstream) de verificación del audio.
+- **Prompt 1 — Ficha**: Generación de la Ficha académica y su Handoff.
+- **Prompt 2 — MIT**: Generación del Mapa Nuclear, la Tabla de Alertas y el Simulacro de 10 preguntas.
+- **Prompt 3 — Cuestionario+Casos**: Generación del Cuestionario y los 3 Casos prácticos.
+- **Auditoría Documental**: Proceso final de control de calidad sobre los documentos generados.
+
+### 2. Regla de Marcadores de Incertidumbre
+Antes de clasificar cualquier dato en la Ficha, MIT o Cuestionario, cruzá el fragmento de la transcripción cruda con estos marcadores:
+- `[dudoso]`, `[nombre dudoso]`, `[artículo dudoso]`, `[número dudoso]`: El dato no fue oído con claridad. **No puede ser fuente única de un Concepto de Oro ni de una cita textual.** Debés degradarlo a Concepto Satelital indicando la incertidumbre en el texto (ej. *"el profesor hace referencia a un artículo de número no verificado; verificar"*).
+- `[inaudible]`: El tramo no es recuperable. Nunca infieras o inventes contenido para rellenarlo. Si coincide con una definición clave, reportala en el Handoff como vacío de información.
+- `[REVISAR]` (Auditoría de Transcripción): Tratalo bajo el mismo criterio que los marcadores dudosos.
+- `[CONSISTENTE]` (Auditoría de Transcripción): Significa que el texto no presenta errores sintácticos internos, pero no equivale a una verificación externa definitiva. Utilizalo con la precaución habitual del perfil.
+
+### 3. Consistencia entre Prompt 1 (Ficha) y Prompt 2 (MIT)
+Al procesar el **Prompt 2 — MIT**, debés leer el Handoff del **Prompt 1 — Ficha**. Priorizá los Conceptos de Oro (O1–O4) identificados allí como base de los 5 conceptos del Mapa Nuclear del MIT. Si al releer la transcripción encontrás un concepto estructural que se omitió en el Paso 1, agregalo al MIT y documentá el motivo en una línea adicional: *"Concepto añadido en Paso 2, no estaba en el Handoff: [motivo]"*.
+
+### 4. Auditoría Documental Pre-Notion
+Antes de guardar los apuntes, contrastá minuciosamente las citas normativas, doctrinarias o de fallos de los apuntes generados contra la transcripción original. Si detectás alguna cita que carece de base en la transcripción, no la borres en silencio: añadí una sección al pie del apunte correspondiente titulada:
+`## ⚠️ Auditoría Documental — revisar`
+Y detallá allí las citas bajo duda para que el usuario las revise.
+
+### 5. Naming y Registro de Metadata
+- **Nombres de archivo:** Asegurá los nombres exactos en formato: `Ficha_MateriaSinEspacios_ClaseN_DD-MM-AA.md`.
+- **Metadata del modelo:** Agregá siempre al pie del Handoff la línea:
+  `Generado con: [Claude Sonnet 4.6 | Claude Opus 4.6] · Modo: Antigravity` (según el modelo que estés ejecutando).
+- **Fallback sin terminal:** Si en la sesión de Antigravity no tenés permisos para ejecutar `subir_a_notion.py`, entregá los archivos `.md` completos y formateados directamente en bloques de código en el chat de Antigravity, y avisá explícitamente al usuario que la subida a Notion queda pendiente de ejecución manual.
+
+### 6. Checklist Operativo de Finalización
+Antes de entregar los apuntes y dar por terminada la tarea, verificá que:
+- [ ] Hayas procesado la transcripción como entrada terminada (no la generaste vos).
+- [ ] Aplicaste la Regla de Marcadores de Incertidumbre a cada dato dudoso.
+- [ ] Garantizaste la consistencia de los Conceptos de Oro en el MIT.
+- [ ] Corriste la Auditoría Documental y marcaste cualquier cita sospechosa al pie de las páginas.
+- [ ] Insertaste la línea de metadata del modelo y respetaste el naming de archivos.
+- [ ] Ejecutaste la subida automática a Notion o, en su defecto, diste el aviso de subida manual pendiente.
+
