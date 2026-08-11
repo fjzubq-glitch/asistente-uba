@@ -147,3 +147,12 @@ Thumbs.db
 **/chats.json
 **/ultimo_buenos_dias.txt
 **/cache_precios.json
+
+# Carpetas duplicadas locales no seguidas por Git
+Asistente UBA 1.0/.agents/
+Asistente UBA 1.0/Proyecto 1 - Bot Telegram/
+Asistente UBA 1.0/Proyecto 2 - Fabrica de Apuntes/
+Asistente UBA 1.0/Proyecto 3 - Asistente Vero/
+Asistente UBA 1.0/Proyecto 4 - Transcriptor de Audio/Deepgram API.txt
+Asistente UBA 1.0/Universidad/
+
