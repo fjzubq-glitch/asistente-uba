@@ -105,10 +105,10 @@ def obtener_o_crear_pagina_materia(notion_token, database_id, materia):
         print(f"[SUCCESS] Registro de materia creado con éxito. ID: {new_page_id}")
         return new_page_id
     except Exception as e:
-        print(f"[ERROR] Fallo crítico al crear el registro de materia en Notion: {e}")
+        print(f"[WARN] No se pudo crear o verificar el registro de materia en Notion: {e}")
         if 'r' in locals() and r.text:
             print(f"Detalle de la respuesta del servidor: {r.text}")
-        sys.exit(1)
+        return None
 
 
 def obtener_o_crear_carpeta_tipo(notion_token, materia_page_id, tipo_documento):
@@ -435,21 +435,45 @@ def subir_apuntes(materia, clase, fecha, tipo_documento, filepath, notion_token,
         
     print(f"[INFO] Subiendo '{tipo_documento}' desde '{os.path.basename(filepath)}'...")
     
-    # 1. Obtener la carpeta global correspondiente según el tipo de documento
-    mapeo_env_folders = {
-        "Ficha + Handoff": "NOTION_FOLDER_FICHAS",
-        "Sistema MIT": "NOTION_FOLDER_MIT",
-        "Cuestionario + Casos": "NOTION_FOLDER_CUESTIONARIOS"
+    # 1. Resolver la carpeta contenedora según la materia y el tipo de documento
+    import re
+    # Generar prefijo normalizado de materia (ej. "Contratos II" -> "CONTRATOS_II", "Derecho Comercial" -> "DERECHO_COMERCIAL")
+    materia_clean = re.sub(r'[^a-zA-Z0-9_]', '', materia.upper().replace(' ', '_'))
+    
+    mapeo_documento = {
+        "Ficha + Handoff": "FICHAS",
+        "Sistema MIT": "MIT",
+        "Cuestionario + Casos": "CUESTIONARIOS"
     }
+    doc_suffix = mapeo_documento.get(tipo_documento)
     
-    var_env = mapeo_env_folders.get(tipo_documento)
-    carpeta_id = os.environ.get(var_env) if var_env else None
+    carpeta_id = None
+    var_env_used = None
     
+    if doc_suffix:
+        # 1. Intentar variable de entorno específica dinámica (ej. NOTION_CONTRATOS_II_FICHAS)
+        var_env_especifica = f"NOTION_{materia_clean}_{doc_suffix}"
+        carpeta_id = os.environ.get(var_env_especifica)
+        var_env_used = var_env_especifica
+        
+        # 2. Intentar variable de entorno alias si la anterior no dio resultado
+        if not carpeta_id:
+            parts = materia_clean.split('_')
+            materia_alias = parts[0]
+            # Si el primer término es genérico como "DERECHO" (ej. DERECHO_COMERCIAL), usamos el segundo como alias
+            if materia_alias == "DERECHO" and len(parts) > 1:
+                materia_alias = parts[1]
+                
+            var_env_alias = f"NOTION_{materia_alias}_{doc_suffix}"
+            carpeta_id = os.environ.get(var_env_alias)
+            if carpeta_id:
+                var_env_used = var_env_alias
+
     if carpeta_id:
-        print(f"[INFO] Utilizando carpeta global configurada en entorno para '{tipo_documento}'. ID: {carpeta_id}")
+        print(f"[INFO] Utilizando carpeta configurada en entorno '{var_env_used}' para la materia '{materia}' y tipo '{tipo_documento}'. ID: {carpeta_id}")
     else:
         # Fallback a la carpeta local de la materia
-        print(f"[WARN] Variable de entorno '{var_env}' no configurada o vacía. Intentando resolver carpeta local bajo la materia...")
+        print(f"[WARN] No se encontró variable de entorno configurada para la materia '{materia}' y tipo '{tipo_documento}'. Intentando resolver carpeta local bajo la materia...")
         try:
             carpeta_id = obtener_o_crear_carpeta_tipo(notion_token, materia_page_id, tipo_documento)
         except Exception as e:
