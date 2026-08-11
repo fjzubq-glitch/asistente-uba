@@ -115,3 +115,6 @@ Un contrato se forma entre dos partes después de una serie de negociaciones. ¿
 * ▸ RESPUESTA ESPERADA: El contrato se considera perfeccionado en el momento en que hay concordancia exacta entre la oferta y la aceptación, aplicando el principio del espejo.
 * ▸ ERROR TÍPICO: Creer que el contrato se perfecciona en el momento de las negociaciones iniciales o en un momento posterior a la aceptación.
 * ▸ FUENTE PARA REPASAR SI FALLÁS: Artículos 971 y 978 del CCC.
+
+## ⚠️ Auditoría Documental — revisar
+Ninguna. El sistema MIT presentado también se basa en conceptos y estructuras que se mencionan en la transcripción original. La clasificación de las ofertas, el principio del espejo en la aceptación, la vigencia de la oferta y la retractación son temas tratados en la transcripción y se reflejan adecuadamente en el sistema MIT.

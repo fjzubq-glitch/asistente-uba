@@ -83,3 +83,6 @@ Materia: Contratos II · Clase: 99 · Fecha: 11-08-26 · Tema: Prueba consolidad
 Generado con: gemini-2.5-flash · Modo: Script
 
 ✅ Paso 1 completo.
+
+## ⚠️ Auditoría Documental — revisar
+Ninguna. Los conceptos y citas presentados en la ficha tienen respaldo en la transcripción original de la clase. Los artículos del Código Civil y Comercial de la Nación mencionados, como el 971, 972, 973, 974, 975, 978 y 981, se refieren a la formación del consentimiento contractual, la oferta, la aceptación, la invitación a ofertar, la vigencia de la oferta y la retractación, todos temas abordados en la transcripción.

@@ -1,68 +1,47 @@
 # 📄 PASO 2A — CUESTIONARIO · Pegar en Notion: Cuestionario_Contratos II_Clase99_11-08-26
 
-❓ 1. ¿Cuál es el elemento esencial que distingue a la oferta de la invitación a ofertar en el derecho argentino? · fuente Art. 972 CCC · [Etiquetas: 🎯 Pareto, ⚠️ Trampa]
-1. La oferta debe ser dirigida a persona determinada o determinable.
-2. La oferta debe contener las precisiones necesarias para que, de ser aceptada, el contrato quede concluido.
-*❌ Error típico: Confundir una invitación a ofertar con una oferta vinculante.
+❓ 1. ¿Cuál es la diferencia fundamental entre una oferta y una invitación a ofertar en el contexto del Código Civil y Comercial de la Nación? · fuente Artículo 973 del CCC · [Etiquetas: 🎯 Pareto, ⚠️ Trampa]
+1. La oferta es una manifestación de voluntad unilateral con intención de obligarse y dirigida a persona determinada o determinable, mientras que la invitación a ofertar carece de estos requisitos.
+2. La oferta tiene fuerza vinculante, mientras que la invitación a ofertar no obliga al emisor.
+*❌ Error típico: Confundir una invitación a ofertar con una oferta, olvidando verificar si la manifestación de voluntad está dirigida a persona determinada o determinable y si contiene todos los elementos esenciales para que el contrato quede concluido con la mera aceptación.
 
-❓ 2. ¿Qué sucede con la oferta si es sin plazo y se hace a persona ausente? · fuente Art. 974 CCC · [Etiquetas: 🏆 Cae siempre]
-1. La oferta caduca inmediatamente.
-2. El oferente queda obligado por un plazo razonable.
-*❌ Error típico: Creer que la oferta sin plazo a persona ausente caduca de inmediato.
+❓ 2. ¿Qué es el principio del espejo en la aceptación, y cuál es su importancia en la formación del consentimiento contractual? · fuente Artículo 978 del CCC · [Etiquetas: 🏆 Cae siempre]
+1. El principio del espejo establece que la aceptación debe coincidir plenamente con la oferta, sin modificaciones.
+2. Este principio es crucial porque garantiza que las partes estén de acuerdo en los mismos términos, evitando malentendidos y asegurando la validez del contrato.
 
-❓ 3. ¿Cuál es el principio que establece que la aceptación debe reflejar exactamente la oferta sin introducir modificaciones? · fuente Art. 978 CCC · [Etiquetas: 🎯 Pareto]
-1. Principio de la buena fe.
-2. Principio del Espejo.
-*❌ Error típico: No reconocer el Principio del Espejo como el principio aplicable.
+❓ 3. ¿Cómo se clasifican las ofertas en términos de su vigencia, y cuáles son las implicaciones de cada tipo? · fuente Artículo 974 del CCC · [Etiquetas: 🎯 Pareto]
+1. Las ofertas se clasifican en con plazo y sin plazo, y dentro de estas últimas, en ofertas a persona presente (que deben ser aceptadas inmediatamente) y a persona ausente (que tienen un plazo razonable para la aceptación).
+2. La clasificación de la oferta determina su vigencia y las obligaciones del oferente.
 
-❓ 4. ¿Qué sucede si la retractación de la oferta llega al destinatario después de que la oferta ya fue aceptada? · fuente Art. 975 CCC · [Etiquetas: ⚠️ Trampa]
-1. La retractación es eficaz y el contrato no se perfecciona.
-2. La retractación no es eficaz porque el contrato ya quedó perfeccionado.
-*❌ Error típico: Creer que la retractación de la oferta puede ser eficaz después de la aceptación.
+❓ 4. ¿Qué es la retractación de una oferta o aceptación, y bajo qué condiciones es eficaz? · fuente Artículos 975 y 981 del CCC · [Etiquetas: ⚠️ Trampa]
+1. La retractación es la revocación de una oferta o aceptación antes de que sea aceptada o rechazada.
+2. Para ser eficaz, la retractación debe llegar al destinatario antes o al mismo tiempo que la oferta o la aceptación.
 
-❓ 5. ¿Cuál es el requisito para que la aceptación sea válida según el Código Civil y Comercial de la Nación? · fuente Art. 978 CCC · [Etiquetas: 🏆 Cae siempre]
-1. Debe ser oportuna y lisa y llana.
-2. Debe ser inmediata y sin condiciones.
-*❌ Error típico: No considerar que la aceptación debe ser oportuna y lisa y llana.
+❓ 5. ¿Cuál es el efecto jurídico de una contraoferta o modificación de la oferta en el proceso de formación del consentimiento contractual? · fuente Artículo 978 del CCC · [Etiquetas: 🏆 Cae siempre]
+1. Una contraoferta o modificación de la oferta implica la caducidad de la oferta original.
+2. Esto da lugar al nacimiento de una nueva propuesta, invirtiéndose los roles de oferente y aceptante.
 
-❓ 6. ¿Qué es la autosuficiencia de la oferta? · fuente Art. 972 CCC · [Etiquetas: 🎯 Pareto]
-1. La capacidad de la oferta para ser aceptada sin modificaciones.
-2. La condición de que la oferta contenga todas las precisiones necesarias para que, de ser aceptada, el contrato quede concluido.
-*❌ Error típico: Confundir la autosuficiencia con la capacidad de ser aceptada sin modificaciones.
-
-❓ 7. ¿Cuál es la consecuencia de no cumplir con los requisitos de la oferta? · fuente Art. 972 CCC · [Etiquetas: ⚠️ Trampa]
-1. La oferta es vinculante pero puede ser retractada.
-2. La propuesta no es una oferta, sino una invitación a ofertar o una mera propuesta sin efectos vinculantes.
-*❌ Error típico: Creer que una propuesta que no cumple con los requisitos de la oferta sigue siendo vinculante.
-
-❓ 8. ¿Qué sucede con la oferta si es sin plazo y se hace a persona presente? · fuente Art. 974 CCC · [Etiquetas: 🏆 Cae siempre]
-1. La oferta debe ser aceptada inmediatamente; de lo contrario, caduca.
-2. El oferente queda obligado por un plazo razonable.
-*❌ Error típico: No considerar que la oferta sin plazo a persona presente requiere aceptación inmediata.
-
-❓ Integradora. ¿Cómo se relacionan los conceptos de oferta, aceptación, y retractación en la formación del consentimiento contractual? Considerando los artículos 971 a 981 del Código Civil y Comercial de la Nación, explique:
-1. La importancia de la autosuficiencia de la oferta.
-2. La diferencia entre una oferta y una invitación a ofertar.
-3. El efecto de la retractación de la oferta o la aceptación en la formación del contrato.
-4. La aplicación del Principio del Espejo en la aceptación.
+❓ Integradora. ¿Cómo se relacionan los conceptos de oferta, aceptación, y retractación en la formación del consentimiento contractual, y qué implicaciones tienen en la práctica contractual? 
+1. La oferta es la manifestación de voluntad unilateral que inicia el proceso contractual.
+2. La aceptación debe ser oportuna y lisa y llana, coincidiendo plenamente con la oferta.
+3. La retractación de la oferta o la aceptación puede ser eficaz si se produce antes de la aceptación o rechazo.
+4. La interacción entre estos conceptos determina la validez y el contenido del contrato.
 
 ## 🎯 Top Pareto
 | Prioridad | Pregunta | Concepto clave |
 | --- | --- | --- |
-| 🔴 Crítico | 1 | Oferta vs. Invitación a Ofertar |
-| 🟠 Alto | 3 | Principio del Espejo |
-| 🟠 Alto | 6 | Autosuficiencia de la Oferta |
+| 🔴 Crítico | 1 | Oferta vs. Invitación a ofertar |
+| 🟠 Alto | 2 | Principio del espejo en la aceptación |
+| 🟠 Alto | 3 | Clasificación de las ofertas |
 
 ## 📜 Fuentes clave
 | Fuente | Qué establece | Por qué importa en examen |
 | --- | --- | --- |
-| Art. 971 CCC | Consentimiento Contractual | Define la estructura básica del contrato |
-| Art. 972 CCC | Oferta | Establece los requisitos para una oferta válida |
-| Art. 973 CCC | Invitación a Ofertar | Distingue la invitación a ofertar de la oferta |
-| Art. 974 CCC | Vigencia de la Oferta | Regula la caducidad de la oferta |
-| Art. 975 CCC | Retractación de Oferta | Establece el efecto de la retractación |
-| Art. 978 CCC | Aceptación | Define la aceptación lisa y llana |
-| Art. 981 CCC | Retractación de Aceptación | Regula el efecto de la retractación de la aceptación |
+| Artículo 971 del CCC | Definición de consentimiento contractual | Fundamento del contrato |
+| Artículo 972 del CCC | Definición de oferta | Requisitos de la oferta |
+| Artículo 973 del CCC | Definición de invitación a ofertar | Diferenciación con la oferta |
+| Artículo 974 del CCC | Vigencia de la oferta | Implicaciones para el oferente |
+| Artículo 978 del CCC | Principio del espejo en la aceptación | Validez del contrato |
 
 ---
 
@@ -70,62 +49,60 @@
 
 📌 **CASO 1 — Oferta y Aceptación**
 Nivel: Simple
-Conceptos: O1, O2, O4
-⚖️ Fuentes: Art. 971, 972, 978 CCC
-**Enunciado:** Juan ofrece a María comprar su auto por $100,000. María acepta la oferta de inmediato. ¿Se ha perfeccionado el contrato?
+Conceptos: O1, O2, O3
+⚖️ Fuentes: Artículos 971, 972, 978 del CCC
+**Enunciado:** Juan ofrece a María comprar su auto por $100,000. María responde que acepta la oferta. 
 ► Intentá resolverlo antes de seguir.
 **Resolución**
-Figura jurídica en juego: Consentimiento Contractual
+Figura jurídica en juego: Consentimiento contractual
 Razonamiento: 
-1. La oferta de Juan es clara y dirigida a María.
-2. La aceptación de María es oportuna y lisa y llana.
-3. Se cumple con los requisitos del consentimiento contractual.
-Respuesta: Sí, el contrato se ha perfeccionado.
-⚠️ Error típico: No considerar que la aceptación debe ser oportuna y lisa y llana.
-Relacionado con: P1 del cuestionario
+1. Juan hace una oferta a María con todos los elementos esenciales (precio, objeto).
+2. María acepta la oferta de manera lisa y llana, sin modificaciones.
+3. El consentimiento contractual se perfecciona con la aceptación.
+Respuesta: El contrato de compraventa se perfecciona.
+⚠️ Error típico: No verificar si la aceptación es lisa y llana.
 
 📌 **CASO 2 — Invitación a Ofertar**
 Nivel: Trampa
-Conceptos: O2, O3
-⚖️ Fuentes: Art. 972, 973 CCC
-**Enunciado:** Una tienda publica un anuncio que dice "Vendo notebooks, consultar precio". ¿Es esto una oferta o una invitación a ofertar?
+Conceptos: S1, O2
+⚖️ Fuentes: Artículo 973 del CCC
+**Enunciado:** Una tienda publica un anuncio que dice "Autos a precios increíbles". Pedro se acerca y ofrece comprar un auto por $50,000.
 ► Intentá resolverlo antes de seguir.
 **Resolución**
-Figura jurídica en juego: Invitación a Ofertar
+Figura jurídica en juego: Invitación a ofertar
 Razonamiento: 
-1. La publicación no está dirigida a persona determinada o determinable.
-2. No contiene las precisiones necesarias para que, de ser aceptada, el contrato quede concluido.
-3. Es una invitación a ofertar porque carece de autosuficiencia.
-Respuesta: Es una invitación a ofertar.
-⚠️ Error típico: Confundir la invitación a ofertar con una oferta vinculante.
-Relacionado con: P2 del cuestionario
+1. El anuncio no es una oferta porque no está dirigido a persona determinada o determinable y carece de elementos esenciales.
+2. Pedro hace una oferta al tienda.
+3. La tienda puede aceptar o rechazar la oferta de Pedro.
+Respuesta: La tienda no está obligada por el anuncio.
+⚠️ Error típico: Confundir el anuncio con una oferta.
 
-📌 **CASO 3 — Retractación de Oferta**
+📌 **CASO 3 — Retractación y Contraoferta**
 Nivel: Complejo
-Conceptos: O2, O4
-⚖️ Fuentes: Art. 972, 975, 978 CCC
-**Enunciado:** Carlos ofrece a Ana comprar su departamento por $500,000 con un plazo de aceptación de 5 días. Al día siguiente, Carlos intenta retractar su oferta. Ana acepta la oferta original al tercer día. ¿Es válida la retractación de Carlos? ¿Se ha perfeccionado el contrato?
+Conceptos: S3, S4, O2
+⚖️ Fuentes: Artículos 975, 981 del CCC
+**Enunciado:** Ana ofrece a Carlos comprar su casa por $500,000. Antes de que Carlos responda, Ana retracta su oferta. Luego, Carlos responde aceptando la oferta original, pero pide una reducción del precio a $450,000.
 ► Intentá resolverlo antes de seguir.
 **Resolución**
-Figura jurídica en juego: Retractación de Oferta y Consentimiento Contractual
+Figura jurídica en juego: Retractación y contraoferta
 Razonamiento: 
-1. La retractación de Carlos debe llegar a Ana antes o al mismo tiempo que la aceptación para ser eficaz.
-2. La aceptación de Ana es oportuna y lisa y llana dentro del plazo de la oferta.
-3. La retractación de Carlos no es eficaz porque llega después de la aceptación.
-Respuesta: La retractación no es válida, y el contrato se ha perfeccionado.
-⚠️ Error típico: Creer que la retractación de la oferta puede ser eficaz después de la aceptación.
-Relacionado con: P4 del cuestionario
+1. Ana retracta su oferta antes de que Carlos responda, por lo que la oferta original caduca.
+2. La respuesta de Carlos, que incluye una modificación del precio, es una contraoferta.
+3. Ana puede aceptar o rechazar la contraoferta de Carlos.
+Respuesta: El contrato no se perfecciona con la aceptación original de Carlos porque la oferta había sido retractada.
+⚠️ Error típico: No considerar la retractación de la oferta antes de la aceptación.
 
 ## 📊 Mapa de cobertura
 | Concepto | Caso | Pregunta | Riesgo |
 | --- | --- | --- | --- |
-| O1 - Consentimiento Contractual | Caso 1 | P1 | Alto |
-| O2 - Oferta | Caso 1, Caso 2 | P1, P2 | Alto |
-| O3 - Invitación a Ofertar | Caso 2 | P2 | Medio |
-| O4 - Aceptación | Caso 1, Caso 3 | P1, P4 | Alto |
-| Vigencia de la Oferta | Caso 3 | P5 | Medio |
-| Retractación de Oferta | Caso 3 | P4 | Alto |
-| Principio del Espejo | Caso 1 | P3 | Alto |
-| Autosuficiencia de la Oferta | Caso 2 | P6 | Medio |
+| O1 | CASO 1 | 1 | Alto |
+| O2 | CASO 1, CASO 2 | 1, 2 | Alto |
+| O3 | CASO 1 | 2 | Medio |
+| S1 | CASO 2 | 3 | Bajo |
+| S3 | CASO 3 | 4 | Alto |
+| S4 | CASO 3 | 5 | Medio |
 
 ✅ Paso 2 completo.
+
+## ⚠️ Auditoría Documental — revisar
+Ninguna. Las preguntas y casos presentados en el cuestionario y en los casos tienen su base en la transcripción original de la clase. Los conceptos de oferta, aceptación, invitación a ofertar, retractación y principio del espejo son abordados de manera coherente con lo expuesto en la transcripción. Las fuentes citadas, como los artículos del Código Civil y Comercial de la Nación, son relevantes y se mencionan en la transcripción como fundamentos de los conceptos tratados.

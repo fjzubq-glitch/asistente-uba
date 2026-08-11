@@ -461,7 +461,7 @@ def subir_apuntes(materia, clase, fecha, tipo_documento, filepath, notion_token,
         
     blocks = parsear_markdown_a_bloques(content)
     
-    nombre_pagina = f"{tipo_documento} - Clase {clase} ({fecha})"
+    nombre_pagina = f"{materia} - {tipo_documento} - Clase {clase} ({fecha})"
     
     properties = {
         "title": {
