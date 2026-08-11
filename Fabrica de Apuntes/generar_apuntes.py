@@ -127,7 +127,7 @@ def llamar_api(prompt_sistema, prompt_usuario, provider, model, api_key):
             print(f"❌ Error al llamar a la API de {provider.capitalize()}: {e}")
             if response is not None and response.text:
                 print(f"Detalle: {response.text}")
-            sys.exit(1)
+            raise RuntimeError(f"Falla crítica en la API de {provider.capitalize()}: {e}")
 
 
 def enviar_notificacion_telegram(materia, clase, fecha, tema):
@@ -185,6 +185,52 @@ def enviar_notificacion_telegram(materia, clase, fecha, tema):
     except Exception as e:
         print(f"[WARN] No se pudo enviar la notificación por Telegram: {e}")
         return False
+
+
+def ejecutar_con_fallback(prompt_sistema, prompt_usuario, provider_principal, model_override=None):
+    """
+    Intenta ejecutar la llamada a la API con el proveedor principal.
+    Si falla críticamente y el proveedor principal es Gemini, realiza
+    un fallback automático a Groq utilizando sus credenciales del entorno.
+    """
+    api_key_env = {
+        "openrouter": "OPENROUTER_API_KEY",
+        "gemini": "GEMINI_API_KEY",
+        "groq": "GROQ_API_KEY"
+    }
+    
+    try:
+        model = model_override if model_override else DEFAULT_MODELS[provider_principal]
+        env_var = api_key_env[provider_principal]
+        api_key = os.environ.get(env_var)
+        if not api_key:
+            raise ValueError(f"No se encontró la variable de entorno {env_var}")
+            
+        return llamar_api(prompt_sistema, prompt_usuario, provider_principal, model, api_key)
+        
+    except Exception as principal_error:
+        if provider_principal == "gemini":
+            print(f"\n⚠️ [FALLBACK] La llamada a Gemini falló críticamente: {principal_error}")
+            print("🚀 Iniciando fallback automático a GROQ...")
+            
+            try:
+                fallback_provider = "groq"
+                model_fallback = DEFAULT_MODELS[fallback_provider]
+                env_var_fallback = api_key_env[fallback_provider]
+                api_key_fallback = os.environ.get(env_var_fallback)
+                
+                if not api_key_fallback:
+                    raise ValueError(f"No se encontró la variable de entorno {env_var_fallback} para el fallback")
+                
+                print(f"🤖 Utilizando proveedor de respaldo: {fallback_provider.upper()} | Modelo: {model_fallback}")
+                return llamar_api(prompt_sistema, prompt_usuario, fallback_provider, model_fallback, api_key_fallback)
+            except Exception as fallback_error:
+                print(f"❌ [FALLBACK ERROR] El proveedor de respaldo Groq también falló: {fallback_error}")
+                # Si el fallback también falla, salimos con error crítico
+                sys.exit(1)
+        else:
+            print(f"❌ Error crítico sin proveedor de respaldo configurado: {principal_error}")
+            sys.exit(1)
 
 
 def main():
@@ -313,7 +359,7 @@ TRANSCRIPCIÓN DE LA CLASE:
 {transcripcion}
 """
     
-    ficha_content = llamar_api(prompt_ficha_sistema, prompt_ficha_usuario, args.provider, model, api_key)
+    ficha_content = ejecutar_con_fallback(prompt_ficha_sistema, prompt_ficha_usuario, args.provider, args.model)
     ficha_path = os.path.join(output_dir, f"Ficha_{args.materia}_Clase{args.clase}_{args.fecha}.md")
     with open(ficha_path, "w", encoding="utf-8") as f:
         f.write(ficha_content)
@@ -355,7 +401,7 @@ TRANSCRIPCIÓN DE LA CLASE:
 {transcripcion}
 """
     
-    mit_content = llamar_api(prompt_mit_sistema, prompt_mit_usuario, args.provider, model, api_key)
+    mit_content = ejecutar_con_fallback(prompt_mit_sistema, prompt_mit_usuario, args.provider, args.model)
     mit_path = os.path.join(output_dir, f"Sistema_MIT_{args.materia}_Clase{args.clase}_{args.fecha}.md")
     with open(mit_path, "w", encoding="utf-8") as f:
         f.write(mit_content)
@@ -410,7 +456,7 @@ FICHA Y HANDOFF (PASO 1 GENERADO):
 {ficha_content}
 """
     
-    cuestionario_content = llamar_api(prompt_cuestionario_sistema, prompt_cuestionario_usuario, args.provider, model, api_key)
+    cuestionario_content = ejecutar_con_fallback(prompt_cuestionario_sistema, prompt_cuestionario_usuario, args.provider, args.model)
     cuestionario_path = os.path.join(output_dir, f"Cuestionario_y_Casos_{args.materia}_Clase{args.clase}_{args.fecha}.md")
     with open(cuestionario_path, "w", encoding="utf-8") as f:
         f.write(cuestionario_content)
