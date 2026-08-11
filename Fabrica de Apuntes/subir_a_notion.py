@@ -435,12 +435,26 @@ def subir_apuntes(materia, clase, fecha, tipo_documento, filepath, notion_token,
         
     print(f"[INFO] Subiendo '{tipo_documento}' desde '{os.path.basename(filepath)}'...")
     
-    # 1. Obtener o crear la carpeta del tipo correspondiente dentro de la materia
-    try:
-        carpeta_id = obtener_o_crear_carpeta_tipo(notion_token, materia_page_id, tipo_documento)
-    except Exception as e:
-        print(f"[ERROR] No se pudo resolver la carpeta contenedora para '{tipo_documento}': {e}")
-        return False
+    # 1. Obtener la carpeta global correspondiente según el tipo de documento
+    mapeo_env_folders = {
+        "Ficha + Handoff": "NOTION_FOLDER_FICHAS",
+        "Sistema MIT": "NOTION_FOLDER_MIT",
+        "Cuestionario + Casos": "NOTION_FOLDER_CUESTIONARIOS"
+    }
+    
+    var_env = mapeo_env_folders.get(tipo_documento)
+    carpeta_id = os.environ.get(var_env) if var_env else None
+    
+    if carpeta_id:
+        print(f"[INFO] Utilizando carpeta global configurada en entorno para '{tipo_documento}'. ID: {carpeta_id}")
+    else:
+        # Fallback a la carpeta local de la materia
+        print(f"[WARN] Variable de entorno '{var_env}' no configurada o vacía. Intentando resolver carpeta local bajo la materia...")
+        try:
+            carpeta_id = obtener_o_crear_carpeta_tipo(notion_token, materia_page_id, tipo_documento)
+        except Exception as e:
+            print(f"[ERROR] No se pudo resolver la carpeta contenedora para '{tipo_documento}': {e}")
+            return False
         
     with open(filepath, "r", encoding="utf-8") as f:
         content = f.read()
