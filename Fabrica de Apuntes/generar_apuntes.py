@@ -198,8 +198,8 @@ def main():
                         help="Proveedor de API a utilizar (por defecto: gemini)")
     parser.add_argument("--model", help="Modelo específico a utilizar (opcional, tiene valores por defecto por proveedor)")
     parser.add_argument("--upload", action="store_true", help="Sube automáticamente los archivos generados a Notion")
-    parser.add_argument("--parent-page", default="2361618c-4b73-80cd-8a85-dfc5557c60d7", 
-                        help="ID de la página principal de Notion 'Franklin - Universidad' donde se creará la base de datos")
+    parser.add_argument("--parent-page", default="2361618c-4b73-8173-8126-e8d418984def", 
+                        help="ID de la base de datos de materias en Notion (por defecto: base 'Materias')")
     
     args = parser.parse_args()
     

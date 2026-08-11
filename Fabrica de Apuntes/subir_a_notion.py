@@ -35,56 +35,45 @@ def obtener_cabeceras(notion_token):
         "Content-Type": "application/json"
     }
 
-def obtener_o_crear_pagina_materia(notion_token, parent_page_id, materia):
+def obtener_o_crear_pagina_materia(notion_token, database_id, materia):
     """
-    Busca una página con el título de la materia bajo la página padre de Notion.
-    Si no existe, la crea como subpágina con portada e icono estético, y devuelve su ID.
+    Busca una tarjeta (fila) con el nombre de la materia en la base de datos de materias en Notion.
+    Si no existe, la crea con portada e icono estético, y devuelve su ID de página.
     """
     headers = obtener_cabeceras(notion_token)
     
-    # 1. Buscar si ya existe la página de la materia
-    search_url = "https://api.notion.com/v1/search"
-    search_payload = {
-        "query": materia,
+    # 1. Buscar si ya existe la materia en la base de datos mediante query
+    query_url = f"https://api.notion.com/v1/databases/{database_id}/query"
+    query_payload = {
         "filter": {
-            "value": "page",
-            "property": "object"
+            "property": "Name",
+            "title": {
+                "equals": materia
+            }
         }
     }
     
     try:
-        r = requests.post(search_url, headers=headers, json=search_payload, timeout=15)
+        r = requests.post(query_url, headers=headers, json=query_payload, timeout=15)
         r.raise_for_status()
         results = r.json().get("results", [])
         
-        # Normalizar el ID del padre para comparación
-        parent_normalized = parent_page_id.replace("-", "").lower()
-        
         for page in results:
-            properties = page.get("properties", {})
-            title_prop = properties.get("title", {})
-            title_list = title_prop.get("title", [])
-            title_text = title_list[0].get("plain_text", "") if title_list else ""
-            
-            if title_text == materia and not page.get("archived", False):
-                parent = page.get("parent", {})
-                page_parent_id = parent.get("page_id", "").replace("-", "").lower()
-                if page_parent_id == parent_normalized:
-                    print(f"[INFO] Página de materia existente encontrada. ID: {page['id']}")
-                    return page["id"]
+            if not page.get("archived", False):
+                print(f"[INFO] Registro de materia existente encontrado en la base de datos. ID: {page['id']}")
+                return page["id"]
     except Exception as e:
-        print(f"[WARN] Error al buscar página de materia: {e}")
+        print(f"[WARN] Error al consultar la base de datos de materias: {e}")
 
-    # 2. Si no existe, crear la página de la materia con portada e icono estético
-    print(f"[INFO] Creando nueva página para la materia '{materia}' con estética personalizada...")
+    # 2. Si no existe, crear la materia en la base de datos de materias
+    print(f"[INFO] Creando nuevo registro para la materia '{materia}' en la base de datos con estética personalizada...")
     create_url = "https://api.notion.com/v1/pages"
     
     estetica = MAPEO_ESTETICA_MATERIAS.get(materia, MAPEO_ESTETICA_MATERIAS["DEFAULT"])
     
     page_payload = {
         "parent": {
-            "type": "page_id",
-            "page_id": parent_page_id
+            "database_id": database_id
         },
         "icon": {
             "type": "emoji",
@@ -97,7 +86,7 @@ def obtener_o_crear_pagina_materia(notion_token, parent_page_id, materia):
             }
         },
         "properties": {
-            "title": {
+            "Name": {
                 "title": [
                     {
                         "text": {
@@ -113,10 +102,10 @@ def obtener_o_crear_pagina_materia(notion_token, parent_page_id, materia):
         r = requests.post(create_url, headers=headers, json=page_payload, timeout=20)
         r.raise_for_status()
         new_page_id = r.json()["id"]
-        print(f"[SUCCESS] Página de materia creada con éxito. ID: {new_page_id}")
+        print(f"[SUCCESS] Registro de materia creado con éxito. ID: {new_page_id}")
         return new_page_id
     except Exception as e:
-        print(f"[ERROR] Fallo crítico al crear la página de materia en Notion: {e}")
+        print(f"[ERROR] Fallo crítico al crear el registro de materia en Notion: {e}")
         if 'r' in locals() and r.text:
             print(f"Detalle de la respuesta del servidor: {r.text}")
         sys.exit(1)
