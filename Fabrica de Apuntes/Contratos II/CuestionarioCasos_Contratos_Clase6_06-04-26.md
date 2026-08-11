@@ -1,188 +1,228 @@
 # 📄 PASO 2A — CUESTIONARIO · Pegar en Notion: Cuestionario_Contratos_Clase6_06-04-26
 
-❓ 1. ¿Cuáles son los cuatro requisitos esenciales que debe reunir el objeto de un contrato para que el acuerdo sea plenamente válido? · fuente [O1] · [Etiquetas: 🎯 Pareto, 🏆 Cae siempre]
-1. Debe ser lícito: No estar prohibido por las leyes, el orden público, la moral, las buenas costumbres ni perjudicar a terceros.
-2. Debe ser material y jurídicamente posible: No violar leyes físicas de la naturaleza ni límites conceptuales del ordenamiento (ej. hipotecar un auto).
-3. Debe ser determinado o determinable: Estar individualizado o contener pautas precisas para su posterior determinación.
-4. Debe tener valoración económica: Ser susceptible de apreciación pecuniaria, aunque el interés de las partes no sea estrictamente patrimonial.
-*❌ Error típico: Creer que si el interés de las partes es meramente altruista o no patrimonial, la prestación no requiere ser valorable económicamente.*
-
-❓ 2. ¿Cuál es el principio general en materia de contratos sobre herencia futura y qué excepción prevé la legislación vigente para proteger las empresas familiares? · fuente [O2] · [Etiquetas: 🎯 Pareto, 🏆 Cae siempre]
-1. Principio general: Los contratos que versan sobre una herencia futura o derechos sucesorios eventuales son nulos de nulidad absoluta.
-2. Excepción (Art. 1010, 2° párr.): Se validan los pactos sobre una explotación productiva o participaciones societarias con miras a conservar la unidad empresarial o evitar litigios sucesorios.
-3. Límites: Estos pactos no deben vulnerar la legítima hereditaria, los derechos del cónyuge ni los derechos de terceros.
-*❌ Error típico: Extender la validez de la excepción a pactos que transmiten directamente bienes inmuebles residenciales sin actividad mercantil.*
-
-❓ 3. ¿Qué exigencia impone el artículo 1011 del Código Civil y Comercial a quien decida rescindir unilateralmente un contrato de larga duración? · fuente [O3] · [Etiquetas: ⚠️ Trampa, 🏆 Cae siempre]
-1. Las partes deben ejercitar sus derechos de acuerdo con un estricto deber de colaboración mutua y buena fe.
-2. El rescindente debe dar a la otra parte una oportunidad razonable de renegociar las cláusulas desequilibradas antes de declarar extinguido el vínculo.
-3. La omisión de este paso configura un ejercicio abusivo del derecho de rescindir.
-*❌ Error típico: Rescindir de forma intempestiva y directa pretendiendo que la facultad contractual de rescisión es absoluta e incondicionada.*
-
-❓ 4. ¿Qué es la causa fin del contrato y qué relevancia tiene su subsistencia durante la vigencia de la relación contractual? · fuente [O4] · [Etiquetas: 🎯 Pareto, 🏆 Cae siempre]
-1. La causa fin es la finalidad o motivación subjetiva que determinó la celebración del negocio, debidamente causalizada y conocida por la otra parte.
-2. La causa debe estar presente en la celebración y subsistir durante toda la ejecución del contrato.
-3. La desaparición sobrevenida de la causa fin faculta a la parte perjudicada a solicitar la extinción por frustración de la finalidad (Art. 1090).
-*❌ Error típico: Confundir la causa fin con el objeto del contrato o creer que las motivaciones internas no exteriorizadas tienen relevancia jurídica.*
-
-❓ 5. ¿Qué responsabilidad asume quien promete la transmisión de un bien ajeno según lo declare como propio o como ajeno? · fuente [S1] · [Etiquetas: ⚠️ Trampa]
-1. Como propio: Si se ofrece el bien ajeno como si fuese de titularidad propia, rige una responsabilidad objetiva y el promitente debe reparar los daños si no realiza la entrega.
-2. Como ajeno (sin garantía): Rige obligación de medios; solo responde si por su culpa no se obtiene la conformidad del dueño.
-3. Como ajeno (con garantía): Rige obligación de resultado; responde por daños si la transmisión no se efectúa, aun sin culpa de su parte.
-*❌ Error típico: Suponer que la contratación de bienes ajenos es siempre un acto ilícito nulo o que no genera responsabilidad contractual.*
-
-❓ 6. ¿Bajo qué condiciones pueden contratarse bienes futuros y qué sucede si la prestación no llega a existir? · fuente [S2] · [Etiquetas: ⚠️ Trampa]
-1. Regla general: Se pueden contratar bienes futuros, pero la promesa de transmisión queda supeditada a la condición suspensiva de que lleguen a existir.
-2. Excepción aleatoria: Si el contrato es calificado de aleatorio (las partes asumen el álea, como en un contrato de seguro), el acuerdo es válido y exigible aun si la cosa nunca existe.
-*❌ Error típico: Calificar como incumplimiento culpable del vendedor el hecho de que un cultivo futuro no se coseche por factores climáticos ordinarios bajo condición suspensiva.*
-
-❓ 7. ¿Cuáles son los límites que imponen los artículos 17 y 56 del Código Civil y Comercial a los contratos que versan sobre el cuerpo humano? · fuente [S3] · [Etiquetas: ⚠️ Trampa]
-1. Las partes del cuerpo humano no tienen valor comercial y no pueden ser objeto de contratos de contenido patrimonial directo (Art. 17).
-2. Se prohíben actos de disposición que provoquen una disminución permanente de la integridad física o resulten contrarios a la ley, moral o buenas costumbres (Art. 56).
-3. Excepciones: Se validan actos de disposición no comerciales (donación de órganos) y la comercialización de partes del cuerpo regenerables (como el pelo).
-*❌ Error típico: Asimilar la comercialización permitida de cabello con la licitud de contratar la venta de órganos o tejidos corporales.*
-
-❓ 8. ¿Qué efectos produce la contratación de mala fe sobre bienes gravados, litigiosos o cautelados si se los declara como si estuvieran libres? · fuente [S4] · [Etiquetas: ⚠️ Trampa]
-1. La contratación sobre bienes gravados, litigiosos o cautelados es lícita en sí misma (Art. 1009).
-2. El contratante de mala fe que oculta la medida cautelar o gravamen y actúa como si el bien estuviera libre debe reparar los daños causados al contratante de buena fe.
-3. El tercero acreedor o embargante conserva intactos sus derechos sobre el bien objeto del contrato.
-*❌ Error típico: Afirmar que el embargo o hipoteca inmoviliza absolutamente el bien e impide cualquier contrato de transmisión sobre el mismo.*
+❓ 1. ¿Cuáles son los cuatro requisitos que debe reunir el objeto de un contrato según el Art. 1003 CCC? Ejemplifique brevemente cada uno. · fuente [O1] · 🎯 Pareto · 🏆 Cae siempre
+1. **Lícito:** no prohibido por la ley, el orden público, la moral o contrario a la dignidad humana. Ej. no puede ser objeto un contrato de tráfico de influencias.
+2. **Posible:** material y físicamente posible (no puede venderse "tocar el cielo con las manos") y jurídicamente posible (no puede constituirse una prenda sobre un inmueble; se requiere hipoteca).
+3. **Determinado o determinable:** puede ser una cosa específica o fijarse por género/especie con criterios suficientes. Ej. "diez toneladas de girasol de la cosecha de tal campo" es determinable.
+4. **Susceptible de valoración económica** correspondiente a un interés de las partes, aunque el interés no sea patrimonial. Ej. el médico que presta servicios gratuitos en una fundación: la prestación tiene valor económico aunque no cobre.
+*❌ Error típico: confundir el objeto del contrato con las obligaciones que de él nacen (sus efectos); o creer que si el interés es altruista la prestación no requiere valoración económica.*
 
 ---
 
-### TABLAS DE DISTINCIONES CLAVE
-
-#### D1: Objeto vs. Causa
-| Criterio | Objeto del Contrato | Causa del Contrato |
-| --- | --- | --- |
-| **Pregunta orientadora** | ¿Qué deben las partes? (Las prestaciones) | ¿Por qué / Para qué contratan? (La motivación causalizada) |
-| **Naturaleza** | Objetivo (comportamiento o conducta debida) | Subjetivo-Objetivo (propósito o fin inmediato del negocio) |
-| **Ejemplo (Alquiler)** | Entrega del uso de la propiedad a cambio de un canon locativo. | Acceder a un techo para vivienda familiar cerca del lugar de trabajo. |
-
-#### D2: Promesa de bien ajeno como propio vs. como ajeno
-| Criterio | Prometido como propio | Prometido como ajeno (sin garantía) | Prometido como ajeno (con garantía) |
-| --- | --- | --- | --- |
-| **Declaración** | Oculta la ajenidad del bien. | Declara que el bien pertenece a un tercero. | Declara que es ajeno pero asegura el resultado. |
-| **Naturaleza de obligación** | De resultado (obligado a entregar). | De medios (gestionar de buena fe). | De resultado (asegura la transmisión). |
-| **Responsabilidad** | Responde por daños ante el incumplimiento. | Responde solo si medió culpa en la gestión. | Responde siempre si el dueño no firma. |
+❓ 2. ¿Cuál es la distinción entre causa objetiva y causa subjetiva de un contrato? ¿Por qué importa la causa subjetiva en el derecho contractual argentino? · fuente [O4] · 🎯 Pareto · 🏆 Cae siempre
+1. La **causa objetiva** es el fin típico e inmediato que caracteriza a cada tipo contractual: en la locación, la obtención del uso y goce de la cosa a cambio de un canon.
+2. La **causa subjetiva** es la motivación individual que determinó a la parte a celebrar ese contrato en esas condiciones concretas, siempre que haya sido exteriorizada de modo cognoscible para la contraparte (causalizada).
+3. La causa subjetiva importa porque, una vez causalizada, su frustración sobrevenida por una circunstancia externa habilita la extinción del contrato (Art. 1090 CCC), aunque el objeto material continúe existiendo y la otra parte no haya incumplido. Ej. alquiler del balcón para ver el Roadshow de Colapinto: cancelado el evento, la causa subjetiva se frustra y el contrato puede extinguirse.
+*❌ Error típico: identificar la causa del contrato únicamente con la finalidad típica del tipo (causa objetiva) e ignorar la relevancia jurídica de la motivación individual causalizada.*
 
 ---
 
-❓ **Integradora. Supuesto práctico** 🏆 Cae siempre
-Un estudiante avanzado de abogacía es consultado por un cliente sobre la validez de un contrato de servicios donde se pactó lo siguiente:
-- El contratista se compromete a donar un riñón al hijo del comitente a cambio de la transferencia del 15% de las acciones de la empresa familiar del comitente.
-- El contrato prevé que, si la operación de trasplante no pudiera realizarse por razones médicas, las acciones se transferirán igualmente pero el contratista deberá prestar servicios de consultoría informática gratuita por 3 años.
-1. Analice la validez del contrato respecto de la donación del órgano a cambio de las acciones.
-2. Identifique el impacto de la prohibición de pactos sobre herencia futura respecto de la transferencia del 15% de las acciones de la empresa familiar.
-3. Determine la validez de la cláusula supletoria de consultoría informática.
+❓ 3. Un bien inmueble está sujeto a una hipoteca al momento en que el propietario lo vende. ¿Es válida esa compraventa? ¿Qué consecuencias tiene si el vendedor ocultó la hipoteca al comprador? · fuente [O2] · ⚠️ Trampa · 🏆 Cae siempre
+1. La compraventa es **válida**: el Art. 1009 CCC permite contratar sobre bienes gravados, sin perjuicio de los derechos del acreedor hipotecario.
+2. Si el vendedor **ocultó** la hipoteca actuando de mala fe, debe **reparar los daños** causados al comprador que obró de buena fe.
+3. El acreedor hipotecario **conserva** íntegramente su derecho sobre el inmueble, que es oponible al nuevo adquirente.
+*❌ Error típico: afirmar que la venta de un bien hipotecado es nula o que el embargo/hipoteca "libera" al comprador de sus obligaciones.*
+
+---
+
+❓ 4. ¿En qué circunstancias es válido un pacto sobre herencia futura? ¿Puede el padre fundador de una empresa ser parte de ese pacto? · fuente [O3] · 🎯 Pareto · ⚠️ Trampa
+1. La regla general del Art. 1010, 1° párr. CCC prohíbe los pactos sobre herencia futura como objeto de contratos.
+2. La **excepción** (Art. 1010, 2° párr.) habilita pactos sobre: (a) explotaciones productivas o (b) participaciones societarias de cualquier tipo, con la finalidad de conservar la unidad de gestión empresarial o prevenir/resolver conflictos. Los pactos pueden incluir disposiciones sobre futuros derechos hereditarios y compensaciones a otros legitimarios.
+3. El padre (futuro causante) **puede o no ser parte**: la norma dice expresamente "sean o no parte el futuro causante y su cónyuge".
+4. **Requisito ineludible:** el pacto no debe afectar la legítima hereditaria, los derechos del cónyuge ni los de terceros.
+*❌ Error típico: aplicar la excepción a cualquier bien de la herencia, incluida la vivienda familiar, que no constituye explotación productiva ni participación societaria.*
+
+---
+
+❓ 5. ¿Qué ocurre jurídicamente cuando ambas partes de un contrato actúan por un motivo ilícito? ¿Y cuando solo una de ellas lo hace? · fuente [O4] · ⚠️ Trampa · 🏆 Cae siempre
+1. **Motivo ilícito bilateral** (Art. 1014, 1° párr.): el contrato es nulo de nulidad absoluta. **Ninguna de las dos partes** tiene acción para exigir el cumplimiento ni para reclamar la restitución de lo entregado. El principio *nemo auditur propiam turpitudinem allegans* opera para ambas.
+2. **Motivo ilícito unilateral** (Art. 1014, 2° párr.): la parte que actuó por motivo ilícito **no puede invocar el contrato** frente a la otra. La parte inocente, en cambio, **sí puede reclamar** lo que dio en virtud del contrato.
+*❌ Error típico: aplicar siempre la prohibición de reclamar a ambas partes, sin distinguir si la ilicitud del motivo fue compartida o solo de una de ellas.*
+
+---
+
+❓ 6. ¿Cuáles son los tres regímenes de responsabilidad que el Art. 1008 CCC establece para la promesa de transmisión de bienes ajenos? · fuente [O2] · 🎯 Pareto · ⚠️ Trampa
+1. **Prometido como ajeno sin garantía del éxito:** el promitente asume obligación de *medios*; solo está obligado a emplear los medios necesarios para lograr la transmisión. Si fracasa sin culpa propia, no responde.
+2. **Prometido como ajeno garantizando el éxito:** el promitente asume obligación de *resultado*; responde por los daños si la transmisión no se concreta, aunque no haya actuado con negligencia.
+3. **Prometido como propio siendo ajeno (mala fe):** el promitente responde como si fuera el dueño de la cosa, con la misma extensión que el incumplimiento de contrato de un propietario.
+*❌ Error típico: afirmar que la venta de un bien ajeno es siempre ilícita o siempre genera responsabilidad objetiva, sin distinguir los tres supuestos.*
+
+---
+
+❓ 7. ¿En qué consiste el deber de renegociación en los contratos de larga duración y cuándo puede prescindirse de él? · fuente [O3] · ⚠️ Trampa
+1. El Art. 1011 CCC impone, en contratos donde el tiempo es esencial, un **deber de colaboración** ante desequilibrios sobrevenidos por factores externos (avance tecnológico, cambios regulatorios, etc.): las partes deben respetar la reciprocidad de las obligaciones en relación a la duración total del contrato.
+2. Antes de rescindir, la parte que lo pretende debe **otorgar a la otra una oportunidad razonable de renegociar de buena fe**. La rescisión directa sin ese paso configura ejercicio abusivo del derecho.
+3. **No puede prescindirse** del paso de renegociación previa. Si la otra parte rechaza renegociar o el acuerdo resulta imposible, recién entonces procede la rescisión, que en ese caso no será imputable a quien rescindió.
+*❌ Error típico: rescindir directamente el contrato de larga duración invocando el desequilibrio sobrevenido sin agotar la etapa de renegociación de buena fe.*
+
+---
+
+❓ 8. ¿Los negocios abstractos (cheque, pagaré) carecen de causa? Explique el régimen aplicable. · fuente [O4] · ⚠️ Trampa
+1. Los negocios abstractos **no carecen de causa**: detrás de todo cheque o pagaré existe un contrato o negocio jurídico subyacente que les da causa.
+2. Lo que ocurre es que la causa es **irrelevante para la ejecución del título**: el ordenamiento permite ejecutar el instrumento cambiario sin necesidad de indagar o acreditar la causa del crédito (abstracción cambiaria).
+3. La causa puede ser relevante en el marco del negocio subyacente entre las partes originarias (ej. para plantear usura o nulidad de la relación de base), pero no es oponible a terceros portadores de buena fe del título.
+*❌ Error típico: afirmar que el pagaré no tiene causa o que los negocios abstractos son negocios sin causa, confundiendo la irrelevancia procesal de la causa con su inexistencia.*
+
+---
+
+### Tabla comparativa D1: Objeto vs. Causa
+
+| | **Objeto** | **Causa** |
+|---|---|---|
+| **Pregunta que responde** | ¿Qué deben las partes? | ¿Por qué / Para qué contratan? |
+| **Naturaleza** | Compromiso de conducta / prestación | Finalidad o motivación determinante |
+| **Ejemplo** | Locación: el uso y goce del inmueble | Locación: tener un techo / estar cerca de la madre |
+| **Dimensiones** | Único (con requisitos: lícito, posible, etc.) | Objetiva (fin típico) y Subjetiva (motivación causalizada) |
+| **Falta sobrevenida** | Imposibilidad sobrevenida → extinción | Frustración del fin → extinción (Art. 1090) |
+
+### Tabla comparativa D3: Bienes ajenos según régimen
+
+| Supuesto | Declaración del promitente | Tipo de obligación | Responde si no transmite |
+|---|---|---|---|
+| Ajeno sin garantía | Declara que es ajeno | Medios | Solo si hubo culpa propia |
+| Ajeno con garantía | Declara que es ajeno pero garantiza éxito | Resultado | Siempre (objetivamente) |
+| Propio siendo ajeno | Silencia u oculta la ajenidad | Resultado agravado | Sí, como dueño |
+
+---
+
+❓ **Integradora. Caso de tres eslabones** 🏆 Cae siempre
+
+*Beatriz alquila a Luis un salón de eventos en el centro de Buenos Aires. En el instrumento se consigna explícitamente que el alquiler se contrata "para celebrar la fiesta de graduación de la Universidad el 15 de mayo, siendo esa la única finalidad del contrato". Luis lleva quince años arrendando salones para eventos y el contrato se renueva automáticamente cada año. Dos semanas antes de la fecha, la Universidad cancela el acto de graduación por razones institucionales. Luis exige el pago del canon pactado.*
+
+1. ¿Puede Beatriz extinguir el contrato sin pagar el canon? Identifique la figura y la norma aplicable.
+2. Si hubiera clausulado solo "para eventos sociales" sin mencionar la graduación, ¿cambiaría la solución?
+3. ¿Qué implicancias tiene que se trate de un contrato de renovación anual durante quince años si Luis pretende rescindir unilateralmente ante cualquier desequilibrio futuro?
+
 * ▸ RESPUESTA ESPERADA:
-1. El contrato de donación de riñón a cambio de acciones es nulo de nulidad absoluta. Viola los Arts. 17 y 56 del CCC y la Ley de Trasplantes (27.447), que prohíben la patrimonialidad y comercialización de partes del cuerpo humano no regenerables.
-2. Respecto del 15% de las acciones, si estas pertenecen al patrimonio actual del causante y el traspaso se pacta para ejecutarse post-mortem como un pacto sucesorio, constituiría un pacto de herencia futura. No obstante, si se formula con miras a la conservación de la unidad de gestión empresarial y no afecta la legítima, podría encuadrarse en la excepción del Art. 1010, 2° párr. En este caso, al estar causalizado a un acto ilícito (compra de órgano), la causa ilícita invalida todo el negocio.
-3. La cláusula de consultoría informática es válida en cuanto a su objeto técnico (prestación lícita y valuable). Sin embargo, al formar parte de un contrato inescindible cuya causa fin principal es ilícita (obtención comercial de un órgano), la nulidad absoluta se propaga a todo el negocio jurídico, invalidando también la prestación supletoria de consultoría informática.
-*❌ Error típico: Sostener que la cláusula de consultoría informática sobrevive a la nulidad del negocio principal por ser en sí misma una actividad lícita y posible.*
+  1. Sí, Beatriz puede extinguir el contrato sin pagar el canon. Se aplica la **frustración de la finalidad** (Art. 1090 CCC): la causa subjetiva del contrato —celebrar la fiesta de graduación— fue debidamente causalizada e incorporada al negocio (consta en el instrumento). La cancelación del evento por parte de la Universidad es una causa exterior a Beatriz. La causa fin del contrato se frustró definitivamente, lo que habilita la extinción sin responsabilidad para ninguna de las partes.
+  2. **Sí cambiaría la solución.** Si la finalidad específica no fue causalizada (no surge del instrumento ni fue cognoscible para Luis), opera solo la causa objetiva: el tipo contractual es la locación de salón para eventos y ese objeto subsiste. Sin causa subjetiva causalizada, Luis tiene derecho al canon y Beatriz no puede invocar la frustración del fin. La enseñanza: no basta con que la motivación exista subjetivamente; debe haberse incorporado al negocio de modo objetivable.
+  3. Al tratarse de un contrato de larga duración (Art. 1011 CCC), si Luis pretende rescindir ante cualquier desequilibrio sobrevenido (no ante la frustración de Beatriz, sino ante un problema propio), no puede hacerlo de forma directa. Debe intimar a Beatriz a renegociar de buena fe y otorgarle una oportunidad razonable de adecuar las condiciones. La rescisión sin ese paso es abusiva y genera responsabilidad por los daños causados a Beatriz.
+*❌ Error típico: en el punto 1, exigir el pago del canon porque el salón estaba disponible y Luis no incumplió su prestación, sin aplicar la teoría de la frustración de la finalidad. En el punto 3, habilitar la rescisión directa por ser un contrato de largo plazo.*
 
 ---
 
-### 🎯 Top Pareto
-| Prioridad | Pregunta | Concepto clave |
-| --- | --- | --- |
-| 🔴 Crítico | Pregunta 1 | Requisitos del objeto contractual (Art. 1003). |
-| 🔴 Crítico | Pregunta 4 | Causa fin y su subsistencia durante el contrato (Art. 1013). |
-| 🟠 Alto | Pregunta 2 | Pactos sobre herencia futura y excepción societaria (Art. 1010). |
-| 🟠 Alto | Pregunta 3 | Renegociación previa en contratos de larga duración (Art. 1011). |
+## 🎯 Top Pareto
 
-### 📜 Fuentes clave
+| Prioridad | Pregunta | Concepto clave |
+|---|---|---|
+| 🔴 Crítico | Pregunta 1 | Requisitos del objeto — Art. 1003 CCC |
+| 🔴 Crítico | Pregunta 2 | Causa objetiva vs. subjetiva — Arts. 281 y 1013 CCC |
+| 🔴 Crítico | Pregunta 5 | Causa ilícita: bilateral vs. unilateral — Art. 1014 CCC |
+| 🟠 Alto | Pregunta 4 | Herencia futura: excepción empresarial — Art. 1010 CCC |
+| 🟠 Alto | Pregunta 7 | Deber de renegociación — Art. 1011 CCC |
+| 🟠 Alto | Integradora | Frustración del fin + causa subjetiva causalizada |
+
+## 📜 Fuentes clave
+
 | Fuente | Qué establece | Por qué importa en examen |
-| --- | --- | --- |
-| Art. 1003 CCC | Parámetros de validez del objeto de los contratos. | Base normativa del objeto del contrato. |
-| Art. 1010 CCC | Prohibición de pactos de herencia futura y excepción empresarial. | Excepción clave para la subsistencia de pymes y sociedades. |
-| Art. 1011 CCC | Regulación de los contratos de larga duración y el deber de colaborar. | Incorporación del principio de conservación del contrato. |
-| Art. 1013 CCC | Necesidad y subsistencia de la causa fin en el iter contractual. | Fundamento para plantear frustración del fin (Art. 1090). |
+|---|---|---|
+| Art. 1003 CCC | Requisitos del objeto del contrato (remisión Art. 279) | Base estructural de toda la clase; primer filtro de validez |
+| Art. 1004 CCC | Objetos prohibidos | Permite identificar qué está excluido del universo de objetos posibles |
+| Art. 1007 CCC | Bienes futuros: condición suspensiva vs. contratos aleatorios | Distinción esencial para el contrato de seguro y ventas en verde |
+| Art. 1008 CCC | Bienes ajenos: tres regímenes diferenciados de responsabilidad | Confundido frecuentemente en examen; los tres supuestos tienen consecuencias distintas |
+| Art. 1009 CCC | Bienes litigiosos/gravados: mala fe = daños | La regla es que son válidos; la sanción es por el ocultamiento doloso |
+| Art. 1010 CCC | Herencia futura: prohibición + excepción empresarial | Excepción muy acotada; error frecuente extenderla |
+| Art. 1011 CCC | Contratos de larga duración: deber de renegociación | Omitir el paso de renegociación previa = rescisión abusiva |
+| Arts. 281 y 1013 CCC | Causa del contrato: definición, neocausalismo, subsistencia | Eje de la segunda parte de la clase |
+| Art. 1014 CCC | Causa ilícita: bilateral vs. unilateral | Consecuencias distintas según si el vicio es compartido o de una sola parte |
+| Art. 1090 CCC | Frustración de la finalidad como causal de extinción | Conecta la causa subjetiva causalizada con la extinción del vínculo |
 
 ---
 
 # 📄 PASO 2B — CASOS · Pegar en Notion: Casos_Contratos_Clase6_06-04-26
 
-📌 **CASO 1 — El campo ajeno de Don Ramón**
-* **Nivel:** Simple (O1/S1)
-* **Conceptos:** Objeto, Promesa de bienes ajenos, Buena fe.
-* **⚖️ Fuentes:** Art. 1008 del Código Civil y Comercial.
-* **Enunciado:** Ramón celebra un boleto con Julián para venderle una hectárea de campo. En el instrumento se consigna: *"Ramón vende el Lote 5, propiedad catastral de su primo Carlos, comprometiéndose a realizar las gestiones notariales para lograr la escrituración"*. Ramón actúa diligentemente pero Carlos se niega rotundamente a vender el terreno. Julián demanda a Ramón por daños y perjuicios.
+---
+
+📌 **CASO 1 — El campo que no era de Ramiro**
+* **Nivel:** Simple (O1/O2 — bienes ajenos)
+* **Conceptos:** Objeto, bienes ajenos, distinción medios/resultado, Art. 1008 CCC.
+* **⚖️ Fuentes:** Art. 1008 CCC.
+* **Enunciado:** Ramiro acuerda con Valentina la venta del campo "La Esperanza". En el contrato se establece: *"Ramiro actúa en nombre propio pero aclara que el campo pertenece a su tío Ernesto; Ramiro se compromete a gestionar la conformidad de Ernesto sin garantizar el resultado."* Ramiro realiza múltiples gestiones, pero Ernesto finalmente se niega a vender por razones familiares. Valentina inicia una demanda por daños y perjuicios contra Ramiro.
+
 ► Intentá resolverlo antes de seguir.
 
 **Resolución**
-* **Figura jurídica en juego:** Promesa de bien ajeno como ajeno sin garantía de éxito.
-* **Razonamiento:** 
-  1. De la redacción surge que Ramón declaró de buena fe la ajenidad del bien (no lo vendió "como propio").
-  2. Al obligarse únicamente a realizar las gestiones notariales, asumió una obligación de medios (emplear los recursos conducentes) y no una obligación de resultado (no garantizó el éxito).
-  3. Al demostrarse conducta diligente por parte de Ramón, y no habiendo culpa de su parte en la negativa de Carlos, no hay incumplimiento contractual imputable.
-* **Respuesta:** Ramón no responde por los daños y perjuicios sufridos por Julián, dado que se obligó como promitente de bien ajeno sin garantizar el éxito y obró con la debida diligencia de medios exigida por el Art. 1008 del CCC.
-* **⚠️ Error típico:** Condenar al promitente a indemnizar daños presumiendo que toda promesa de venta incumplida acarrea responsabilidad civil contractual objetiva.
-* **Link:** Relacionado con: P5 del cuestionario.
+* **Figura jurídica en juego:** Promesa de transmisión de bien ajeno sin garantía del éxito — obligación de medios (Art. 1008 CCC).
+* **Razonamiento:**
+  1. La contratación sobre bienes ajenos es lícita en el derecho argentino.
+  2. Ramiro declaró la ajenidad del bien y asumió solo la obligación de gestionar la conformidad de Ernesto; no garantizó el resultado.
+  3. Habiendo realizado las gestiones pertinentes sin que medie culpa propia en la negativa de Ernesto, Ramiro cumplió con su obligación de medios.
+* **Respuesta:** La demanda de Valentina es improcedente. Ramiro no debe indemnizar por daños y perjuicios porque su obligación era de medios, la cumplió diligentemente, y la negativa de Ernesto no le es imputable.
+* **⚠️ Error típico:** Condenar a Ramiro automáticamente porque la transmisión no se concretó, sin distinguir si su obligación era de medios o de resultado ni verificar si hubo culpa de su parte.
+* **Link:** Relacionado con: P6 del cuestionario (D3 — tres regímenes de bienes ajenos).
 
 ---
 
-📌 **CASO 2 — La prepaga intempestiva de Verónica**
-* **Nivel:** Trampa (O3/T2)
-* **Conceptos:** Contratos de larga duración, Abuso del derecho, Renegociación.
-* **⚖️ Fuentes:** Art. 1011 del Código Civil y Comercial.
-* **Enunciado:** Verónica mantiene un contrato de medicina prepaga desde hace 15 años. Debido a cambios arancelarios y regulaciones estatales de copagos, la empresa prestadora le envía una carta documento notificándole la rescisión unilateral inmediata del contrato de cobertura médica, alegando que el plan se tornó económicamente inviable para la firma. Verónica interpone una acción judicial.
+📌 **CASO 2 — La prepaga y el megasanatorio**
+* **Nivel:** Trampa (O3/T4 — contratos de larga duración)
+* **Conceptos:** Contratos de larga duración, deber de renegociación, ejercicio abusivo del derecho, Art. 1011 CCC.
+* **⚖️ Fuentes:** Art. 1011 CCC.
+* **Enunciado:** Horacio tiene un contrato de medicina prepaga desde hace dieciocho años. El plan original cubría consultas médicas ambulatorias y estudios de diagnóstico de rutina. La empresa le envía una carta documento rescindiendo el contrato en treinta días, alegando que el servicio le resultó económicamente inviable por la incorporación de nuevas tecnologías de alta complejidad que sus afiliados más antiguos comenzaron a demandar. Horacio tiene 68 años y una patología cardíaca preexistente.
+
 ► Intentá resolverlo antes de seguir.
 
 **Resolución**
-* **Figura jurídica en juego:** Rescisión abusiva en contrato de larga duración por omisión de renegociación.
+* **Figura jurídica en juego:** Rescisión abusiva en contrato de larga duración por omisión del deber de renegociación de buena fe (Art. 1011 CCC).
 * **Razonamiento:**
-  1. El contrato de medicina prepaga es de larga duración, siendo el tiempo un elemento esencial para cumplir su objeto.
-  2. Ante una alteración que afecta la ecuación económica del negocio por factores ajenos, rige el deber legal de colaboración.
-  3. La prestadora tenía la obligación de otorgar a Verónica una oportunidad razonable de renegociar las tarifas o coberturas de buena fe antes de declarar rescindido el vínculo.
-* **Respuesta:** La rescisión unilateral dispuesta por la empresa es ineficaz y abusiva. La firma debe restablecer la cobertura médica a Verónica y entablar una mesa de renegociación de buena fe en los términos del Art. 1011 del CCC.
-* **⚠️ Error típico:** Sostener que la rescisión unilateral es válida porque los desequilibrios económicos configuran fuerza mayor que exime del deber de continuar el contrato.
-* **Link:** Relacionado con: P3 del cuestionario.
+  1. El contrato de medicina prepaga es un contrato de larga duración: el tiempo es esencial para el cumplimiento del objeto (la cobertura médica continua).
+  2. El desequilibrio alegado por la empresa (incorporación de nuevas tecnologías) es exactamente el supuesto que prevé el Art. 1011: factor externo sobrevenido que altera la ecuación de prestaciones.
+  3. Antes de rescindir, la empresa debía notificar a Horacio la situación y ofrecerle una oportunidad razonable de renegociar las condiciones (un plan diferente, un precio actualizado, etc.).
+  4. La rescisión directa en treinta días, sin renegociación previa, constituye un ejercicio abusivo del derecho.
+* **Respuesta:** La rescisión es ineficaz. Horacio tiene derecho a que la empresa le ofrezca la renegociación del contrato antes de proceder a la extinción. Si la empresa se niega a renegociar o el acuerdo es imposible, podrá rescindir válidamente, pero sin imputar la causa a Horacio.
+* **⚠️ Error típico:** Validar la rescisión directa argumentando que la empresa tiene derecho a rescindir contratos, sin exigir el paso previo de renegociación que impone el Art. 1011.
+* **Link:** Relacionado con: P7 del cuestionario.
 
 ---
 
-📌 **CASO 3 — El balcón frente a la pista**
-* **Nivel:** Complejo (O4/T3/T4)
-* **Conceptos:** Causa fin subjetiva, Frustración de la finalidad, Inescindibilidad.
-* **⚖️ Fuentes:** Arts. 1013 y 1090 del Código Civil y Comercial.
-* **Enunciado:** Tomás alquila un balcón en el primer piso sobre la Av. Libertador a Sofía para el día 26 de abril de 11 a 13 hs. En el contrato se deja constancia de que el alquiler se pacta con el propósito de que Tomás presencie el roadshow de Fórmula 1. Dos días antes, la municipalidad revoca la autorización del espectáculo deportivo por motivos de seguridad pública y el evento se cancela. Sofía exige el pago del precio pactado alegando que el balcón está a disposición de Tomás a la hora acordada.
+📌 **CASO 3 — El locatario, el incendiario y el zapatero**
+* **Nivel:** Complejo (O4/T2/T5 — causa ilícita bilateral + frustración del fin)
+* **Conceptos:** Causa del contrato, causa ilícita bilateral vs. unilateral, frustración de la finalidad, Arts. 1013, 1014 y 1090 CCC.
+* **⚖️ Fuentes:** Arts. 1013, 1014 y 1090 CCC.
+* **Enunciado:** Fernanda alquila a Diego un local comercial situado frente a la zapatería de su competidora Claudia. En el contrato figura como finalidad: *"instalación de un negocio de indumentaria"*. Sin embargo, el verdadero propósito de Fernanda —que Diego desconoce— es usar el local como punto de observación para planificar el incendio de la zapatería de Claudia durante las noches. Tres meses después, la policía descubre la maniobra y arresta a Fernanda. Diego, enterado, rescinde el contrato y demanda la restitución de los cánones abonados hasta ese momento. Fernanda, por su parte, reclama la devolución de la garantía depositada.
+
 ► Intentá resolverlo antes de seguir.
 
 **Resolución**
-* **Figura jurídica en juego:** Extinción contractual por frustración sobrevenida de la finalidad.
+* **Figura jurídica en juego:** Causa ilícita unilateral (Art. 1014, 2° párr. CCC) + frustración de la finalidad sobrevenida por descubrimiento del ilícito.
 * **Razonamiento:**
-  1. La causa fin subjetiva (presenciar el roadshow) fue debidamente causalizada y expresada en el texto contractual por las partes.
-  2. La cancelación del evento por la municipalidad constituye una circunstancia extraordinaria e imprevisible, ajena a la voluntad de Tomás y Sofía.
-  3. Sin el espectáculo, la finalidad del contrato se frustró por completo, tornando inútil la prestación de uso del balcón.
-* **Respuesta:** Tomás se encuentra facultado para declarar extinguido el contrato sin obligación de pagar el canon locativo a Sofía, dado que se configuraron los extremos de la frustración de la finalidad previstos en el Art. 1090 del CCC.
-* **⚠️ Error típico:** Creer que la frustración no procede porque el objeto material (el balcón) sigue existiendo y a disposición física del locatario.
-* **Link:** Relacionado con: P4 y P8 del cuestionario.
+  1. La causa ilícita es **unilateral**: solo Fernanda actuó por motivo ilícito (planear el incendio); Diego contrató de buena fe para cobrar un alquiler.
+  2. Conforme al Art. 1014, 2° párr. CCC, la parte que actuó por motivo ilícito (Fernanda) **no puede invocar el contrato** frente a Diego. Diego, en cambio, sí puede reclamar lo que le fue adeudado.
+  3. Diego tiene derecho a rescindir el contrato y a conservar los cánones ya percibidos, dado que la contraparte actuó de mala fe con motivo ilícito.
+  4. Fernanda **no puede reclamar** la devolución de la garantía: al ser ella quien actuó de mala fe, no tiene acción para invocar el contrato en su beneficio.
+* **Respuesta:** Diego puede rescindir el contrato y conservar los cánones cobrados. Fernanda no puede reclamar la devolución de la garantía ni invocar el contrato en ningún sentido. Adicionalmente, Diego podría reclamar daños si los hubiera sufrido por el incumplimiento de Fernanda.
+* **⚠️ Error típico:** Aplicar el régimen de causa ilícita *bilateral* (ninguno puede reclamar) cuando solo una de las partes actuó con motivo ilícito, privando a Diego de sus derechos como contratante inocente.
+* **Link:** Relacionado con: P5 del cuestionario y P8 del simulacro MIT.
 
 ---
 
 ## 📊 Mapa de cobertura
 
 | Concepto | Caso | Pregunta | Riesgo |
-| --- | --- | --- | --- |
-| **[O1] Objeto del contrato** | - | Pregunta 1 | Medio |
-| **[O2] Pacto sobre herencia futura** | - | Pregunta 2 | Alto |
-| **[O3] Contratos de larga duración** | Caso 2 | Pregunta 3 | Alto |
-| **[O4] Causa del contrato** | Caso 3 | Pregunta 4 | Alto |
-| **[S1] Bienes ajenos** | Caso 1 | Pregunta 5 | Medio |
-| **[S2] Bienes futuros** | - | Pregunta 6 | Medio |
-| **[S3] Límites del cuerpo humano** | Caso integrador | Pregunta 7 | Alto |
-| **[S4] Bienes litigiosos o gravados** | - | Pregunta 8 | Medio |
-| **[D1] Objeto vs. Causa** | Caso 3 | Tabla D1 | Alto |
-| **[D2] Promesa de bien ajeno** | Caso 1 | Tabla D2 | Medio |
-| **[T1] Objeto vs. Efectos** | - | Pregunta 1 | Bajo |
-| **[T2] Rescisión intempestiva** | Caso 2 | Pregunta 3 | Alto |
-| **[T3] Aleatoriedad vs. Condición** | - | Pregunta 7 | Medio |
-| **[T4] Causa ilícita bilateral** | Caso integrador | Pregunta 9 | Alto |
-
-## ⚠️ Auditoría Documental — revisar
-- **Nomenclatura del Caso de Dignidad Humana:** En la transcripción figura como "Wackenheimer con Francia", pero el nombre oficial del caso resuelto por el Comité de Derechos Humanos de la ONU en 2002 es *Wackenheim v. France* (Comunicación N° 854/1999).
-- **Leyes Especiales de Trasplante:** Se precisó la alusión a la "Ley de Trasplantes / Justina" con su número oficial (Ley 27.447 de Trasplante de Órganos, Tejidos y Células).
+|---|---|---|---|
+| **[O1] Requisitos del objeto** | — | P1 | 🔴 Crítico |
+| **[O2] Supuestos especiales — bienes ajenos** | Caso 1 | P3 / P6 | 🟠 Alto |
+| **[O2] Supuestos especiales — bienes litigiosos** | — | P3 | 🟠 Alto |
+| **[O2] Supuestos especiales — bienes futuros** | — | P1 (posibilidad) | 🟡 Medio |
+| **[O3] Herencia futura — excepción empresarial** | — | P4 | 🟠 Alto |
+| **[O3] Contratos de larga duración** | Caso 2 | P7 | 🟠 Alto |
+| **[O4] Causa — neocausalismo** | — | P2 | 🔴 Crítico |
+| **[O4] Causa — frustración del fin** | Caso 3 (indirecto) | Integradora | 🔴 Crítico |
+| **[O4] Causa ilícita bilateral** | — | P5 | 🔴 Crítico |
+| **[O4] Causa ilícita unilateral** | Caso 3 | P5 | 🟠 Alto |
+| **[S1] Cuerpo humano — Arts. 17 y 56** | — | P1 (licitud) | 🟡 Medio |
+| **[S3] Negocios abstractos** | — | P8 | 🟠 Alto |
+| **[D1] Objeto vs. Causa** | Integradora | Tabla D1 | 🔴 Crítico |
+| **[D3] Bienes ajenos — tres regímenes** | Caso 1 | P6 / Tabla D3 | 🟠 Alto |
+| **[T2] Negocios abstractos sin causa** | — | P8 | 🟠 Alto |
+| **[T3] Excepción herencia futura extendida** | — | P4 | 🟠 Alto |
+| **[T4] Rescisión sin renegociación** | Caso 2 | P7 | 🟠 Alto |
+| **[T5] Seguro nulo sin siniestro** | — | P3 (bienes futuros/aleatorios) | 🟡 Medio |
 
 ✅ Paso 2 completo.
 
-Generado con: Gemini 1.5 Pro · Modo: Antigravity
+## ⚠️ Auditoría Documental — revisar
+- **Caso Wackenheim:** La transcripción lo registra como "Wackenheimer con Francia". El nombre oficial es *Wackenheim v. France*, Comunicación N° 854/1999, ONU, 2002. Se corrigió en este apunte.
+- **Ley de Trasplantes:** Mencionada sin número. Identificada con certeza razonable como Ley 27.447 (mod. por Ley 27.528). Verificar al estudiar.
+- **DNU 2023 — locaciones:** Identificado como DNU 70/2023. Verificar estado de la norma y su constitucionalidad antes de citar en examen.
+
+Generado con: Claude Sonnet 4.6 · Modo: Antigravity
