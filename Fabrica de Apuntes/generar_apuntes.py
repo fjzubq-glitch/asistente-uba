@@ -481,47 +481,56 @@ TRANSCRIPCIÓN DE LA CLASE:
     print(f"✅ Sistema MIT creado en: {mit_path}")
     
     print("\n--- [3/3] Generando Paso 3: CUESTIONARIO Y CASOS ---")
-    prompt_cuestionario_sistema = perfil_asistente + "\nObjetivo: Basado EXCLUSIVAMENTE en la Ficha y el HANDOFF generados en el Paso 1, generar Cuestionario y Casos prácticos."
-    prompt_cuestionario_usuario = f"""Estructura de salida requerida:
+    prompt_cuestionario_sistema = perfil_asistente + "\nObjetivo: Basado EXCLUSIVAMENTE en la Ficha y el HANDOFF generados en el Paso 1, generar Cuestionario y Casos prácticos. Es un requerimiento crítico seguir la estructura de salida al pie de la letra, limitando el cuestionario a un máximo de 8 preguntas direccionadas y 1 pregunta integradora. No inventar preguntas adicionales."
+    prompt_cuestionario_usuario = f"""Estructura de salida requerida de manera estricta y obligatoria (respetar saltos de línea, emojis y etiquetas):
 # 📄 PASO 2A — CUESTIONARIO · Pegar en Notion: Cuestionario_{args.materia}_Clase{args.clase}_{args.fecha}
-[Máximo 8 preguntas + 1 integradora. Formato por cada una:]
-❓ 1. [Texto] · fuente [X] · [Etiquetas: 🎯 Pareto, ⚠️ Trampa, 🏆 Cae siempre]
-1. [Punto 1 respuesta]
-2. [Punto 2 respuesta]
+
+❓ 1. [Texto de la pregunta] · fuente [Cita exacta del Handoff] · [Etiquetas: 🎯 Pareto, ⚠️ Trampa o 🏆 Cae siempre]
+1. [Punto 1 de la respuesta]
+2. [Punto 2 de la respuesta]
 *❌ Error típico: [error real del HANDOFF]*
+
+[Generar hasta un máximo absoluto de 8 preguntas numeradas consecutivamente del 1 al 8 con el formato anterior. No generar más de 8 preguntas bajo ninguna circunstancia]
 
 [Incluir tabla comparativa si hay distinciones D1/D2 en el Handoff]
 
-❓ Integradora. [2-4 subpreguntas encadenadas] 🏆 Cae siempre
+❓ Integradora. [Texto del escenario del caso integrador con 2-4 subpreguntas encadenadas] 🏆 Cae siempre
 
 ## 🎯 Top Pareto
 | Prioridad | Pregunta | Concepto clave |
-[🔴 Crítico, 🟠 Alto]
+| --- | --- | --- |
+[🔴 Crítico, 🟠 Alto - listar las preguntas más relevantes de las 8 anteriores]
 
 ## 📜 Fuentes clave
 | Fuente | Qué establece | Por qué importa en examen |
+| --- | --- | --- |
 
 ---
 
 # 📄 PASO 2B — CASOS · Pegar en Notion: Casos_{args.materia}_Clase{args.clase}_{args.fecha}
-[3 Casos: Caso 1 (Simple O1/O2), Caso 2 (Trampa T1), Caso 3 (Complejo interclase o nivel intermedio)]
+[Generar exactamente 3 Casos con el formato siguiente: Caso 1 (Simple O1/O2), Caso 2 (Trampa T1), Caso 3 (Complejo interclase o nivel intermedio)]
 
-📌 **CASO [N] — [Título]**
-Nivel: [Simple/Trampa/Complejo]
-Conceptos: [O1, T1...]
-⚖️ Fuentes: [A1, F1...]
-**Enunciado:** [Hechos concretos. Personajes con nombres.]
+📌 **CASO [N] — [Título del caso]**
+* **Nivel:** [Simple/Trampa/Complejo]
+* **Conceptos:** [Conceptos Oro/Trampa involucrados]
+* **⚖️ Fuentes:** [Fuentes normativas/jurisprudenciales involucradas]
+* **Enunciado:** [Relato de hechos concretos con nombres de personas]
+
 ► Intentá resolverlo antes de seguir.
+
 **Resolución**
-Figura jurídica en juego: [1 línea]
-Razonamiento: [1, 2, 3...]
-Respuesta: [Máx 4 líneas]
-⚠️ Error típico: [T1 del Handoff]
-Relacionado con: P[N] del cuestionario
+* **Figura jurídica en juego:** [Identificación del instituto en 1 línea]
+* **Razonamiento:** [Puntos 1, 2, 3 de la argumentación jurídica]
+* **Respuesta:** [Resolución concreta de no más de 4 líneas]
+* **⚠️ Error típico:** [Error o trampa asociada]
+* **Link:** Relacionado con: P[N] del cuestionario
+
+[Repetir estructura para Caso 2 y Caso 3]
 
 ## 📊 Mapa de cobertura
 | Concepto | Caso | Pregunta | Riesgo |
-[Tabla con todos los O, S, D, T, asignando Alto/Medio/Bajo y checkmarks]
+| --- | --- | --- | --- |
+[Tabla con los conceptos O, S, D, T, relacionando cada uno con su caso/pregunta, asignando riesgo Alto/Medio/Bajo y checkmarks]
 
 ✅ Paso 2 completo.
 
