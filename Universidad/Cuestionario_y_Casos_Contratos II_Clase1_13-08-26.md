@@ -1,41 +1,41 @@
 # 📄 PASO 2A — CUESTIONARIO · Pegar en Notion: Cuestionario_Contratos II_Clase1_13-08-26
 
-❓ 1. ¿Qué se entiende por "relación de consumo" y cuáles son sus elementos esenciales? · fuente [La relación de consumo es el vínculo jurídico amplio entre un proveedor y un consumidor, que abarca desde la etapa precontractual (publicidad) hasta la poscontractual (servicio de posventa).] · 🎯 Pareto
+❓ 1. ¿Qué se entiende por "relación de consumo" y cuáles son sus elementos esenciales? · 🎯 Pareto
 1.  La relación de consumo es el vínculo jurídico que une a un proveedor y un consumidor, extendiéndose desde la etapa previa al contrato (publicidad) hasta la posterior (servicio de posventa).
 2.  Sus elementos esenciales incluyen un vínculo jurídico, la existencia de un proveedor y un consumidor/usuario, la adquisición o utilización de bienes o servicios (gratuitos u onerosos), y la finalidad de ser destinatario final.
 *❌ Error típico: Confundir relación de consumo con contrato de consumo.*
 
-❓ 2. ¿Cuál es la definición de "consumidor final" según el derecho argentino y qué implicancias tiene su correcta identificación? · fuente [Se considera consumidor final a la persona humana o jurídica que adquiere o utiliza bienes o servicios, en forma gratuita u onerosa, como destinatario final para beneficio propio o de su grupo familiar o social, agotándose la cadena de comercialización en esa operación jurídica, sin que el producto vuelva a reinsertarse en el mercado, ni siquiera transformado.] · 🏆 Cae siempre
+❓ 2. ¿Cuál es la definición de "consumidor final" según el derecho argentino y qué implicancias tiene su correcta identificación? · 🏆 Cae siempre
 1.  Consumidor final es la persona humana o jurídica que adquiere o utiliza bienes o servicios para uso propio, de su grupo familiar o social, sin que el producto o servicio sea reinsertado en el mercado.
 2.  La correcta identificación del consumidor final es crucial porque determina la aplicación del régimen protectorio del derecho del consumidor (Ley 24.240 y CCC), garantizando sus derechos y las responsabilidades del proveedor.
 *❌ Error típico: No identificar correctamente al "destinatario final".*
 
-❓ 3. Explique el principio de responsabilidad solidaria de la cadena de comercialización en el derecho del consumidor. · fuente [Todos los sujetos que intervienen en la cadena de producción, montaje, creación, importación, distribución, concesión de marcas y comercialización de bienes y servicios son solidariamente responsables ante el consumidor por los daños derivados de la relación de consumo.] · 🎯 Pareto
+❓ 3. Explique el principio de responsabilidad solidaria de la cadena de comercialización en el derecho del consumidor. · 🎯 Pareto
 1.  Este principio establece que todos los participantes en la cadena de valor de un producto o servicio (desde el productor hasta el comercializador) son solidariamente responsables frente al consumidor por cualquier daño derivado de la relación de consumo.
 2.  La solidaridad implica que el consumidor puede reclamar la totalidad del daño a cualquiera de los integrantes de la cadena, sin necesidad de probar la culpa individual de cada uno.
 *❌ Error típico: Desconocer la responsabilidad solidaria de la cadena de comercialización.*
 
-❓ 4. ¿Cómo opera el principio de interpretación favorable al consumidor (in dubio pro consumidor) en el marco del Código Civil y Comercial de la Nación? · fuente [Ante la duda sobre la interpretación de las normas (Código Civil y Comercial o leyes especiales) o del contrato de consumo, siempre prevalece la solución más favorable al consumidor. Si existen dudas sobre el alcance de la obligación del consumidor, se adopta la que sea menos gravosa para él.] · 🎯 Pareto
+❓ 4. ¿Cómo opera el principio de interpretación favorable al consumidor (in dubio pro consumidor) en el marco del Código Civil y Comercial de la Nación? · 🎯 Pareto
 1.  El principio de interpretación favorable al consumidor, consagrado en los artículos 1094 in fine y 1095 del CCC, establece que, ante cualquier duda en la interpretación de las normas o de las cláusulas contractuales, debe optarse por la solución que resulte más beneficiosa para el consumidor.
 2.  Asimismo, si la duda recae sobre el alcance de una obligación del consumidor, se debe elegir la interpretación que le resulte menos gravosa.
 *❌ Error típico: No aplicar el principio de la ley más favorable al consumidor.*
 
-❓ 5. ¿Cuáles son los principales sujetos o situaciones eximidos de la aplicación de la Ley de Defensa del Consumidor (Ley 24.240)? · fuente [No se aplica la Ley 24.240 a: Profesionales con título o matrícula habilitante... Particulares entre sí... Productos que reingresan a la cadena de comercialización... Aeronavegación...] · ⚠️ Trampa
+❓ 5. ¿Cuáles son los principales sujetos o situaciones eximidos de la aplicación de la Ley de Defensa del Consumidor (Ley 24.240)? · ⚠️ Trampa
 1.  La Ley 24.240 no se aplica a los servicios prestados por profesionales con título o matrícula habilitante cuando actúan directamente, salvo que el servicio sea ofrecido por una empresa.
 2.  Tampoco se aplica a operaciones entre particulares, a productos que se adquieren para reinsertarse en la cadena de comercialización, ni, en principio, a la aeronavegación (aunque con excepciones como paquetes turísticos o overbooking).
 *❌ Error típico: Desconocer los sujetos eximidos de la LDC.*
 
-❓ 6. Distinga entre "relación de consumo" y "contrato de consumo", explicando su alcance y diferencias. · fuente [La distinción entre relación de consumo (vínculo jurídico amplio) y contrato de consumo (momento de la adquisición del producto).] · 🏆 Cae siempre
+❓ 6. Distinga entre "relación de consumo" y "contrato de consumo", explicando su alcance y diferencias. · 🏆 Cae siempre
 1.  La relación de consumo es un vínculo jurídico amplio que abarca todas las etapas entre proveedor y consumidor, desde la publicidad precontractual hasta el servicio de posventa.
 2.  El contrato de consumo, en cambio, es un tipo específico de contrato celebrado entre un consumidor y un proveedor, que se inserta dentro de la relación de consumo y se refiere al momento de la adquisición del bien o servicio.
 *❌ Error típico: Confundir relación de consumo con contrato de consumo.*
 
-❓ 7. ¿Qué se entiende por "consumidor expuesto" o "bystander" y cuál es su situación actual en el ordenamiento jurídico argentino? · fuente [La figura del bystander o consumidor expuesto... fue eliminada del texto normativo, aunque la doctrina y jurisprudencia aún la invocan en ciertas situaciones.] · ⚠️ Trampa
+❓ 7. ¿Qué se entiende por "consumidor expuesto" o "bystander" y cuál es su situación actual en el ordenamiento jurídico argentino? · ⚠️ Trampa
 1.  El "consumidor expuesto" o "bystander" era la persona que, sin ser parte de una relación de consumo, resultaba afectada por ella (ej. un tercero dañado por un producto defectuoso).
 2.  Esta figura fue eliminada del texto del artículo 1092 del Código Civil y Comercial de la Nación, aunque parte de la doctrina y jurisprudencia aún la invocan para proteger a terceros afectados en ciertas circunstancias.
 *❌ Error típico: No identificar correctamente al "destinatario final" o aplicar la figura del bystander sin matices.*
 
-❓ 8. ¿Cuál es la diferencia fundamental entre la función de un mediador y un conciliador en el sistema de justicia de consumo de CABA? · fuente [La diferencia entre un conciliador y un mediador radica en que, si bien ambos son neutrales, el conciliador en consumo tiene un rol activo en recomponer los derechos del consumidor, considerado el eslabón más débil, y frenar situaciones abusivas por parte del proveedor.] · 🏆 Cae siempre
+❓ 8. ¿Cuál es la diferencia fundamental entre la función de un mediador y un conciliador en el sistema de justicia de consumo de CABA? · 🏆 Cae siempre
 1.  Mientras ambos son terceros neutrales que buscan facilitar un acuerdo, el conciliador en consumo en CABA tiene un rol más activo y protectorio hacia el consumidor, considerado el eslabón más débil de la relación.
 2.  El conciliador busca recomponer los derechos del consumidor y frenar situaciones abusivas del proveedor, y el acuerdo alcanzado en esta instancia tiene fuerza ejecutiva.
 *❌ Error típico: Desconocer el rol protectorio del conciliador en consumo.*

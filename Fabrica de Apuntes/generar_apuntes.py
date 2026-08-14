@@ -485,7 +485,7 @@ TRANSCRIPCIÓN DE LA CLASE:
     prompt_cuestionario_usuario = f"""Estructura de salida requerida de manera estricta y obligatoria (respetar saltos de línea, emojis y etiquetas):
 # 📄 PASO 2A — CUESTIONARIO · Pegar en Notion: Cuestionario_{args.materia}_Clase{args.clase}_{args.fecha}
 
-❓ 1. [Texto de la pregunta] · fuente [Cita exacta del Handoff] · [Etiquetas: 🎯 Pareto, ⚠️ Trampa o 🏆 Cae siempre]
+❓ 1. [Texto de la pregunta] · [Etiquetas: 🎯 Pareto, ⚠️ Trampa o 🏆 Cae siempre]
 1. [Punto 1 de la respuesta]
 2. [Punto 2 de la respuesta]
 *❌ Error típico: [error real del HANDOFF]*

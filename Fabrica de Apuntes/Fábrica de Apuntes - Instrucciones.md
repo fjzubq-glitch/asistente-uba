@@ -107,7 +107,7 @@ Actuar como profesor exigente. Combinar teoría, normativa y caso.
 
 [Máximo 8 preguntas + 1 integradora. Formato por cada una:]
 
-❓ 1. [Texto] · fuente [X] · [Etiquetas: 🎯 Pareto, ⚠️ Trampa, 🏆 Cae siempre]
+❓ 1. [Texto] · [Etiquetas: 🎯 Pareto, ⚠️ Trampa, 🏆 Cae siempre]
 1. [Punto 1 respuesta]
 2. [Punto 2 respuesta]
 *❌ Error típico: [error real del HANDOFF]*
