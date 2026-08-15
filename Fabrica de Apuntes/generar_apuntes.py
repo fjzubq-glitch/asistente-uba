@@ -165,9 +165,8 @@ def enviar_notificacion_telegram(materia, clase, fecha, tema):
         f"📅 *Fecha:* {fecha}\n"
         f"📌 *Tema:* {tema}\n\n"
         f"✅ *Documentos disponibles en Notion:*\n"
-        f"1. Ficha + Handoff\n"
-        f"2. Sistema MIT\n"
-        f"3. Cuestionario + Casos\n"
+        f"1. Ficha + Handoff (con Mapa de Conexiones y Tabla de Alertas)\n"
+        f"2. Cuestionario + Casos (con integradora resuelta)\n"
     )
     
     url = f"https://api.telegram.org/bot{telegram_token}/sendMessage"
@@ -376,8 +375,8 @@ Todas las respuestas deben ser redactadas en español.
     output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Universidad")
     os.makedirs(output_dir, exist_ok=True)
     
-    print("\n--- [1/3] Generando Paso 1: FICHA + HANDOFF ---")
-    prompt_ficha_sistema = perfil_asistente + "\nObjetivo: Transformar una transcripción cruda en una Ficha académica y un bloque HANDOFF estructurado. Sigue la estructura de salida especificada en las instrucciones."
+    print("\n--- [1/3] Generando Paso 1: FICHA + HANDOFF (con Mapa y Alertas integrados) ---")
+    prompt_ficha_sistema = perfil_asistente + "\nObjetivo: Transformar una transcripción cruda en una Ficha académica completa (con mapa de conceptos y tabla de alertas integrados) y un bloque HANDOFF estructurado para el Paso 2."
     prompt_ficha_usuario = f"""Materia: {args.materia}
 Clase: {args.clase}
 Fecha: {args.fecha}
@@ -387,36 +386,48 @@ Estructura de salida requerida:
 # 📄 PASO 1 — FICHA · Pegar en Notion: Ficha_{args.materia}_Clase{args.clase}_{args.fecha}
 
 ## ⚡ MÓDULO 1 — PORTADA RÁPIDA
+
 ### 📌 BLOQUE A — ¿De qué va la clase?
-**Eje central:** [1-2 frases]
-**Marco normativo:** Artículos, fallos, doctrina.
-**⚖️ Fuente guía:** [El artículo o fallo que estructura la clase]
+* **Eje central:** [1-2 frases]
+* **Marco normativo:** Artículos, fallos, doctrina.
+* **⚖️ Fuente guía:** [El artículo o fallo que estructura la clase]
 
 ### 🎯 BLOQUE B — ¿Qué cae en examen?
-**⭐ Marcado por el profesor:** [Frase textual si hay]
-**🏆 Diferencias de 8+:** [Detalles técnicos o excepciones clave]
-**🚨 Alerta de examen:** [Pregunta típica, fuentes obligatorias]
-**📦 Trampa común:** Error típico y cómo evitarla.
+* **⭐ Marcado por el profesor:** [Frase textual si hay]
+* **🏆 Diferencias de 8+:** [Detalles técnicos o excepciones clave]
+* **🚨 Alerta de examen:** [Pregunta típica, fuentes obligatorias]
+* **📦 Trampa común:** Error típico y cómo evitarla.
 
 ## 🥇 MÓDULO 2 — CONCEPTOS DE ORO
 [Máximo 4 conceptos. Formato por cada uno:]
+
 **[O1] Concepto:** [Nombre]
-**Definición de cátedra:** [Definición con cita si hay]
-**Elementos esenciales:** [Bullets con consecuencias]
-**Fuente:** [Art/Fallo]
-**Consecuencias jurídicas:** ✅ Si se cumple... ❌ Si no se cumple...
-**Relacionado con:** [Concepto]
+* **Definición de cátedra:** [Definición con cita si hay]
+* **Elementos esenciales:** [Bullets con consecuencias]
+* **Función práctica:** [1 línea: para qué sirve este concepto en un caso real]
+* **Fuente:** [Art/Fallo]
+* **Consecuencias jurídicas:** ✅ Si se cumple... ❌ Si no se cumple...
+* **Conexión:** [1 sola línea, formato flecha. Ej: "→ O3 (este concepto es la base normativa que O3 termina cristalizando)". Nunca un párrafo.]
+* **Error frecuente:** [Qué confunde el estudiante entre este concepto y otro cercano]
 
 ## 🛰️ CONCEPTOS SATELITALES
-[Máximo 4. Texto o Tabla según corresponda]
+[Máximo 4. Texto (S1) o Tabla (S2) según corresponda]
+
+## 🗺️ MÓDULO 3 — MAPA DE CONEXIONES (una sola vez, no repetir por concepto)
+[Máximo 4-6 líneas en formato lista o diagrama de flechas mostrando el flujo entre O1→O2→O3→O4. Prohibido usar prosa en párrafo largo.]
+
+## 📋 MÓDULO 4 — TABLA DE ALERTAS DE EXAMEN
+| Regla o idea central | Fuente (ley/clase/fallo) | Advertencia del profesor | Trampa típica de parcial/final |
+| --- | --- | --- | --- |
+[6-10 filas. Priorizar filas que ya correspondan a T1, T2, etc. del Handoff, no inventar filas nuevas sin base en la transcripción.]
 
 ## 🔗 HANDOFF PARA PASO 2
 Materia: {args.materia} · Clase: {args.clase} · Fecha: {args.fecha} · Tema: {args.tema}
-**Conceptos Oro:** O1, O2...
-**Satelitales:** S1, S2...
-**Trampas detectadas:** T1, T2... (con ⚠️ automático)
-**Distinciones clave:** D1, D2...
-**Fuentes centrales:** A1, F1...
+* **Conceptos Oro:** O1, O2...
+* **Satelitales:** S1, S2...
+* **Trampas detectadas:** T1, T2... (con ⚠️ automático)
+* **Distinciones clave:** D1, D2...
+* **Fuentes centrales:** A1, F1...
 
 Generado con: {model} · Modo: Script
 
@@ -432,74 +443,35 @@ TRANSCRIPCIÓN DE LA CLASE:
         f.write(ficha_content)
     print(f"✅ Ficha académica creada en: {ficha_path}")
     
-    print("\n--- [2/3] Generando Paso 2: SISTEMA MIT ---")
-    prompt_mit_sistema = perfil_asistente + "\nObjetivo: Generar el puente entre el resumen y el cuestionario duro. Trabaja directamente sobre la transcripción de la clase, cruzando la consistencia con el Paso 1."
-    prompt_mit_usuario = f"""Materia: {args.materia}
-Tema: {args.tema}
-
-Estructura de salida requerida:
-# SISTEMA MIT — {args.materia}
-**Tema:** {args.tema}
-
-## ETAPA 1 — MAPA NUCLEAR (máximo 1 página)
-Identificar los 5 conceptos centrales. Para cada uno:
-- **Definición precisa:** según el material.
-- **Función práctica:** para qué sirve en un caso real.
-- **Conexión:** con cuál otro concepto se relaciona.
-- **Error frecuente:** qué confunde el estudiante.
-- **Alerta de clase:** advertencia explícita textual si la hay.
-
-Regla de Consistencia de Conceptos y Fallback:
-Antes de definir los 5 conceptos del Mapa Nuclear del MIT, debés revisar los Conceptos de Oro (O1–O4) ya identificados en el Handoff del Paso 1 (provisto abajo). Debés priorizarlos y usarlos como base para estos 5 conceptos del MIT. Si el Handoff trae menos de 5 conceptos entre Oro y Satelitales combinados, completá el 5to tomando el Concepto Satelital de mayor relevancia según la transcripción, y aclará explícitamente: "5to concepto tomado de Satelitales por [motivo]". Solo incorporá un concepto totalmente nuevo (ausente del Handoff) si la relectura de la transcripción revela algo estructuralmente relevante que el Paso 1 omitió, y en ese caso aclará: "Concepto añadido en Paso 2, no estaba en el Handoff: [motivo]".
-
-**MATRIZ DE CONEXIONES:** 3-5 líneas mostrando cómo se relacionan los 5 conceptos como sistema.
-
-## ETAPA 2 — TABLA DE ALERTAS DE EXAMEN
-| Regla o idea central | Fuente (ley/clase/fallo) | Advertencia del profesor | Trampa típica de parcial/final |
-[8-12 filas]
-
-## ETAPA 3 — SIMULACRO DE ALTA DIFICULTAD (10 preguntas)
-Actuar como profesor exigente. Combinar teoría, normativa y caso.
-**PREGUNTA N° [n]**
-[Texto de la pregunta]
-* ▸ RESPUESTA ESPERADA: [3 a 6 líneas]
-* ▸ ERROR TÍPICO: [Qué contesta un estudiante que memorizó pero no entendió]
-* ▸ FUENTE PARA REPASAR SI FALLÁS: [Qué parte del cuaderno leer]
-(La pregunta 10 debe ser integradora)
-
-CONTENIDO GENERADO EN EL PASO 1 (FICHA Y HANDOFF):
-{ficha_content}
-
-TRANSCRIPCIÓN DE LA CLASE:
-{transcripcion}
-"""
-    
-    mit_content = ejecutar_con_fallback(prompt_mit_sistema, prompt_mit_usuario, args.provider, args.model)
-    mit_path = os.path.join(output_dir, f"Sistema_MIT_{args.materia}_Clase{args.clase}_{args.fecha}.md")
-    with open(mit_path, "w", encoding="utf-8") as f:
-        f.write(mit_content)
-    print(f"✅ Sistema MIT creado en: {mit_path}")
-    
-    print("\n--- [3/3] Generando Paso 3: CUESTIONARIO Y CASOS ---")
-    prompt_cuestionario_sistema = perfil_asistente + "\nObjetivo: Basado EXCLUSIVAMENTE en la Ficha y el HANDOFF generados en el Paso 1, generar Cuestionario y Casos prácticos. Es un requerimiento crítico seguir la estructura de salida al pie de la letra, limitando el cuestionario a un máximo de 8 preguntas direccionadas y 1 pregunta integradora. No inventar preguntas adicionales."
-    prompt_cuestionario_usuario = f"""Estructura de salida requerida de manera estricta y obligatoria (respetar saltos de línea, emojis y etiquetas):
+    print("\n--- [2/3] Generando Paso 2: CUESTIONARIO Y CASOS ---")
+    prompt_cuestionario_sistema = perfil_asistente + "\nObjetivo: Basado EXCLUSIVAMENTE en la Ficha y el HANDOFF generados en el Paso 1, generar Cuestionario y Casos prácticos."
+    prompt_cuestionario_usuario = f"""Estructura de salida requerida:
 # 📄 PASO 2A — CUESTIONARIO · Pegar en Notion: Cuestionario_{args.materia}_Clase{args.clase}_{args.fecha}
+[Máximo 8 preguntas. Formato por cada una:]
 
-❓ 1. [Texto de la pregunta] · [Etiquetas: 🎯 Pareto, ⚠️ Trampa o 🏆 Cae siempre]
-1. [Punto 1 de la respuesta]
-2. [Punto 2 de la respuesta]
+❓ 1. [Texto] · fuente [X] · [Etiquetas: 🎯 Pareto, ⚠️ Trampa, 🏆 Cae siempre]
+1. [Punto 1 respuesta]
+2. [Punto 2 respuesta]
 *❌ Error típico: [error real del HANDOFF]*
-
-[Generar hasta un máximo absoluto de 8 preguntas numeradas consecutivamente del 1 al 8 con el formato anterior. No generar más de 8 preguntas bajo ninguna circunstancia]
 
 [Incluir tabla comparativa si hay distinciones D1/D2 en el Handoff]
 
-❓ Integradora. [Texto del escenario del caso integrador con 2-4 subpreguntas encadenadas] 🏆 Cae siempre
+❓ Integradora. [2-4 subpreguntas encadenadas, con nombres de personajes y hechos concretos] · 🏆 Cae siempre
+
+► Intentá resolverlo antes de seguir.
+
+**Resolución**
+* (a) [Respuesta a subpregunta 1, 2-4 líneas]
+* (b) [Respuesta a subpregunta 2, 2-4 líneas]
+* (c) [Respuesta a subpregunta 3 si existe, 2-4 líneas]
+* ⚠️ Error típico: [error que comete un alumno que memorizó pero no integró los conceptos]
+
+Regla obligatoria: ninguna pregunta del Cuestionario, incluida la integradora, puede publicarse sin su resolución esperada. La integradora no es la excepción.
 
 ## 🎯 Top Pareto
 | Prioridad | Pregunta | Concepto clave |
 | --- | --- | --- |
-[🔴 Crítico, 🟠 Alto - listar las preguntas más relevantes de las 8 anteriores]
+[🔴 Crítico, 🟠 Alto]
 
 ## 📜 Fuentes clave
 | Fuente | Qué establece | Por qué importa en examen |
@@ -508,29 +480,27 @@ TRANSCRIPCIÓN DE LA CLASE:
 ---
 
 # 📄 PASO 2B — CASOS · Pegar en Notion: Casos_{args.materia}_Clase{args.clase}_{args.fecha}
-[Generar exactamente 3 Casos con el formato siguiente: Caso 1 (Simple O1/O2), Caso 2 (Trampa T1), Caso 3 (Complejo interclase o nivel intermedio). Si el Handoff no trae ninguna Trampa (T1-T4), reemplazá el Caso 2 por una variante que combine dos Conceptos de Oro de forma no obvia, y aclará explícitamente: "Caso 2 reformulado: Handoff sin Trampas detectadas".]
+[3 Casos: Caso 1 (Simple O1/O2), Caso 2 (Trampa T1), Caso 3 (Complejo interclase o nivel intermedio)]
 
-📌 **CASO [N] — [Título del caso]**
+📌 **CASO [N] — [Título]**
 * **Nivel:** [Simple/Trampa/Complejo]
-* **Conceptos:** [Conceptos Oro/Trampa involucrados]
-* **⚖️ Fuentes:** [Fuentes normativas/jurisprudenciales involucradas]
-* **Enunciado:** [Relato de hechos concretos con nombres de personas]
+* **Conceptos:** [O1, T1...]
+* **⚖️ Fuentes:** [A1, F1...]
+* **Enunciado:** [Hechos concretos. Personajes con nombres.]
 
 ► Intentá resolverlo antes de seguir.
 
 **Resolución**
-* **Figura jurídica en juego:** [Identificación del instituto en 1 línea]
-* **Razonamiento:** [Puntos 1, 2, 3 de la argumentación jurídica]
-* **Respuesta:** [Resolución concreta de no más de 4 líneas]
-* **⚠️ Error típico:** [Error o trampa asociada]
+* **Figura jurídica en juego:** [1 línea]
+* **Razonamiento:** [1, 2, 3...]
+* **Respuesta:** [Máx 4 líneas]
+* **⚠️ Error típico:** [T1 del Handoff]
 * **Link:** Relacionado con: P[N] del cuestionario
-
-[Repetir estructura para Caso 2 y Caso 3]
 
 ## 📊 Mapa de cobertura
 | Concepto | Caso | Pregunta | Riesgo |
 | --- | --- | --- | --- |
-[Tabla con los conceptos O, S, D, T, relacionando cada uno con su caso/pregunta, asignando riesgo Alto/Medio/Bajo y checkmarks]
+[Tabla con todos los O, S, D, T, asignando Alto/Medio/Bajo y checkmarks]
 
 ✅ Paso 2 completo.
 
@@ -542,34 +512,28 @@ FICHA Y HANDOFF (PASO 1 GENERADO):
     cuestionario_path = os.path.join(output_dir, f"Cuestionario_y_Casos_{args.materia}_Clase{args.clase}_{args.fecha}.md")
     with open(cuestionario_path, "w", encoding="utf-8") as f:
         f.write(cuestionario_content)
-    print(f"[SUCCESS] Cuestionario y Casos creados en: {cuestionario_path}")
+    print(f"✅ Cuestionario y Casos creados en: {cuestionario_path}")
     
-    print("\n--- [4/4] Ejecutando Paso 4: AUDITORÍA DOCUMENTAL ---")
+    print("\n--- [3/3] Ejecutando Paso 3: AUDITORÍA DOCUMENTAL ---")
     prompt_auditoria_sistema = perfil_asistente + "\nObjetivo: Actuar como auditor documental de control de calidad. Contrastar minuciosamente los apuntes generados contra la transcripción original de la clase para verificar el respaldo y la veracidad de las citas y aserciones."
-    prompt_auditoria_usuario = f"""Tenés que auditar los siguientes tres apuntes que fueron generados a partir de la transcripción original:
+    prompt_auditoria_usuario = f"""Tenés que auditar los siguientes dos apuntes que fueron generados a partir de la transcripción original:
 
 1. FICHA Y HANDOFF GENERADO:
 {ficha_content}
 
-2. SISTEMA MIT GENERADO:
-{mit_content}
-
-3. CUESTIONARIO Y CASOS GENERADO:
+2. CUESTIONARIO Y CASOS GENERADO:
 {cuestionario_content}
 
 TRANSCRIPCIÓN ORIGINAL DE LA CLASE:
 {transcripcion}
 
 Instrucciones de Auditoría:
-1. Analizá cada cita de leyes, artículos del Código Civil y Comercial (CCC), la Constitución Nacional (CN), fallos/jurisprudencia y posiciones doctrinarias que aparezcan en los tres apuntes.
+1. Analizá cada cita de leyes, artículos del Código Civil y Comercial (CCC), la Constitución Nacional (CN), fallos/jurisprudencia y posiciones doctrinarias que aparezcan en los dos apuntes.
 2. Cruzalas contra la Transcripción Original. Confirmá si tienen respaldo literal o razonable en ella.
 3. Si encontrás aserciones jurídicas o citas específicas que NO se mencionen en la transcripción ni tengan un sustento obvio de certeza razonable en la materia, identificalas como discrepancias.
 4. Generá un reporte de salida estructurado usando EXACTAMENTE estas etiquetas de sección. Si no encontrás discrepancias en algún documento, poné "Ninguna". No agregues preámbulos ni explicaciones fuera de las etiquetas:
 
 <<<AUDITORIA_FICHA>>>
-[Detallá los puntos con discrepancia o "Ninguna"]
-
-<<<AUDITORIA_MIT>>>
 [Detallá los puntos con discrepancia o "Ninguna"]
 
 <<<AUDITORIA_CUESTIONARIO>>>
@@ -587,7 +551,6 @@ Instrucciones de Auditoría:
         return "Ninguna"
         
     auditoria_ficha = extraer_seccion(auditoria_content, "AUDITORIA_FICHA")
-    auditoria_mit = extraer_seccion(auditoria_content, "AUDITORIA_MIT")
     auditoria_cuestionario = extraer_seccion(auditoria_content, "AUDITORIA_CUESTIONARIO")
     
     # Inyectar advertencias si existen y reescribir los archivos locales
@@ -596,12 +559,6 @@ Instrucciones de Auditoría:
         ficha_content += f"\n\n## ⚠️ Auditoría Documental — revisar\n{auditoria_ficha}"
         with open(ficha_path, "w", encoding="utf-8") as f:
             f.write(ficha_content)
-            
-    if auditoria_mit and auditoria_mit.lower() != "ninguna":
-        print("[AUDITORÍA] Se detectaron discrepancias en el Sistema MIT. Inyectando advertencias...")
-        mit_content += f"\n\n## ⚠️ Auditoría Documental — revisar\n{auditoria_mit}"
-        with open(mit_path, "w", encoding="utf-8") as f:
-            f.write(mit_content)
             
     if auditoria_cuestionario and auditoria_cuestionario.lower() != "ninguna":
         print("[AUDITORÍA] Se detectaron discrepancias en el Cuestionario y Casos. Inyectando advertencias...")
@@ -626,12 +583,11 @@ Instrucciones de Auditoría:
             materia_page_id = obtener_o_crear_pagina_materia(notion_token, args.parent_page, args.materia)
             
             f1 = subir_apuntes(args.materia, args.clase, args.fecha, "Ficha + Handoff", ficha_path, notion_token, materia_page_id)
-            f2 = subir_apuntes(args.materia, args.clase, args.fecha, "Sistema MIT", mit_path, notion_token, materia_page_id)
-            f3 = subir_apuntes(args.materia, args.clase, args.fecha, "Cuestionario + Casos", cuestionario_path, notion_token, materia_page_id)
+            f2 = subir_apuntes(args.materia, args.clase, args.fecha, "Cuestionario + Casos", cuestionario_path, notion_token, materia_page_id)
             print("\n[SUCCESS] Carga a Notion finalizada con exito!")
             
             # Enviar notificación por Telegram si al menos un documento se subió correctamente
-            if f1 or f2 or f3:
+            if f1 or f2:
                 enviar_notificacion_telegram(args.materia, args.clase, args.fecha, args.tema)
                 
                 # Programar recordatorios de Active Recall para el bot Franklin

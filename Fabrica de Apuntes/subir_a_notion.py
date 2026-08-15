@@ -226,44 +226,10 @@ def convertir_texto_enriquecido(texto):
         rich_text = [{"type": "text", "text": {"content": ""}}]
     return rich_text
 
-def subir_imagen_a_servidor(filepath):
-    """
-    Sube un archivo de imagen local a catbox.moe para obtener una URL pública directa.
-    Soporta formatos png, jpg, jpeg, gif, webp.
-    """
-    if not os.path.exists(filepath):
-        print(f"[WARN] No se encontró el archivo de imagen local en: {filepath}")
-        return None
-        
-    print(f"[INFO] Subiendo imagen local a hosting público: {os.path.basename(filepath)}...")
-    url = "https://catbox.moe/user/api.php"
-    
-    try:
-        with open(filepath, "rb") as f:
-            files = {
-                "fileToUpload": (os.path.basename(filepath), f)
-            }
-            data = {
-                "reqtype": "fileupload"
-            }
-            r = requests.post(url, data=data, files=files, timeout=45)
-            r.raise_for_status()
-            
-            uploaded_url = r.text.strip()
-            if uploaded_url.startswith("https://files.catbox.moe/"):
-                print(f"[SUCCESS] Imagen subida exitosamente: {uploaded_url}")
-                return uploaded_url
-            else:
-                print(f"[ERROR] Respuesta inesperada del servidor de imágenes: {uploaded_url}")
-                return None
-    except Exception as e:
-        print(f"[ERROR] Fallo al subir la imagen {os.path.basename(filepath)}: {e}")
-        return None
-
-def parsear_markdown_a_bloques(markdown_text, base_dir=None):
+def parsear_markdown_a_bloques(markdown_text):
     """
     Convierte un texto Markdown en una lista de bloques JSON compatibles con la API de Notion.
-    Soporta títulos (#, ##, ###), viñetas (-), listas numeradas (1.), tablas (|) e imágenes.
+    Soporta títulos (#, ##, ###), viñetas (-), listas numeradas (1.) y tablas (|).
     """
     lines = markdown_text.split("\n")
     blocks = []
@@ -362,56 +328,6 @@ def parsear_markdown_a_bloques(markdown_text, base_dir=None):
                     "rich_text": convertir_texto_enriquecido(match.group(2))
                 }
             })
-        # Imágenes
-        elif stripped.startswith("![") and stripped.endswith(")"):
-            match_img = re.match(r"^!\[(.*?)\]\((.*?)\)$", stripped)
-            if match_img:
-                descripcion = match_img.group(1).strip()
-                ruta_img = match_img.group(2).strip()
-                
-                url_publica = None
-                if ruta_img.startswith("http://") or ruta_img.startswith("https://"):
-                    url_publica = ruta_img
-                else:
-                    if ruta_img.startswith("file://"):
-                        ruta_img_clean = re.sub(r"^file:///+", "", ruta_img)
-                        ruta_img_clean = re.sub(r"^file://+", "", ruta_img_clean)
-                        ruta_img = os.path.normpath(ruta_img_clean)
-                    
-                    if base_dir:
-                        ruta_completa = os.path.join(base_dir, ruta_img)
-                    else:
-                        ruta_completa = os.path.abspath(ruta_img)
-                    url_publica = subir_imagen_a_servidor(ruta_completa)
-                
-                if url_publica:
-                    blocks.append({
-                        "object": "block",
-                        "type": "image",
-                        "image": {
-                            "type": "external",
-                            "external": {
-                                "url": url_publica
-                            }
-                        }
-                    })
-                else:
-                    blocks.append({
-                        "object": "block",
-                        "type": "paragraph",
-                        "paragraph": {
-                            "rich_text": [
-                                {
-                                    "type": "text",
-                                    "text": {"content": f"⚠️ [Imagen local no disponible o error al subir: {ruta_img}]"},
-                                    "annotations": {
-                                        "italic": True
-                                    }
-                                }
-                            ]
-                        }
-                    })
-                continue
         # Párrafos normales
         else:
             blocks.append({
@@ -567,8 +483,7 @@ def subir_apuntes(materia, clase, fecha, tipo_documento, filepath, notion_token,
     with open(filepath, "r", encoding="utf-8") as f:
         content = f.read()
         
-    base_dir = os.path.dirname(filepath)
-    blocks = parsear_markdown_a_bloques(content, base_dir=base_dir)
+    blocks = parsear_markdown_a_bloques(content)
     
     nombre_pagina = f"{materia} - {tipo_documento} - Clase {clase} ({fecha})"
     
