@@ -449,8 +449,8 @@ Identificar los 5 conceptos centrales. Para cada uno:
 - **Error frecuente:** qué confunde el estudiante.
 - **Alerta de clase:** advertencia explícita textual si la hay.
 
-Regla de Consistencia de Conceptos:
-Antes de definir los 5 conceptos del Mapa Nuclear del MIT, debés revisar los Conceptos de Oro (O1–O4) ya identificados en el Handoff del Paso 1 (provisto abajo). Debés priorizarlos y usarlos como base para estos 5 conceptos del MIT. Solo incorporá un concepto nuevo (no listado como Oro) si la relectura de la transcripción revela algo estructuralmente relevante que el Paso 1 omitió. En tal caso, agregá una línea aclaratoria al final del concepto: "Concepto añadido en Paso 2, no estaba en el Handoff: [motivo]".
+Regla de Consistencia de Conceptos y Fallback:
+Antes de definir los 5 conceptos del Mapa Nuclear del MIT, debés revisar los Conceptos de Oro (O1–O4) ya identificados en el Handoff del Paso 1 (provisto abajo). Debés priorizarlos y usarlos como base para estos 5 conceptos del MIT. Si el Handoff trae menos de 5 conceptos entre Oro y Satelitales combinados, completá el 5to tomando el Concepto Satelital de mayor relevancia según la transcripción, y aclará explícitamente: "5to concepto tomado de Satelitales por [motivo]". Solo incorporá un concepto totalmente nuevo (ausente del Handoff) si la relectura de la transcripción revela algo estructuralmente relevante que el Paso 1 omitió, y en ese caso aclará: "Concepto añadido en Paso 2, no estaba en el Handoff: [motivo]".
 
 **MATRIZ DE CONEXIONES:** 3-5 líneas mostrando cómo se relacionan los 5 conceptos como sistema.
 
@@ -508,7 +508,7 @@ TRANSCRIPCIÓN DE LA CLASE:
 ---
 
 # 📄 PASO 2B — CASOS · Pegar en Notion: Casos_{args.materia}_Clase{args.clase}_{args.fecha}
-[Generar exactamente 3 Casos con el formato siguiente: Caso 1 (Simple O1/O2), Caso 2 (Trampa T1), Caso 3 (Complejo interclase o nivel intermedio)]
+[Generar exactamente 3 Casos con el formato siguiente: Caso 1 (Simple O1/O2), Caso 2 (Trampa T1), Caso 3 (Complejo interclase o nivel intermedio). Si el Handoff no trae ninguna Trampa (T1-T4), reemplazá el Caso 2 por una variante que combine dos Conceptos de Oro de forma no obvia, y aclará explícitamente: "Caso 2 reformulado: Handoff sin Trampas detectadas".]
 
 📌 **CASO [N] — [Título del caso]**
 * **Nivel:** [Simple/Trampa/Complejo]

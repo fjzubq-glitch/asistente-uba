@@ -75,7 +75,7 @@ Identificar los 5 conceptos centrales (priorizando los Conceptos de Oro O1-O4 de
 * **Conexión:** con cuál otro concepto se relaciona.
 * **Error frecuente:** qué confunde el estudiante.
 * **Alerta de clase:** advertencia explícita textual si la hay.
-*[Si se añade un concepto no listado en el Handoff del Paso 1, agregar al final: "Concepto añadido en Paso 2, no estaba en el Handoff: [motivo]"]*
+*Regla de Consistencia y Fallback: Si el Handoff trae menos de 5 conceptos entre Oro y Satelitales combinados, completá el 5to tomando el Concepto Satelital de mayor relevancia según la transcripción, y aclará explícitamente: "5to concepto tomado de Satelitales por [motivo]". Solo incorporá un concepto totalmente nuevo (ausente del Handoff) si la relectura de la transcripción revela algo estructuralmente relevante que el Paso 1 omitió, y en ese caso aclará: "Concepto añadido en Paso 2, no estaba en el Handoff: [motivo]".*
 
 **MATRIZ DE CONEXIONES:** 3-5 líneas mostrando cómo se relacionan los 5 conceptos como sistema.
 
@@ -128,7 +128,7 @@ Actuar como profesor exigente. Combinar teoría, normativa y caso.
 ---
 
 # 📄 PASO 2B — CASOS · Pegar en Notion: Casos_[Materia]_Clase[N]_[DD-MM-YY]
-[3 Casos: Caso 1 (Simple O1/O2), Caso 2 (Trampa T1), Caso 3 (Complejo interclase o nivel intermedio)]
+[3 Casos: Caso 1 (Simple O1/O2), Caso 2 (Trampa T1), Caso 3 (Complejo interclase o nivel intermedio). Si el Handoff no trae ninguna Trampa (T1-T4), reemplazá el Caso 2 por una variante que combine dos Conceptos de Oro de forma no obvia, y aclará explícitamente: "Caso 2 reformulado: Handoff sin Trampas detectadas".]
 
 📌 **CASO [N] — [Título]**
 * **Nivel:** [Simple/Trampa/Complejo]

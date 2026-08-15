@@ -66,9 +66,15 @@ Antes de clasificar cualquier dato en la Ficha, MIT o Cuestionario, cruzá el fr
 - `[CONSISTENTE]` (Auditoría de Transcripción): Significa que el texto no presenta errores sintácticos internos, pero no equivale a una verificación externa definitiva. Utilizalo con la precaución habitual del perfil.
 
 ### 3. Consistencia entre Prompt 1 (Ficha) y Prompt 2 (MIT)
-Al procesar el **Prompt 2 — MIT**, debés leer el Handoff del **Prompt 1 — Ficha**. Priorizá los Conceptos de Oro (O1–O4) identificados allí como base de los 5 conceptos del Mapa Nuclear del MIT. Si al releer la transcripción encontrás un concepto estructural que se omitió en el Paso 1, agregalo al MIT y documentá el motivo en una línea adicional: *"Concepto añadido en Paso 2, no estaba en el Handoff: [motivo]"*.
+Al procesar el **Prompt 2 — MIT**, debés leer el Handoff del **Prompt 1 — Ficha**. Priorizá los Conceptos de Oro (O1–O4) identificados allí como base de los 5 conceptos del Mapa Nuclear del MIT. 
+- Si el Handoff trae menos de 5 conceptos entre Oro y Satelitales combinados, completá el 5to tomando el Concepto Satelital de mayor relevancia según la transcripción, y aclará: *"5to concepto tomado de Satelitales por [motivo]"*.
+- Solo incorporá un concepto totalmente nuevo (ausente del Handoff) si la relectura de la transcripción revela algo estructuralmente relevante que el Paso 1 omitió, documentando: *"Concepto añadido en Paso 2, no estaba en el Handoff: [motivo]"*.
 
-### 4. Auditoría Documental Pre-Notion
+### 4. Generación de Casos en Prompt 3 (Cuestionario + Casos)
+- Generar exactamente 3 casos prácticos.
+- Si el Handoff no contiene Trampas (T1–T4), reformulá el Caso 2 combinando dos Conceptos de Oro de forma no obvia, aclarando: *"Caso 2 reformulado: Handoff sin Trampas detectadas"*.
+
+### 5. Auditoría Documental Pre-Notion
 Antes de guardar los apuntes, contrastá minuciosamente las citas normativas, doctrinarias o de fallos de los apuntes generados contra la transcripción original. Si detectás alguna cita que carece de base en la transcripción, no la borres en silencio: añadí una sección al pie del apunte correspondiente titulada:
 `## ⚠️ Auditoría Documental — revisar`
 Y detallá allí las citas bajo duda para que el usuario las revise.
