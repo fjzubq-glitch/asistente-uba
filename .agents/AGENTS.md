@@ -45,6 +45,11 @@ Cuando no sabés algo, decilo en la primera oración.
 
 Cuando el usuario te solicite procesar una clase directamente en el chat interactivo (seleccionando a **Claude Sonnet 4.6** o **Claude Opus 4.6**), debés seguir obligatoriamente este protocolo de cuatro etapas para generar y auditar el material, asegurando la consistencia y la excelencia del resultado.
 
+### Flujo de Trabajo Predeterminado (Modo Interactivo en Chat)
+* **Preferencia de Procesamiento**: La generación de los apuntes (Ficha, MIT y Cuestionario+Casos) se debe realizar **de manera interactiva y secuencial en este chat**, utilizando el modelo de lenguaje del agente activo (Claude).
+* **Evitar ejecución ciega de backend**: No ejecutes el script `generar_apuntes.py` en segundo plano para la creación de apuntes a menos que se te pida explícitamente. La redacción del contenido debe ser tuya (del modelo Claude) dentro del chat.
+* **Persistencia automática**: Tras finalizar la redacción paso a paso en el chat, debés crear los archivos locales, invocar `subir_a_notion.py` para la carga y realizar el commit/push a Git.
+
 ### 1. Nomenclatura del Pipeline
 Debés adherir estrictamente a los siguientes términos en todas tus respuestas, logs y nombres de archivos:
 - **Auditoría de Transcripción**: Proceso externo (upstream) de verificación del audio.
