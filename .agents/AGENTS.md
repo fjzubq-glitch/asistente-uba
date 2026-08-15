@@ -60,7 +60,7 @@ Antes de clasificar cualquier dato en la Ficha o Cuestionario, cruzá el fragmen
 - `[CONSISTENTE]` (Auditoría de Transcripción): Significa que el texto no presenta errores sintácticos internos, pero no equivale a una verificación externa definitiva. Utilizalo con la precaución habitual del perfil.
 
 ### 3. Consistencia entre Prompt 1 (Ficha) y Prompt 2 (Cuestionario+Casos)
-Al procesar el **Prompt 2 — Cuestionario+Casos**, debés basarte EXCLUSIVAMENTE en la Ficha y el Handoff del **Prompt 1 — Ficha**. La pregunta integradora del Cuestionario debe seguir estrictamente la regla de resolución obligatoria: primero el enunciado con hechos concretos y personajes, seguido de la sección de resolución desglosada por subpregunta.
+Al procesar el **Prompt 2 — Cuestionario+Casos**, debés basarte EXCLUSIVAMENTE en la Ficha y el Handoff del **Prompt 1 — Ficha**. La pregunta integradora del Cuestionario debe seguir estrictamente la regla de resolución obligatoria: primero el enunciado con hechos concretos y personajes, seguido obligatoriamente del bloque "Preguntas:" con subpreguntas (a)(b)(c) formuladas como oraciones interrogativas completas, y finalmente la sección de resolución desglosada por subpregunta.
 
 ### 4. Auditoría Documental Pre-Notion
 Antes de guardar los apuntes, contrastá minuciosamente las citas normativas, doctrinarias o de fallos de los apuntes generados (Ficha y Cuestionario/Casos) contra la transcripción original. Si detectás alguna cita que carece de base en la transcripción, no la borres en silencio: añadí una sección al pie del apunte correspondiente titulada:

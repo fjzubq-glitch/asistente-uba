@@ -93,17 +93,22 @@ Generado con: [Modelo] · Modo: [Interactivo/Script]
 
 [Incluir tabla comparativa si hay distinciones D1/D2 en el Handoff]
 
-❓ Integradora. [2-4 subpreguntas encadenadas, con nombres de personajes y hechos concretos] · 🏆 Cae siempre
+❓ Integradora. [Enunciado: hechos concretos con nombres de personajes, situación fáctica completa] · 🏆 Cae siempre
+
+Preguntas:
+(a) [Pregunta 1, formulada como oración interrogativa completa]
+(b) [Pregunta 2, formulada como oración interrogativa completa]
+(c) [Pregunta 3 si existe, formulada como oración interrogativa completa]
 
 ► Intentá resolverlo antes de seguir.
 
 **Resolución**
-* (a) [Respuesta a subpregunta 1, 2-4 líneas]
-* (b) [Respuesta a subpregunta 2, 2-4 líneas]
-* (c) [Respuesta a subpregunta 3 si existe, 2-4 líneas]
+* (a) [Respuesta a la pregunta (a), 2-4 líneas]
+* (b) [Respuesta a la pregunta (b), 2-4 líneas]
+* (c) [Respuesta a la pregunta (c) si existe, 2-4 líneas]
 * ⚠️ Error típico: [error que comete un alumno que memorizó pero no integró los conceptos]
 
-Regla obligatoria: ninguna pregunta del Cuestionario, incluida la integradora, puede publicarse sin su resolución esperada. La integradora no es la excepción.
+Regla obligatoria: ninguna pregunta del Cuestionario, incluida la integradora, puede publicarse sin su resolución esperada. La integradora no es la excepción. El bloque "Preguntas:" de la pregunta integradora es de aparición forzosa y debe listar cada subpregunta (a)(b)(c) como oración interrogativa completa, en el mismo orden en que se responde en la Resolución. Prohibido saltar directo de los hechos a la Resolución sin mostrar las preguntas.
 
 ## 🎯 Top Pareto
 | Prioridad | Pregunta | Concepto clave |
