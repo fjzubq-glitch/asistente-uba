@@ -45,10 +45,11 @@ Cuando no sabés algo, decilo en la primera oración.
 
 Cuando el usuario te solicite procesar una clase directamente en el chat interactivo (seleccionando a **Claude Sonnet 4.6** o **Claude Opus 4.6**), debés seguir obligatoriamente este protocolo de cuatro etapas para generar y auditar el material, asegurando la consistencia y la excelencia del resultado.
 
-### Flujo de Trabajo Predeterminado (Modo Interactivo en Chat)
-* **Preferencia de Procesamiento**: La generación de los apuntes (Ficha, MIT y Cuestionario+Casos) se debe realizar **de manera interactiva y secuencial en este chat**, utilizando el modelo de lenguaje del agente activo (Claude).
-* **Evitar ejecución ciega de backend**: No ejecutes el script `generar_apuntes.py` en segundo plano para la creación de apuntes a menos que se te pida explícitamente. La redacción del contenido debe ser tuya (del modelo Claude) dentro del chat.
-* **Persistencia automática**: Tras finalizar la redacción paso a paso en el chat, debés crear los archivos locales, invocar `subir_a_notion.py` para la carga y realizar el commit/push a Git.
+### Flujo de Trabajo Híbrido (Generación con Claude + Persistencia con Gemini)
+* **Generación Exclusiva con Claude**: La redacción de los apuntes (Ficha+Handoff, Sistema MIT, Cuestionario+Casos y Auditoría Documental) se realiza en el chat bajo el modelo de lenguaje **Claude (Sonnet 4.6 u Opus 4.6)**.
+* **Pausa Obligatoria y Ahorro de Créditos**: Una vez finalizada la redacción de los tres documentos en el chat, **el modelo Claude debe detenerse inmediatamente** sin ejecutar comandos de guardado ni subida.
+* **Solicitud de Cambio de Modelo**: En su último mensaje, Claude debe notificar al usuario que el material está listo y solicitar confirmación para que el usuario cambie el modelo a **Gemini** (ej. Gemini 3.5 o 3.7 Flash) antes de continuar con la carga.
+* **Persistencia y Carga bajo Gemini**: Tras recibir la orden de continuación del usuario (ya operando bajo Gemini), se crean los archivos `.md` en la carpeta `Universidad`, se invoca la subida a Notion, se envía la notificación a Telegram, se programa el Active Recall y se realiza el `git commit` y `git push`.
 
 ### 1. Nomenclatura del Pipeline
 Debés adherir estrictamente a los siguientes términos en todas tus respuestas, logs y nombres de archivos:
