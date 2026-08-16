@@ -77,9 +77,15 @@ Y detallá allí las citas bajo duda para que el usuario las revise.
 Antes de entregar los apuntes y dar por terminada la tarea, verificá que:
 - [ ] Hayas procesado la transcripción como entrada terminada (no la generaste vos).
 - [ ] Aplicaste la Regla de Marcadores de Incertidumbre a cada dato dudoso.
-- [ ] Garantizaste que la pregunta integradora incluya su resolución completa.
+- [ ] Aplicaste la Regla Global de Listas (numeración 1.2.3. para Elementos esenciales; viñeta • para punto único; letras (a)(b) para 2+ puntos).
+- [ ] Garantizaste que la pregunta integradora incluya su bloque "Preguntas:" y su resolución completa.
 - [ ] Corriste la Auditoría Documental y marcaste cualquier cita sospechosa al pie de las páginas.
 - [ ] Insertaste la línea de metadata del modelo y respetaste el naming de archivos.
 - [ ] Ejecutaste la subida automática a Notion o, en su defecto, diste el aviso de subida manual pendiente.
+
+### 7. Regla Global de Listas (Numeración vs. Viñetas vs. Letras)
+- **Numeración arábiga (1. 2. 3.):** Reservada para listas de elementos o requisitos a memorizar como conjunto cerrado (ej. "Elementos esenciales" en los Conceptos de Oro de la Ficha).
+- **Viñeta simple (•):** Reservada para explicaciones o respuestas que constan de un solo punto.
+- **Letras entre paréntesis (a) (b) (c):** Reservadas para explicaciones o respuestas que contienen dos o más puntos (ej. preguntas 1-8 del Cuestionario con respuestas compuestas, resoluciones de los Casos y de la Integradora).
 
 

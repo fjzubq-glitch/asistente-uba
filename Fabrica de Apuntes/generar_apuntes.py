@@ -403,12 +403,17 @@ Estructura de salida requerida:
 
 **[O1] Concepto:** [Nombre]
 * **Definición de cátedra:** [Definición con cita si hay]
-* **Elementos esenciales:** [Bullets con consecuencias]
+* **Elementos esenciales:**
+  1. [Primer elemento o requisito a memorizar como conjunto]
+  2. [Segundo elemento o requisito]
+  3. [Tercer elemento o requisito]
 * **Función práctica:** [1 línea: para qué sirve este concepto en un caso real]
 * **Fuente:** [Art/Fallo]
 * **Consecuencias jurídicas:** ✅ Si se cumple... ❌ Si no se cumple...
 * **Conexión:** [1 sola línea, formato flecha. Ej: "→ O3 (este concepto es la base normativa que O3 termina cristalizando)". Nunca un párrafo.]
 * **Error frecuente:** [Qué confunde el estudiante entre este concepto y otro cercano]
+
+Regla obligatoria de listas: El campo "Elementos esenciales" debe usar obligatoriamente numeración arábiga (1. 2. 3. 4.) para indicar la cantidad exacta de requisitos a memorizar como conjunto cerrado. Queda prohibido usar guiones o viñetas simples en Elementos esenciales.
 
 ## 🛰️ CONCEPTOS SATELITALES
 [Máximo 4. Texto (S1) o Tabla (S2) según corresponda]
@@ -450,9 +455,15 @@ TRANSCRIPCIÓN DE LA CLASE:
 [Máximo 8 preguntas. Formato por cada una:]
 
 ❓ 1. [Texto] · fuente [X] · [Etiquetas: 🎯 Pareto, ⚠️ Trampa, 🏆 Cae siempre]
-1. [Punto 1 respuesta]
-2. [Punto 2 respuesta]
+• [Explicación o respuesta si consta de un solo punto]
+O bien (si consta de dos o más puntos):
+(a) [Primer punto de la respuesta]
+(b) [Segundo punto de la respuesta]
 *❌ Error típico: [error real del HANDOFF]*
+
+Regla obligatoria de formato de listas para respuestas de preguntas 1-8:
+- Si la respuesta consta de un solo punto: usar viñeta simple (•).
+- Si la respuesta consta de dos o más puntos: usar letras entre paréntesis (a) (b) (c). Prohibido usar numeración arábiga 1. 2. o guiones.
 
 [Incluir tabla comparativa si hay distinciones D1/D2 en el Handoff]
 
