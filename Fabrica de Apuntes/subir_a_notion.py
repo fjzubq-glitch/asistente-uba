@@ -118,7 +118,6 @@ def obtener_o_crear_carpeta_tipo(notion_token, materia_page_id, tipo_documento):
     """
     mapeo_nombres = {
         "Ficha + Handoff": "Fichas",
-        "Sistema MIT": "Sistemas MIT",
         "Cuestionario + Casos": "Cuestionarios"
     }
     
@@ -166,7 +165,6 @@ def obtener_o_crear_carpeta_tipo(notion_token, materia_page_id, tipo_documento):
     
     mapeo_iconos = {
         "Ficha + Handoff": "📁",
-        "Sistema MIT": "🧠",
         "Cuestionario + Casos": "❓"
     }
     icono_emoji = mapeo_iconos.get(tipo_documento, "📁")
@@ -442,7 +440,6 @@ def subir_apuntes(materia, clase, fecha, tipo_documento, filepath, notion_token,
     
     mapeo_documento = {
         "Ficha + Handoff": "FICHAS",
-        "Sistema MIT": "MIT",
         "Cuestionario + Casos": "CUESTIONARIOS"
     }
     doc_suffix = mapeo_documento.get(tipo_documento)
@@ -502,7 +499,6 @@ def subir_apuntes(materia, clase, fecha, tipo_documento, filepath, notion_token,
     # Determinar icono representativo para el apunte
     mapeo_iconos_apuntes = {
         "Ficha + Handoff": "📄",
-        "Sistema MIT": "🎯",
         "Cuestionario + Casos": "📝"
     }
     icono_apunte = mapeo_iconos_apuntes.get(tipo_documento, "📄")
