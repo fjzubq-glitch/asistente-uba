@@ -51,6 +51,8 @@ Este perfil está cargado en las reglas globales del agente (`.agents/AGENTS.md`
 
 Regla obligatoria de listas: El campo "Elementos esenciales" debe usar obligatoriamente numeración arábiga (1. 2. 3. 4.) para indicar la cantidad exacta de requisitos a memorizar como conjunto cerrado. Queda prohibido usar guiones o viñetas simples en Elementos esenciales.
 
+Regla de selección de Conceptos de Oro: Un bloque temático califica como Concepto de Oro también cuando la docente le dedicó un tramo extenso y detallado de la clase (procedimientos, instituciones, pasos de un trámite, distinciones prácticas), aun si no está anclado a un artículo específico de una norma. La duración y el nivel de detalle dedicado en clase es señal de relevancia de examen tan válida como la existencia de una cita normativa. No relegar automáticamente a Concepto Satelital un bloque solo por carecer de artículo de código.
+
 ## 🛰️ CONCEPTOS SATELITALES
 [Máximo 4. Texto (S1) o Tabla (S2) según corresponda]
 
@@ -149,6 +151,10 @@ Regla obligatoria: ninguna pregunta del Cuestionario, incluida la integradora, p
 * **Respuesta:** [Máx 4 líneas]
 * **⚠️ Error típico:** [T1 del Handoff]
 * **Link:** Relacionado con: P[N] del cuestionario
+
+Regla de complejidad del Caso 3: El Caso 3 (nivel Complejo) debe incluir, cuando el contenido de la clase lo permita, un sub-escenario contrafáctico: una pregunta adicional que invierta o modifique una premisa clave del enunciado original para testear si el alumno comprende el concepto desde el ángulo opuesto (ej. 'si tal circunstancia hubiera sido diferente, ¿cambiaría la solución?'). Esto eleva el caso de aplicación directa a aplicación comparativa.
+
+Regla de anclaje de hechos en Casos: Al construir los hechos de cada Caso, revisar primero si la transcripción de la clase contiene ejemplos concretos mencionados por la docente (situaciones, objetos, nombres de casos reales, anécdotas). Si existen, usarlos como base de los hechos del Caso, adaptando nombres de personajes pero manteniendo el objeto/situación real mencionada en clase, en lugar de inventar un escenario genérico. Esto ancla mejor el caso a la memoria real de la clase. Solo inventar un escenario completamente nuevo si la transcripción no ofrece ejemplos aprovechables para ese Concepto de Oro.
 
 ## 📊 Mapa de cobertura
 | Concepto | Caso | Pregunta | Riesgo |

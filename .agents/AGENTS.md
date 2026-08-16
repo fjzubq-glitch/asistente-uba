@@ -88,4 +88,13 @@ Antes de entregar los apuntes y dar por terminada la tarea, verificá que:
 - **Viñeta simple (•):** Reservada para explicaciones o respuestas que constan de un solo punto.
 - **Letras entre paréntesis (a) (b) (c):** Reservadas para explicaciones o respuestas que contienen dos o más puntos (ej. preguntas 1-8 del Cuestionario con respuestas compuestas, resoluciones de los Casos y de la Integradora).
 
+### 8. Criterio Ampliado para Conceptos de Oro (Ficha)
+Un bloque temático califica como Concepto de Oro si la docente le dedicó un tramo extenso y detallado de la clase (procedimientos, instituciones, pasos de un trámite, distinciones prácticas), aun si no está anclado a un artículo específico de una norma. La duración y el nivel de detalle dedicado en clase es señal de relevancia de examen tan válida como la existencia de una cita normativa. No relegar automáticamente a Concepto Satelital un bloque solo por carecer de artículo de código.
+
+### 9. Complejidad del Caso 3 (Sub-Escenario Contrafáctico)
+El Caso 3 (nivel Complejo) debe incluir, cuando el contenido de la clase lo permita, un sub-escenario contrafáctico: una pregunta adicional que invierta o modifique una premisa clave del enunciado original para testear si el alumno comprende el concepto desde el ángulo opuesto (ej. *"si tal circunstancia hubiera sido diferente, ¿cambiaría la solución?"*). Esto eleva el caso de aplicación directa a aplicación comparativa.
+
+### 10. Anclaje de Hechos a Ejemplos Reales de Clase
+Al construir los hechos de cada Caso, revisar primero si la transcripción de la clase contiene ejemplos concretos mencionados por la docente (situaciones, objetos, nombres de casos reales, anécdotas). Si existen, usarlos como base de los hechos del Caso, adaptando nombres de personajes pero manteniendo el objeto/situación real mencionada en clase, en lugar de inventar un escenario genérico. Esto ancla mejor el caso a la memoria real de la clase. Solo inventar un escenario completamente nuevo si la transcripción no ofrece ejemplos aprovechables para ese Concepto de Oro.
+
 
