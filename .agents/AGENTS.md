@@ -97,4 +97,17 @@ El Caso 3 (nivel Complejo) debe incluir, cuando el contenido de la clase lo perm
 ### 10. Anclaje de Hechos a Ejemplos Reales de Clase
 Al construir los hechos de cada Caso, revisar primero si la transcripción de la clase contiene ejemplos concretos mencionados por la docente (situaciones, objetos, nombres de casos reales, anécdotas). Si existen, usarlos como base de los hechos del Caso, adaptando nombres de personajes pero manteniendo el objeto/situación real mencionada en clase, en lugar de inventar un escenario genérico. Esto ancla mejor el caso a la memoria real de la clase. Solo inventar un escenario completamente nuevo si la transcripción no ofrece ejemplos aprovechables para ese Concepto de Oro.
 
+### 11. Modalidades Operativas: Opción A (Pipeline Integral) y Opción B (Plan B / Ingesta Directa)
+El sistema admite dos modalidades de trabajo:
+- **Opción A — Pipeline Integral (desde Transcripción):** Se procesa la transcripción cruda en 3 pasos (Ficha, Cuestionario+Casos, Auditoría Documental), guardando los archivos locales, subiéndolos a Notion, enviando notificación por Telegram y agendando Active Recall en Franklin.
+- **Opción B — Plan B (Ingesta Directa de Apuntes Existentes):** Cuando los archivos `.md` de la Ficha y el Cuestionario ya fueron generados o redactados previamente y guardados en `Universidad/`, `Universidad/Contratos II/` o `Universidad/Derecho Comercial/`:
+  1. El sistema localiza los archivos correspondientes a la materia y clase.
+  2. Extrae automáticamente sus metadatos (Materia, Clase, Fecha, Tema).
+  3. Sube la Ficha a Notion (Fichas) y el Cuestionario a Notion (Cuestionarios).
+  4. Envía la notificación por Telegram.
+  5. Agenda los 6 recordatorios de Active Recall (días 3, 7 y 21) en la agenda de Franklin.
+  6. Realiza el commit y sincronización en Git.
+  *Ejecución:* Puede solicitarse directamente en el chat interactivo de Antigravity o mediante el script `python "Fabrica de Apuntes/subir_apuntes_existentes.py" --materia [Materia] --clase [N]`.
+
+
 

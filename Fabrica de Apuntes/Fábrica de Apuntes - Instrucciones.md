@@ -202,3 +202,26 @@ Antes de clasificar cualquier dato en la Ficha o Cuestionario, cruzá el fragmen
 - `[inaudible]`: El tramo no es recuperable. Nunca infieras o inventes contenido para rellenarlo. Si coincide con una definición clave, reportala en el Handoff como vacío de información.
 - `[REVISAR]` (Auditoría de Transcripción): Tratalo bajo el mismo criterio que los marcadores dudosos.
 - `[CONSISTENTE]` (Auditoría de Transcripción): Significa que el texto no presenta errores sintácticos internos, pero no equivale a una verificación externa definitiva. Utilizalo con la precaución habitual del perfil.
+
+---
+
+## 🔀 MODALIDADES OPERATIVAS: OPCIÓN A Y OPCIÓN B (PLAN B)
+
+### Opción A — Pipeline de Generación Integral (desde Transcripción)
+Se ingresa la transcripción de la clase en el chat o mediante archivo `.txt`:
+1. **Paso 1:** Generación de Ficha académica (con Módulo 3 Mapa de Conexiones y Módulo 4 Tabla de Alertas) y Handoff.
+2. **Paso 2:** Generación de Cuestionario (1-8 y Pregunta Integradora completa) y 3 Casos prácticos.
+3. **Paso 3:** Auditoría Documental Pre-Notion.
+4. **Integración:** Subida automática a Notion, alerta en Telegram y programación de Active Recall en Franklin.
+*Comando de consola:* `python "Fabrica de Apuntes/generar_apuntes.py" [ruta_transcripcion.txt] --materia [Materia] --clase [N] --fecha [DD-MM-AA] --tema [Tema]`
+
+### Opción B — Plan B (Ingesta Directa de Apuntes Existentes)
+Cuando los apuntes ya fueron redactados o generados externamente (ej. en Claude Web) y se guardan en las carpetas `Universidad/`, `Universidad/Contratos II/` o `Universidad/Derecho Comercial/`:
+1. **Detección:** El sistema localiza los archivos `.md` de Ficha y Cuestionario/Casos.
+2. **Metadatos:** Extrae automáticamente Materia, Clase, Fecha y Tema.
+3. **Subida a Notion:** Carga la Ficha en la carpeta de Fichas y el Cuestionario en la de Cuestionarios.
+4. **Notificación Telegram:** Emite la alerta de clase procesada.
+5. **Active Recall:** Agenda los 6 recordatorios (días 3, 7 y 21) en la base de datos de Franklin en Notion.
+6. **Git:** Registra los cambios y sincroniza el repositorio remoto.
+*Comando de consola:* `python "Fabrica de Apuntes/subir_apuntes_existentes.py" --materia "Derecho Comercial" --clase 2` (o con `--auto`).
+
