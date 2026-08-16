@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import argparse
+import json
 import requests
 from dotenv import load_dotenv
 from requests.adapters import HTTPAdapter
@@ -138,23 +139,42 @@ def enviar_notificacion_telegram(materia, clase, fecha, tema):
     if not telegram_token:
         print("[WARN] No se encontró la variable de entorno TELEGRAM_TOKEN. Omisión de notificación.")
         return False
-        
-    # 1. Intentar obtener el chat ID desde las variables de entorno
+
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    # Reunir todos los chats: TELEGRAM_CHAT_ID + chats.json (multi-usuario del bot)
+    chats = []
     chat_id = os.environ.get("TELEGRAM_CHAT_ID")
-    
-    # 2. Si no está en el .env, intentar leer de la persistencia local del bot
-    if not chat_id:
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if chat_id and chat_id != "0" and chat_id not in chats:
+        chats.append(chat_id)
+
+    chats_json_path = os.path.join(base_dir, "Bot Telegram", "chats.json")
+    if os.path.exists(chats_json_path):
+        try:
+            with open(chats_json_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            if isinstance(data, list):
+                for c in data:
+                    cs = str(c).strip()
+                    if cs and cs != "0" and cs not in chats:
+                        chats.append(cs)
+        except Exception as e:
+            print(f"[WARN] Error al leer chats.json: {e}")
+
+    # Fallback al archivo escalar legacy si no hay ningún chat todavía
+    if not chats:
         chat_id_path = os.path.join(base_dir, "Bot Telegram", "chat_id.txt")
         if os.path.exists(chat_id_path):
             try:
                 with open(chat_id_path, "r", encoding="utf-8") as f:
                     chat_id = f.read().strip()
+                if chat_id and chat_id != "0":
+                    chats.append(chat_id)
             except Exception as e:
                 print(f"[WARN] Error al leer el chat_id desde {chat_id_path}: {e}")
-            
-    if not chat_id or chat_id == "0":
-        print("[WARN] No se encontró un Chat ID válido (TELEGRAM_CHAT_ID en .env o chat_id.txt). Omisión de notificación.")
+
+    if not chats:
+        print("[WARN] No se encontró ningún Chat ID válido (TELEGRAM_CHAT_ID, chats.json o chat_id.txt). Omisión de notificación.")
         return False
 
     mensaje = (
@@ -168,22 +188,20 @@ def enviar_notificacion_telegram(materia, clase, fecha, tema):
         f"1. Ficha + Handoff (con Mapa de Conexiones y Tabla de Alertas)\n"
         f"2. Cuestionario + Casos (con integradora resuelta)\n"
     )
-    
+
     url = f"https://api.telegram.org/bot{telegram_token}/sendMessage"
-    payload = {
-        "chat_id": chat_id,
-        "text": mensaje,
-        "parse_mode": "Markdown"
-    }
-    
-    try:
-        r = session.post(url, json=payload, timeout=15)
-        r.raise_for_status()
-        print("[SUCCESS] Notificación enviada con éxito por Telegram.")
-        return True
-    except Exception as e:
-        print(f"[WARN] No se pudo enviar la notificación por Telegram: {e}")
-        return False
+
+    exito_total = True
+    for chat in chats:
+        try:
+            r = session.post(url, json={"chat_id": chat, "text": mensaje, "parse_mode": "Markdown"}, timeout=15)
+            r.raise_for_status()
+            message_id = r.json().get("result", {}).get("message_id")
+            print(f"[SUCCESS] Notificación enviada a chat {chat} (message_id {message_id}).")
+        except Exception as e:
+            exito_total = False
+            print(f"[WARN] No se pudo enviar la notificación al chat {chat}: {e}")
+    return exito_total
 
 
 def agendar_active_recall_notion(asunto, fecha_iso, notion_token, database_id):
