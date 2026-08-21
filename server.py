@@ -353,8 +353,14 @@ def revisar_alarmas_uba():
 # BOT 2: ASISTENTE PARA VERO (GOOGLE CALENDAR & PROMOS)
 # ==========================================
 sys.path.append(VERO_DIR)
-import google_calendar as gc
-import buscador_ofertas as bo
+try:
+    import google_calendar as gc
+    import buscador_ofertas as bo
+    VEROS_MODULOS_OK = True
+except Exception:
+    gc = None
+    bo = None
+    VEROS_MODULOS_OK = False
 
 TELEGRAM_TOKEN_VERO = os.environ.get("VERO_TELEGRAM_TOKEN") or os.environ.get("TELEGRAM_TOKEN")
 
@@ -425,6 +431,8 @@ def cargar_chat_id_vero():
 
 def ejecutar_ciclo_vero():
     """Un ciclo de alarmas del Asistente Vero. Idempotente, apto para hilo o cronjob."""
+    if not VEROS_MODULOS_OK:
+        return
     global MI_CHAT_ID_VERO
     send_url_vero = f"https://api.telegram.org/bot{TELEGRAM_TOKEN_VERO}/sendMessage"
     MI_CHAT_ID_VERO = cargar_chat_id_vero()
@@ -566,6 +574,8 @@ REGLAS:
 @app.route(f"/{TELEGRAM_TOKEN_VERO}", methods=["POST"])
 def webhook_handler_vero():
     asegurar_hilos_alarmas()
+    if not VEROS_MODULOS_OK:
+        return "OK", 200
     try:
         update = request.get_json()
         if not update:
