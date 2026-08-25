@@ -1,80 +1,96 @@
-📄 PASO 2A — CUESTIONARIO · Pegar en Notion: **Cuestionario_ContratosClase324-08-26**
+📄 **PASO 2A — CUESTIONARIO · Pegar en Notion: Cuestionario_Contratos_Clase3_24-08-26**
 
 ---
 
-❓ **1.** ¿Cuáles son los tipos de leasing previstos en el art. 1231 CCC (según lo visto en clase) y qué distingue al leasing operativo del financiero? · fuente A1 · 🎯 Pareto
+❓ **1.** ¿Qué distingue al leasing financiero del leasing operativo, y dónde encaja el leaseback en esa clasificación? · fuente O1 · Etiquetas: 🎯 Pareto
 
 - **Resolución**
-    - (a) Tipos de leasing:
-        1. Financiero (incs. a, b, c): el dador adquiere el bien indicado por el tomador, con variantes según quién asume la garantía o quién gestiona la compra → el dador actúa como intermediario financiero frente a un tercero vendedor.
-        2. Operativo (inc. d): el bien ya es propiedad previa del dador → no hay intermediación en una compraventa a un tercero.
-        3. Leaseback (inc. e): el tomador vende su propio bien al dador, quien se lo devuelve en leasing → sirve como mecanismo de autofinanciación.
-        4. Por mandato (inc. f): el dador confiere el leasing sin tener el bien en su cabeza, por ejemplo mediante un mandatario.
-    - (b) La distinción clave entre operativo y financiero es que en el operativo el dador ya es dueño del bien y no gestiona ninguna compra a un tercero, mientras que en el financiero el dador adquiere el bien específicamente porque el tomador se lo indicó, actuando como intermediario de una operación de compraventa.
-- ❌ Error típico: tratar el leaseback como una simple compraventa seguida de un alquiler, sin advertir que es una figura autónoma del art. 1231 con función de autofinanciamiento.
+    - (a) En el leasing financiero (incisos a, b y c del art. 1231 CCCN) el dador adquiere el bien de un tercero por indicación, especificación o sustitución del tomador en una compraventa que este ya había celebrado.
+    - (b) En el leasing operativo (inciso d) el bien ya es propiedad del dador antes de vincularse con el tomador: no hay ninguna gestión de compra a un tercero.
+    - (c) El leaseback (inciso e) es un tercer género: el tomador vende su propio bien al dador, que se lo entrega nuevamente en leasing — funciona como mecanismo de autofinanciamiento, no de adquisición de un bien nuevo.
 
-❓ **2.** ¿Cómo se rige el contrato de leasing frente al concurso o la quiebra de una de las partes? · fuente A2 · ⚠️ Trampa
-
-- **Resolución**
-    - El contrato de leasing no se suspende por el concurso o la quiebra de ninguna de las partes: continúa su curso, y las cuotas pueden ingresar a la masa concursal conforme a los privilegios que rijan en la causa. Este supuesto no está regulado en el CCC, sino específicamente en la Ley de Leasing 25.248.
-- ❌ Error típico: buscar la respuesta en los arts. 1227-1250 CCC, cuando el régimen concursal del leasing tiene fuente normativa distinta (Ley 25.248).
-
-❓ **3.** En materia de incumplimiento del canon de leasing, ¿qué diferencia hay entre la cláusula penal moratoria y la compensatoria? · fuente A1 · 🎯 Pareto
-
-- **Resolución**
-    - (a) Cláusula penal moratoria: sanciona el incumplimiento de una obligación concreta, indemnizando únicamente el retraso en su cumplimiento.
-    - (b) Cláusula penal compensatoria: abarca los daños y perjuicios futuros que se le reclamarán al deudor, no solo el retraso.
-    - (c) Aplicación al leasing: ante la mora del tomador (automática en todos los casos previstos), el dador puede rescindir, ejecutar las cuotas adeudadas y, según corresponda, reclamar la indemnización de perjuicios se ejerza o no la cláusula penal pactada.
-- ❌ Error típico: asumir que ambas cláusulas cubren lo mismo, cuando la moratoria se limita al retraso y la compensatoria absorbe los daños futuros.
-
-❓ **4.** ¿Quién responde por el riesgo o vicio de la cosa dada en leasing, y por qué? · fuente S1 · ⚠️ Trampa
-
-- **Resolución**
-    - Responde el tomador, aunque el dueño registral del bien sea el dador, porque la cosa riesgosa está bajo la guarda del tomador —es él quien tiene la disponibilidad material de la cosa—. El factor de atribución es objetivo (arts. 1243, 1757 y 1758 CCC, según lo referido en clase). Si el tomador subalquila el bien a un tercero, ambos pueden resultar responsables del resarcimiento.
-- ❌ Error típico: atribuir la responsabilidad al dador por figurar como titular registral del bien.
-
-❓ **5.** ¿Cuál es la naturaleza jurídica del corredor y qué distinción existe entre los arts. 1391 y 1392 CCC respecto de su deber de confidencialidad? · fuente A3 · 🎯 Pareto
-
-- **Resolución**
-    - (a) Naturaleza del corredor: actúa por cuenta, nombre y riesgo propio, sin relación de subordinación jurídica ni de representación con las partes; no es un mandatario, sino un intermediario que acerca oferta y demanda (art. 1345 CCC).
-    - (b) Distinción arts. 1391/1392: el art. 1391 impone actuar de buena fe durante las tratativas preliminares, con factor de atribución subjetivo; el art. 1392 regula específicamente el deber de confidencialidad, que —al tratarse de una obligación de no hacer— responde a un factor de atribución objetivo.
-- ❌ Error típico: confundir al corredor con un mandatario, o aplicar un único factor de atribución (subjetivo u objetivo) indistintamente a los arts. 1391 y 1392.
-
-❓ **6.** Si interviene un solo corredor en la negociación, ¿cómo responden las partes por la comisión? · fuente A3 · ⚠️ Trampa
-
-- **Resolución**
-    - Todas las partes le deben comisión al corredor, salvo pacto en contrario o protesta de alguna de ellas según las circunstancias, pero no existe solidaridad entre ellas frente al corredor. Se trata de obligaciones concurrentes: la comisión se le paga a partir de un mismo crédito, aunque provenga de distintos obligados (art. 1351 CCC, según lo visto en clase). Distinto es el caso en que interviene un corredor por cada parte, donde cada uno solo cobra a su propio comitente.
-- ❌ Error típico: calificar la obligación de pagar comisión como solidaria entre las partes, cuando en realidad es concurrente.
-
-❓ **7.** En el contrato de concesión, ¿es la exclusividad un elemento esencial, y cuál es el plazo mínimo aplicable? · fuente A4 · 🏆 Cae siempre
-
-- **Resolución**
-    - (a) Exclusividad: no es un elemento típico ni esencial de la concesión (a diferencia de la agencia), aunque puede pactarse referida al territorio. El art. 1503 inc. b prevé una excepción: el concesionario puede reservarse la venta a través de otra sociedad tratándose de ventas dirigidas o clientes con condiciones especiales.
-    - (b) Plazo mínimo: la regla general es de 4 años, incluso si se pactó un plazo determinado menor. La excepción es de 2 años, aplicable únicamente cuando es el concedente quien pone la estructura organizativa y empresarial para que el concesionario opere.
-- ❌ Error típico: aplicar la excepción de 2 años sin verificar previamente quién aportó la estructura organizativa.
-
-❓ **8.** ¿En qué se diferencian el contrato de concesión y el contrato de distribución? · fuente A4/A5 · 🎯 Pareto
-
-- **Resolución**
-    - (a) Tipificación: la concesión está regulada en los arts. 1502 a 1511 CCC; la distribución es atípica y se rige por las normas de la concesión en lo pertinente (art. 1511 inc. b).
-    - (b) Autonomía: el distribuidor tiene mayor autonomía que el concesionario, no está sometido a las decisiones del distribuido de la misma manera.
-    - (c) Objeto: la distribución recae típicamente sobre mercaderías fungibles (alimentos, agroquímicos), mientras que la concesión no se limita a ese tipo de bienes.
-    - (d) Responsabilidad frente al consumidor: en la distribución, el art. 40 de la Ley 24.240 establece responsabilidad solidaria del distribuidor por daños, con factor de atribución generalmente objetivo (aunque puede ser subjetivo según se trate de obligaciones de medios o de resultado).
-- ❌ Error típico: tratar concesión y distribución como sinónimos, ignorando que la segunda no está tipificada y remite a la primera solo "en lo pertinente".
+    ❌ Error típico: tratar al leaseback como una simple compraventa, sin advertir que el vendedor conserva el uso del bien como tomador.
 
 ---
 
-❓ **Integradora.** Ricardo, abogado independiente, había adquirido camionetas de alta gama para el ejercicio de su actividad profesional. Tiempo después, vendió su opción de compra sobre esos vehículos a los tenedores de un fideicomiso, quienes se los entregaron nuevamente en leasing. Ricardo continúa usando y gozando de las camionetas mientras paga el canon correspondiente. · 🏆 Cae siempre
+❓ **2.** Si un tomador de leasing sobre un inmueble adeuda un cuarto o más pero menos de tres cuartas partes del canon pactado, ¿qué procedimiento debe seguir el dador antes de poder pedir el desalojo? · fuente S3 · Etiquetas: 🏆 Cae siempre
 
-Preguntas: (a) ¿Qué tipo de leasing se configura en la operación descripta? (b) ¿Qué particularidad impositiva y económica presenta esta modalidad frente a una venta común? (c) Si Ricardo deja de pagar el canon adeudando menos de un cuarto de lo pactado, ¿qué procedimiento corresponde seguir?
+- **Resolución**
+    - (a) La mora es automática, sin necesidad de interpelación previa para que se produzca.
+    - (b) El dador debe intimar al tomador al pago de los períodos adeudados con más sus intereses, otorgándole un plazo no menor a 60 días desde la notificación.
+    - (c) Vencido ese plazo sin que se verifique el pago, recién ahí el dador puede demandar el desalojo, dando previamente vista al tomador por 5 días.
+
+    ❌ Error típico: aplicar directamente el tramo de "menos de un cuarto" (vista de 5 días sin intimación previa de 60 días) a un tomador que ya pagó más de un cuarto del canon.
+
+---
+
+❓ **3.** Si las partes no pactaron el monto de la comisión del corredor, ¿cómo se determina? · fuente O2
+
+- **Resolución**
+    - Se aplica el uso del lugar de celebración del contrato; en su defecto, el uso del lugar donde el corredor principalmente realizó su cometido; y si tampoco existe un uso determinado, la fija el juez.
+
+    ❌ Error típico: creer que, a falta de pacto, el corredor no tiene derecho a cobrar nada.
+
+---
+
+❓ **4.** ¿Por qué el incumplimiento del deber de confidencialidad del corredor genera responsabilidad objetiva, y no exige probar culpa o dolo? · fuente S4 · Etiquetas: ⚠️ Trampa
+
+- **Resolución**
+    - No revelar información confidencial conocida por su intervención es una obligación de no hacer, y el régimen de las obligaciones de no hacer responde a un factor de atribución objetivo. Basta con que el corredor haya revelado o usado indebidamente la información para que responda, sin necesidad de indagar su intención.
+
+    ❌ Error típico: citar los arts. "1391" y "1392" CCCN para este deber (como aparece en la transcripción de la clase) — esos artículos pertenecen al capítulo de contratos bancarios; la numeración correcta es arts. 991 (buena fe, factor subjetivo) y 992 (confidencialidad, factor objetivo).
+
+---
+
+❓ **5.** ¿Es la exclusividad territorial un elemento esencial del contrato de concesión? · fuente O3 · Etiquetas: ⚠️ Trampa
+
+- **Resolución**
+    - No. Es un elemento natural, no esencial: admite pacto en contrario (arts. 1503, 1504 inc. b y 1505 inc. b). De existir, suele referirse al territorio, pero incluso así el concedente puede reservarse ventas directas a clientes especiales, como el Estado, diplomáticos o compradores de grandes volúmenes anuales.
+
+    ❌ Error típico: T4 — dar por sentado que toda concesión es exclusiva por su sola naturaleza jurídica.
+
+---
+
+❓ **6.** ¿Por qué no es técnicamente correcto llamar "comisión" a la retribución del concesionario? · fuente O3, D2 · Etiquetas: ⚠️ Trampa
+
+- **Resolución**
+    - El concesionario actúa a nombre y por cuenta propia, comprando y revendiendo mercaderías a riesgo propio; no media un negocio ajeno como el corredor. Por eso su ganancia es, en principio, la diferencia entre el precio que paga al concedente y el que obtiene en la reventa ("margen comercial"), aunque el art. 1507 CCCN también admite que se pacte como comisión, margen sobre unidades o cantidades fijas.
+
+    ❌ Error típico: T1 — confundir esta retribución con la comisión del art. 1350 CCCN, que corresponde específicamente al corredor.
+
+---
+
+❓ **7.** ¿Cuál es la diferencia esencial entre el contrato de concesión y el de distribución? · fuente O4, D3
+
+- **Resolución**
+    - (a) La concesión está tipificada en el CCCN (arts. 1502 a 1511); la distribución es un contrato atípico, sin regulación propia, cuyo concepto fue moldeado por doctrina y jurisprudencia.
+    - (b) El distribuidor tiene mayor autonomía frente al distribuido que el concesionario frente al concedente.
+    - (c) La actividad del distribuidor no comprende las obligaciones de posventa del producto, a diferencia de la del concesionario.
+
+    ❌ Error típico: T7 — atribuirle a la distribución reglas propias de plazo o extinción, cuando en realidad se toman prestadas de la concesión por remisión del art. 1511 inc. b.
+
+---
+
+❓ **8.** Si el tomador de un leasing entra en concurso preventivo, ¿qué ocurre con el contrato? · fuente S2 · Etiquetas: 🏆 Cae siempre / ⚠️ Trampa
+
+- **Resolución**
+    - El CCCN no regula expresamente los efectos del concurso o la quiebra sobre el leasing; la regla práctica es que el contrato sigue su curso pese al concurso de cualquiera de las partes. El supuesto específico de la quiebra está regulado en la Ley de Leasing 25.248, no en el Código.
+
+    ❌ Error típico: T5 — suponer que la apertura del concurso resuelve automáticamente el contrato o habilita al dador a recuperar el bien de inmediato.
+
+---
+
+❓ **Integradora.** Mediante la intervención del corredor Bruno Ferretti, las empresas Aránzazu S.A. (vendedora) y Kowalski Hnos. S.A. (compradora) negocian la venta de un inmueble industrial. En el curso de la negociación, Ferretti toma conocimiento confidencial de que Aránzazu S.A. atraviesa una caída de rentabilidad y necesita vender con urgencia. Se lo revela a Kowalski Hnos. S.A., esperando que esta le encargue futuros negocios de intermediación. · 🏆 Cae siempre
+
+Preguntas: (a) ¿Qué deber del corredor vulnera Ferretti con esa revelación, y en qué artículo del CCCN está regulado correctamente? (b) ¿Qué tipo de obligación incumple y qué factor de atribución le resulta aplicable? (c) Si de esa revelación se deriva un perjuicio para Aránzazu S.A., ¿qué consecuencia jurídica puede seguirse para Ferretti?
 
 ► Intentá resolverlo antes de seguir.
 
 - **Resolución**
-    - (a) Se configura un leaseback (inc. e del art. 1231 CCC): el bien estaba en cabeza de Ricardo (tomador), quien se lo vendió al fideicomiso (dador), que se lo entregó nuevamente en leasing al mismo Ricardo.
-    - (b) Es un modo de autofinanciarse para generar caja: las cuotas que ingresan por leasing no tributan de la misma manera que la utilidad de una venta común, lo cual constituye la ventaja económica central de esta modalidad.
-    - (c) Al tratarse de bienes muebles y adeudarse menos de un cuarto del canon pactado, corresponde dar vista al dador (fideicomiso) por 5 días, operando la mora en forma automática; a partir de allí puede resolverse el contrato, reclamar daños y perjuicios y ejecutar el pago de las cuotas adeudadas con sus intereses.
-    - ⚠️ Error típico: el alumno que memorizó el leaseback como "venta con recompra" pero no integra que sigue siendo un leasing pleno, sujeto al mismo régimen de mora e incumplimiento que cualquier otro leasing de bienes muebles.
+    - (a) Vulnera el deber de confidencialidad del corredor, regulado en el art. 992 CCCN (la transcripción de la clase citó por error los arts. 1391/1392, que en realidad pertenecen al capítulo de contratos bancarios).
+    - (b) Es una obligación de no hacer —no revelar ni usar en beneficio propio o ajeno la información confidencial conocida por su intervención— y ese tipo de obligación responde a un factor de atribución objetivo, sin necesidad de probar culpa o dolo de Ferretti.
+    - (c) Ferretti queda obligado a resarcir el daño causado a Aránzazu S.A. y puede además perder su derecho a cobrar la comisión pactada, dado que su conducta contraría los deberes que hacen a la imparcialidad de la mediación (arts. 1347 y 1348 CCCN).
+    - ⚠️ Error típico: creer que, para responsabilizar a Ferretti, hace falta demostrar que actuó con mala fe o intención de dañar — al tratarse de una obligación de no hacer con factor objetivo, ese análisis subjetivo es innecesario.
 
 ---
 
@@ -82,90 +98,97 @@ Preguntas: (a) ¿Qué tipo de leasing se configura en la operación descripta? (
 
 | Prioridad | Pregunta | Concepto clave |
 |---|---|---|
-| 🔴 Crítico | 2 | Régimen concursal del leasing en Ley 25.248, no en CCC |
-| 🔴 Crítico | 4 | Responsabilidad objetiva del tomador por riesgo/vicio de la cosa |
-| 🔴 Crítico | 5 | Distinción factor subjetivo (art. 1391) vs. objetivo (art. 1392) en confidencialidad del corredor |
-| 🟠 Alto | 1 | Tipos de leasing y distinción operativo/financiero |
-| 🟠 Alto | 6 | Comisión concurrente (no solidaria) con un solo corredor |
-| 🟠 Alto | 7 | Plazo mínimo de la concesión y su excepción |
-| 🟠 Alto | 8 | Concesión vs. distribución |
+| 🔴 Crítico | P2 | Tramos de mora del leasing inmobiliario (art. 1248) |
+| 🔴 Crítico | P4 | Confidencialidad del corredor como obligación de no hacer (art. 992) |
+| 🔴 Crítico | P6 | Comisión del corretaje vs. diferencia comercial de la concesión |
+| 🟠 Alto | P8 | Continuidad del leasing frente al concurso; reenvío a la Ley 25.248 |
+| 🟠 Alto | Integradora | Deber de confidencialidad aplicado a un caso concreto |
 
 ## 📜 Fuentes clave
 
 | Fuente | Qué establece | Por qué importa en examen |
 |---|---|---|
-| A1 — Arts. 1227-1250 CCC | Régimen general del leasing: tipos, registración, oponibilidad, incumplimiento | Es la fuente guía de toda la clase; base de O1 y O2 |
-| A2 — Ley 25.248 | Régimen específico del leasing en caso de concurso o quiebra | Punto de examen explícito señalado por la cátedra (T1) |
-| A3 — Arts. 1345-1356 CCC y Ley 25.028 | Corretaje: definición, recaudos, facultades, deberes, prohibiciones y comisión | Contiene la distinción de factores de atribución (T6) y el régimen de comisión (T3) |
-| A4 — Arts. 1502-1511 CCC | Concesión: exclusividad, plazos, retribución y extinción | Fija el plazo mínimo con su excepción (T4) y remite a la distribución |
-| A5 — Art. 40 Ley 24.240 | Responsabilidad solidaria del distribuidor frente al consumidor | Conecta la distribución con el régimen de consumidor (materia correlativa) |
+| Art. 1231 CCCN | Modalidades de elección del bien en el leasing | Base para distinguir financiero, operativo y leaseback |
+| Arts. 1248-1249 CCCN | Incumplimiento y ejecución del leasing | Esquemas distintos según el objeto sea inmueble o mueble; muy preguntado |
+| Art. 992 CCCN | Deber de confidencialidad en tratativas preliminares | Corrige el error de cita de la transcripción (1391/1392) y funda la responsabilidad objetiva del corredor |
+| Art. 1507 CCCN | Retribución del concesionario | Permite distinguir la "comisión" impropia de la concesión de la comisión técnica del corretaje |
+| Ley 25.248 | Régimen del leasing en caso de quiebra | Suple el silencio del CCCN sobre ese punto puntual |
+
+✅ Paso 2A completo.
 
 ---
 ---
 
-📄 PASO 2B — CASOS · Pegar en Notion: **Casos_ContratosClase324-08-26**
+📄 **PASO 2B — CASOS · Pegar en Notion: Casos_Contratos_Clase3_24-08-26**
 
 ---
 
-📌 **CASO 1 — El alquiler que termina siendo tuyo**
+📌 **CASO 1 — El galgo que volvió a casa**
+
 - **Nivel:** Simple
-- **Conceptos:** O1, O2
-- **⚖️ Fuentes:** A1
-- **Enunciado:** Martín alquila un automóvil 0km a la financiera AutoPlus, con opción de comprarlo al finalizar el plan. El canon total se divide en cuatro partes iguales. Al día de hoy, Martín pagó exactamente las tres cuartas partes del canon pactado.
+- **Conceptos:** O1
+- **⚖️ Fuentes:** art. 1231 inc. e) CCCN
+- **Enunciado:** Mariano Sasso es titular de una camioneta de alta gama que utiliza para su actividad profesional. Necesitado de liquidez, se la vende a Global Renting S.A. (empresa financiera) y esta, en el mismo acto, se la entrega nuevamente en leasing: Sasso sigue usando la camioneta mientras paga cánones mensuales, con la posibilidad de recomprarla al final del contrato.
 
 ► Intentá resolverlo antes de seguir.
 
 - **Resolución**
-    - Figura jurídica en juego: contrato de leasing (probablemente financiero, si AutoPlus adquirió el auto por indicación de Martín).
+    - Figura jurídica en juego: leaseback (*sale and leaseback*), art. 1231 inc. e) CCCN.
     - Razonamiento:
-        1. El leasing se estructura como un alquiler con entrega de la cosa, seguido de una eventual opción de compra a favor del tomador.
-        2. Por autonomía de la voluntad, las partes pueden convenir el momento de ejercicio de la opción, pero la práctica habitual la habilita al alcanzarse las tres cuartas partes del canon.
-        3. Alcanzado ese umbral, se actualiza el precio del bien y se habilita a Martín a ejercer la opción de compra; AutoPlus, como dador, responde frente a él en esa instancia.
-    - Respuesta: Martín, al haber pagado las tres cuartas partes del canon, ya se encuentra habilitado para ejercer la opción de compra sobre el vehículo, previa actualización del precio conforme a lo pactado.
-    - ⚠️ Error típico: creer que la opción de compra solo puede ejercerse al finalizar el 100% del canon, ignorando que la práctica habitual (y lo pactable por autonomía de la voluntad) la habilita en las tres cuartas partes.
-    - Link: Relacionado con P1 del cuestionario.
+        1. Sasso es titular de un bien propio que decide vender.
+        2. El comprador (Global Renting S.A.) es, a la vez, quien se lo entrega nuevamente en leasing.
+        3. Sasso, ahora tomador, conserva el uso del bien y paga cánones con miras a recomprarlo — esa es la estructura típica del inciso e) del art. 1231.
+        4. La operación funciona como mecanismo de autofinanciamiento para Sasso, que obtiene liquidez sin perder el uso de la camioneta.
+    - Respuesta: se configura un leaseback (art. 1231 inc. e CCCN). Sasso vende el bien a Global Renting S.A., que se lo entrega de nuevo en leasing, permitiéndole autofinanciarse sin perder el uso de la camioneta.
+    - ⚠️ Error típico: confundir esta operación con una simple compraventa, sin advertir que el vendedor conserva el uso del bien como tomador; o clasificarla como leasing financiero, que exige que el dador adquiera el bien de un tercero indicado por el tomador, no del propio tomador.
+    - Link: Relacionado con: P1 del cuestionario.
 
 ---
 
-📌 **CASO 2 — La financiera en concurso**
-- **Nivel:** Trampa (T1)
-- **Conceptos:** O2, T1
-- **⚖️ Fuentes:** A1, A2
-- **Enunciado:** Constructora Del Sur S.A. es dadora de un leasing sobre una retroexcavadora, cuya tomadora es la empresa Excavaciones Norte S.R.L. A mitad del plazo contractual, Constructora Del Sur S.A. se presenta en concurso preventivo. Excavaciones Norte S.R.L. sostiene que, al estar la dadora en concurso, el contrato de leasing queda automáticamente suspendido y ya no debe seguir pagando el canon.
+📌 **CASO 2 — La "comisión" de AutoValle**
+
+- **Nivel:** Trampa
+- **Conceptos:** T1, O2, O3, D2
+- **⚖️ Fuentes:** art. 1350 CCCN (comisión del corredor), art. 1507 CCCN (retribución del concesionario)
+- **Enunciado:** La concesionaria AutoValle comercializa vehículos de la marca Kestrel bajo un contrato de concesión con Kestrel Argentina S.A., y factura mensualmente a la terminal un monto en concepto de "comisión por unidad vendida". Al analizar el contrato para el final, un estudiante sostiene que esa comisión se rige por el art. 1350 CCCN, igual que la comisión de un corredor.
 
 ► Intentá resolverlo antes de seguir.
 
 - **Resolución**
-    - Figura jurídica en juego: efectos del leasing frente al concurso o quiebra de una de las partes.
+    - Figura jurídica en juego: retribución del concesionario (art. 1507 CCCN), distinta de la comisión del corretaje (art. 1350 CCCN).
     - Razonamiento:
-        1. El concurso preventivo de una de las partes de un contrato de leasing no suspende el contrato: este sigue su curso normal.
-        2. Este supuesto no está regulado en el Código Civil y Comercial, sino específicamente en la Ley de Leasing 25.248.
-        3. Las cuotas adeudadas por Excavaciones Norte S.R.L. pueden ingresar a la masa concursal de Constructora Del Sur S.A., pero conforme a los privilegios que rijan en esa causa, no de manera individual.
-    - Respuesta: la postura de Excavaciones Norte S.R.L. es incorrecta. El contrato de leasing no se suspende por el concurso de la dadora; Excavaciones Norte S.R.L. debe continuar pagando el canon, sin perjuicio de que esos fondos se integren a la masa concursal conforme a los privilegios aplicables.
-    - ⚠️ Error típico (T1): asumir que el régimen concursal del leasing está contenido en los arts. 1227-1250 CCC, cuando en realidad se rige por la Ley 25.248.
-    - Link: Relacionado con P2 del cuestionario.
+        1. El concesionario actúa a nombre y por cuenta propia, comprando y revendiendo los vehículos a su propio riesgo, no mediando un negocio ajeno como el corredor.
+        2. Por eso, aunque el contrato o la práctica comercial llamen "comisión" a esa suma, técnicamente se trata de la retribución del art. 1507 CCCN, que puede consistir en un margen, una comisión o cantidades fijas, según lo pactado con el concedente.
+        3. El art. 1350 CCCN regula específicamente la comisión del corredor, que media —sin representar ni asumir riesgo propio— entre dos partes que no son él mismo.
+        4. La denominación comercial "comisión" no cambia la naturaleza jurídica del vínculo: AutoValle no es un intermediario neutral, sino que compra y revende a su propio riesgo.
+    - Respuesta: el estudiante se equivoca. El nombre comercial "comisión" no determina el régimen aplicable: la retribución de AutoValle se rige por el art. 1507 CCCN, no por el art. 1350 CCCN, porque AutoValle actúa a riesgo propio y no media un negocio ajeno.
+    - ⚠️ Error típico: T1 — confundir la comisión del corretaje con la retribución/diferencia comercial de la concesión por el solo hecho de que ambas se llamen coloquialmente "comisión".
+    - Link: Relacionado con: P6 del cuestionario.
 
 ---
 
-📌 **CASO 3 — El leaseback y el imprevisto del fideicomiso**
-- **Nivel:** Complejo (interclase: leasing + responsabilidad civil)
-- **Conceptos:** O1, S1, T1, T2
-- **⚖️ Fuentes:** A1, A2
-- **Enunciado:** Ricardo, abogado independiente, había adquirido camionetas de alta gama para su actividad profesional. Vendió su opción de compra sobre esos vehículos a los tenedores de un fideicomiso (dador), quienes se los entregaron nuevamente en leasing, configurando un leaseback. Mientras Ricardo (tomador) sigue usando una de las camionetas para trasladar a un cliente, un desperfecto mecánico del vehículo provoca un accidente que lesiona a un tercero, quien pretende demandar al fideicomiso por ser el titular registral del bien.
+📌 **CASO 3 — El galpón de Herrajes del Sur**
+
+- **Nivel:** Complejo
+- **Conceptos:** O1, S2, S3, T5, T6
+- **⚖️ Fuentes:** arts. 1231 inc. d), 1237, 1243, 1248, 1249 CCCN; Ley 25.248
+- **Enunciado:** Herrajes del Sur SRL tomó en leasing operativo (art. 1231 inc. d) un galpón industrial de propiedad de Inverfin S.A., comprometiéndose a pagar 48 cánones mensuales. Tras abonar 20 cuotas, dejó de pagar durante cuatro meses consecutivos. Mientras Inverfin S.A. evaluaba iniciar el trámite de desalojo, Herrajes del Sur SRL se presentó en concurso preventivo. El abogado de Inverfin S.A. sostiene que, al haberse abierto el concurso, el contrato de leasing queda automáticamente resuelto y el galpón debe restituirse de inmediato.
 
 ► Intentá resolverlo antes de seguir.
 
 - **Resolución**
-    - Figura jurídica en juego: leaseback (art. 1231 inc. e) combinado con el régimen de responsabilidad civil objetiva por riesgo o vicio de la cosa en el leasing.
+    - Figura jurídica en juego: incumplimiento y mora en el leasing inmobiliario (art. 1248), y efecto del concurso preventivo sobre el contrato de leasing (S2).
     - Razonamiento:
-        1. La operación entre Ricardo y el fideicomiso configura un leaseback: Ricardo vendió el bien que ya tenía en su cabeza al fideicomiso, que se lo devolvió en leasing.
-        2. Pese a que el fideicomiso es el dueño registral del vehículo, el riesgo o vicio de la cosa recae sobre quien tiene su guarda —es decir, sobre Ricardo como tomador—, conforme al factor de atribución objetivo aplicable en la materia.
-        3. En consecuencia, el tercero lesionado debería dirigir su reclamo contra Ricardo (guardián de la cosa) y no —o no exclusivamente— contra el fideicomiso por su sola condición de titular registral.
-    - Respuesta: el reclamo del tercero contra el fideicomiso, fundado únicamente en su carácter de titular registral, no es la vía correcta; la responsabilidad objetiva por el riesgo o vicio de la cosa recae sobre Ricardo, en su calidad de tomador con la guarda del bien.
-    - ⚠️ Error típico (T2): atribuir la responsabilidad al dador por su condición de dueño registral, desconociendo que el criterio determinante es la guarda de la cosa.
-    - Link: Relacionado con P4 del cuestionario.
-    - 🔄 **Sub-escenario contrafáctico:** ¿Qué ocurriría si, antes del accidente, Ricardo hubiera sido declarado en quiebra?
-        - **Resolución contrafáctica:** la quiebra de Ricardo (tomador) no suspende el contrato de leasing, que continúa su curso conforme al régimen específico de la Ley 25.248 (no regulado de la misma manera en el CCC). La responsabilidad objetiva por riesgo o vicio de la cosa frente al tercero lesionado seguiría recayendo sobre quien detenta la guarda material del vehículo al momento del hecho, con independencia de la situación concursal de Ricardo; las cuotas de leasing pendientes, en cambio, sí integrarían la masa falencial conforme a los privilegios correspondientes.
+        1. Herrajes del Sur SRL pagó 20 de 48 cuotas (algo más de un cuarto, menos de tres cuartas partes), por lo que corresponde el tramo intermedio del art. 1248 inc. b): mora automática, con intimación por un plazo no menor a 60 días.
+        2. La apertura del concurso preventivo no extingue automáticamente el contrato de leasing: la regla general es que el contrato sigue su curso pese al concurso o la quiebra de cualquiera de las partes.
+        3. El régimen específico de los efectos de la quiebra sobre el leasing está en la Ley de Leasing 25.248, no en el CCCN, por lo que el abogado de Inverfin S.A. no puede fundar la resolución automática en el Código.
+        4. Inverfin S.A. debe seguir el procedimiento del art. 1248 (intimación, plazo, eventual desalojo) y, en paralelo, verificar su crédito por los cánones adeudados dentro del proceso concursal.
+    - Respuesta: el abogado de Inverfin S.A. está equivocado. El concurso preventivo no resuelve automáticamente el leasing; el contrato sigue vigente y Inverfin S.A. debe cumplir el procedimiento del art. 1248 inc. b) (intimación con plazo no menor a 60 días) antes de poder demandar el desalojo, además de verificar su crédito en el concurso.
+    - ⚠️ Error típico: T5 — suponer que el concurso o la quiebra de una de las partes extingue automáticamente el leasing, cuando la regla es la continuidad del contrato, con reenvío a la Ley 25.248 para los efectos específicos de la quiebra.
+    - Link: Relacionado con: P8 del cuestionario.
+    - 🔄 Sub-escenario contrafáctico: ¿Cómo cambiaría el análisis si el galpón fuera reemplazado por una flota de camiones (bien mueble) en las mismas condiciones de mora?
+
+        Resolución contrafáctica: si el objeto fuera un bien mueble, no correspondería el esquema escalonado del art. 1248 (pensado para inmuebles), sino el del art. 1249: ante la mora automática, Inverfin S.A. podría optar directamente por el secuestro del bien —previa interpelación por un plazo no menor a cinco días— o por la vía ejecutiva para el cobro del canon adeudado, sin el tramo de intimación de 60 días propio de los inmuebles. El concurso preventivo de Herrajes del Sur SRL seguiría sin resolver automáticamente el contrato, por la misma razón de S2.
 
 ---
 
@@ -173,27 +196,27 @@ Preguntas: (a) ¿Qué tipo de leasing se configura en la operación descripta? (
 
 | Concepto | Caso | Pregunta | Riesgo |
 |---|---|---|---|
-| O1 (Leasing – tipos) | Caso 1, Caso 3 | P1, Integradora | Alto |
-| O2 (Efectos del leasing) | Caso 1, Caso 2 | P2, P3 | Alto |
-| O3 (Corretaje) | — | P5, P6 | Medio |
-| O4 (Concesión) | — | P7, P8 | Medio |
-| S1 (Responsabilidad civil en leasing) | Caso 3 | P4 | Alto |
-| S2 (Distribución) | — | P8 | Bajo |
-| S3 (Antecedente histórico del leasing) | — | — | Bajo |
-| S4 (Cláusula penal moratoria/compensatoria) | — | P3 | Medio |
-| D1 (Tipos de leasing entre sí) | Caso 1, Caso 3 | P1 | Alto |
-| D2 (Corretaje vs. mandato) | — | P5 | Medio |
-| D3 (Concesión vs. distribución) | — | P8 | Medio |
-| D4 (Cláusula penal moratoria vs. compensatoria) | — | P3 | Medio |
-| D5 (Art. 1391 vs. 1392 CCC) | — | P5 | Alto |
-| T1 (Concurso/quiebra – Ley 25.248) | Caso 2, Caso 3 | P2 | Alto |
-| T2 (Responsabilidad objetiva pese a titularidad registral) | Caso 3 | P4 | Alto |
-| T3 (Comisión concurrente, no solidaria) | — | P6 | Medio |
-| T4 (Excepción de 2 años en plazo de concesión) | — | P7 | Medio |
-| T5 (Corredor no es mandatario) | — | P5 | Bajo |
-| T6 (Factor subjetivo vs. objetivo, arts. 1391/1392) | — | P5 | Alto |
-| T7 (Concesión ≠ distribución) | — | P8 | Medio |
+| O1 (Leasing) | Caso 1 | P1 | Alto |
+| O2 (Corretaje) | — | P3 | Medio |
+| O3 (Concesión) | Caso 2 | P5, P6 | Alto |
+| O4 (Distribución) | — | P7 | Medio |
+| S1 (Forma e inscripción) | — | — | Bajo |
+| S2 (Oponibilidad/concurso/resp. civil) | Caso 3 | P8 | Alto |
+| S3 (Incumplimiento y mora) | Caso 3 | P2 | Alto |
+| S4 (Confidencialidad del corredor) | — | P4, Integradora | Alto |
+| D1 (Tipos de leasing) | Caso 1 | P1 | Alto |
+| D2 (Comisión vs. diferencia comercial) | Caso 2 | P6 | Alto |
+| D3 (Concesión vs. distribución) | — | P7 | Medio |
+| D4 (Factor subjetivo vs. objetivo) | — | P4, Integradora | Alto |
+| T1 (Comisión ≠ retribución) | Caso 2 | P6 | Alto |
+| T2 (Cita errónea 1391/1392) | — | P4, Integradora | Alto |
+| T3 (Art. 1237 vs. 1247) | — | — | Medio |
+| T4 (Exclusividad no esencial) | — | P5 | Medio |
+| T5 (Concurso no extingue el leasing) | Caso 3 | P8 | Alto |
+| T6 (Mora inmueble vs. mueble) | Caso 3 (contrafáctico) | P2 | Medio |
+| T7 (Distribución no tipificada) | — | P7 | Medio |
+| T8 (Responsabilidad objetiva: tomador, no dador) | — | — | Bajo |
+
+*Nota: S1, T3 y T8 quedan sin pregunta o caso dedicado en esta tanda — si en el próximo repaso aparecen como insuficientemente cubiertos, son buenos candidatos para un cuestionario de refuerzo.*
 
 ✅ Paso 2 completo.
-
-*Nota de trazabilidad: al igual que en la Ficha del Paso 1, las citas de artículos y leyes usadas en el cuestionario y los casos reproducen la numeración enunciada por la cátedra. Antes de subir el material a Notion, valé la pena contrastar puntualmente los arts. 1231, 1234, 1247-1248, 1345-1356, 1391-1392, 1502-1511 y la Ley 25.028/25.248 contra el texto vigente.*
