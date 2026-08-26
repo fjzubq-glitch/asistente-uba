@@ -156,3 +156,6 @@ Asistente UBA 1.0/Proyecto 3 - Asistente Vero/
 Asistente UBA 1.0/Proyecto 4 - Transcriptor de Audio/Deepgram API.txt
 Asistente UBA 1.0/Universidad/
 
+
+# Archivos con secretos sueltos (no versionar)
+**/openrouter.txt
