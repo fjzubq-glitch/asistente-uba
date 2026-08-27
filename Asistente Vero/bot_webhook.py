@@ -457,14 +457,15 @@ REGLAS PARA CONVERSACIÓN GENERAL:
 
 @app.route("/ping", methods=["GET"])
 def ping_handler():
-    """Ruta para mantener activa la Web App en PythonAnywhere usando pings."""
+    """Ruta de health check para verificar que el servicio está activo."""
     asegurar_hilo_alarmas()
     return f"OK - Thread active: {hilo_iniciado} - Chat ID: {MI_CHAT_ID}", 200
 
 @app.route("/set_webhook", methods=["GET"])
 def set_webhook():
-    """Ruta de utilidad para registrar este webhook en Telegram."""
-    webhook_url = f"https://franklinzg.pythonanywhere.com/{TELEGRAM_TOKEN}"
+    """Ruta de utilidad para registrar este webhook en Telegram. Usa WEBHOOK_BASE_URL."""
+    base = os.environ.get("WEBHOOK_BASE_URL", "https://localhost:5000").rstrip("/")
+    webhook_url = f"{base}/{TELEGRAM_TOKEN}"
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/setWebhook?url={webhook_url}"
     try:
         r = requests.get(url, timeout=10)

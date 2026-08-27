@@ -22,7 +22,7 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 load_dotenv(os.path.join(VERO_DIR, ".env"))
 
 # URL base pública del servidor (sin barra final). Configurable por entorno.
-WEBHOOK_BASE_URL = os.environ.get("WEBHOOK_BASE_URL", "https://franklinzg.pythonanywhere.com").rstrip("/")
+WEBHOOK_BASE_URL = os.environ.get("WEBHOOK_BASE_URL", "https://localhost:5000").rstrip("/")
 
 app = Flask(__name__)
 
