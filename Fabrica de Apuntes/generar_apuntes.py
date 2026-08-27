@@ -30,7 +30,7 @@ DEFAULT_PROVIDER = "gemini"
 DEFAULT_MODELS = {
     "openrouter": "anthropic/claude-3.5-sonnet",
     "gemini": "gemini-2.5-flash",
-    "groq": "llama-3.3-70b-versatile"
+    "groq": "openai/gpt-oss-120b"
 }
 
 def llamar_api(prompt_sistema, prompt_usuario, provider, model, api_key):
