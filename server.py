@@ -308,8 +308,8 @@ def ejecutar_ciclo_uba():
         ahora = ahora_argentina()
         hoy_str = ahora.strftime("%Y-%m-%d")
 
-        # Buenos días (solo a las 8:00 ARG, una vez por día)
-        if ahora.hour == 8 and ahora.minute == 0 and not buenos_dias_ya_enviado_hoy(BUENOS_DIAS_STATE_UBA):
+        # Buenos días (entre 8:00 y 8:09 ARG, una vez por día)
+        if ahora.hour == 8 and ahora.minute < 10 and not buenos_dias_ya_enviado_hoy(BUENOS_DIAS_STATE_UBA):
             msg = f"🌅 *¡BUENOS DÍAS!*\n\n{leer_pendientes_dia()}"
             for chat in chats:
                 enviar_telegram_retry(send_url_uba, {"chat_id": chat, "text": msg})
@@ -443,8 +443,8 @@ def ejecutar_ciclo_vero():
         ahora = ahora_argentina()
         hoy_str = ahora.strftime("%Y-%m-%d")
 
-        # Buenos días (solo a las 8:00 ARG, una vez por día)
-        if ahora.hour == 8 and ahora.minute == 0 and not buenos_dias_ya_enviado_hoy(BUENOS_DIAS_STATE_VERO):
+        # Buenos días (entre 8:00 y 8:09 ARG, una vez por día)
+        if ahora.hour == 8 and ahora.minute < 10 and not buenos_dias_ya_enviado_hoy(BUENOS_DIAS_STATE_VERO):
             try:
                 eventos = gc.listar_eventos_dia(hoy_str)
             except Exception:
