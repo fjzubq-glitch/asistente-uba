@@ -50,7 +50,7 @@ def formatear_fecha_humana(fecha_str):
 # ==========================================
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_MODEL = "openai/gpt-oss-120b"
+GROQ_MODEL = "groq/compound-mini"
 
 session = requests.Session()
 retry = Retry(connect=3, backoff_factor=1)
