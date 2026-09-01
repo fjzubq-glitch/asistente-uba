@@ -68,7 +68,7 @@ def extraer_metadatos_de_archivo(filepath):
     # Ficha_DerechoComercial_Clase2_14-08-26.md
     # Ficha_Contratos II_Clase1_13-08-26.md
     # Cuestionario_y_Casos_Comercial_Clase1_07-07-26.md
-    match_nombre = re.search(r'(?:Ficha|Cuestionario(?:_y_Casos)?)_([A-Za-z0-9_\s]+)_Clase([0-9]+)_([0-9]{2}[-_][0-9]{2}[-_][0-9]{2,4})', filename, re.IGNORECASE)
+    match_nombre = re.search(r'(?:Ficha|Cuestionario(?:_y_Casos)?)_([A-Za-z0-9_\s]+)_Clase\s*([0-9]+)_([0-9]{2}[-_][0-9]{2}[-_][0-9]{2,4})', filename, re.IGNORECASE)
     if match_nombre:
         materia_raw = match_nombre.group(1).replace('_', ' ')
         materia = normalizar_nombre_materia(materia_raw)
