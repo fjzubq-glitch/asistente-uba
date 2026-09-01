@@ -4,6 +4,7 @@ import os
 import time
 import datetime
 import json
+import tempfile
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -11,6 +12,11 @@ import traceback
 import re
 import threading
 from dotenv import load_dotenv
+
+# Agregar Fabrica de Apuntes al path para importar sus módulos
+FABRICA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Fabrica de Apuntes")
+if FABRICA_DIR not in sys.path:
+    sys.path.insert(0, FABRICA_DIR)
 
 # Cargar variables de entorno de forma robusta
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -990,6 +996,117 @@ def set_webhook_vero():
         r = requests.get(url, timeout=10)
         return jsonify(r.json()), r.status_code
     except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# 6. Endpoint para subir apuntes a Notion + notificar por Telegram (desde Render)
+@app.route("/subir-apuntes", methods=["POST"])
+def subir_apuntes_endpoint():
+    """
+    Recibe archivos de Ficha y Cuestionario via POST, los sube a Notion y notifica por Telegram.
+    Body JSON esperado:
+    {
+        "materia": "Contratos II",
+        "clase": "5",
+        "fecha": "31-08-26",
+        "tema": "El contrato de transporte...",
+        "ficha": "contenido markdown de la ficha",
+        "cuestionario": "contenido markdown del cuestionario"
+    }
+    """
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No se recibió JSON válido"}), 400
+
+        materia = data.get("materia")
+        clase = data.get("clase")
+        fecha = data.get("fecha")
+        tema = data.get("tema", f"Clase {clase}")
+        ficha_content = data.get("ficha")
+        cuestionario_content = data.get("cuestionario")
+
+        if not materia or not clase:
+            return jsonify({"error": "Faltan campos obligatorios: materia, clase"}), 400
+        if not ficha_content and not cuestionario_content:
+            return jsonify({"error": "Debes enviar al menos ficha o cuestionario"}), 400
+
+        notion_token = os.environ.get("NOTION_TOKEN")
+        db_id = os.environ.get("NOTION_DB_ID")
+        if not notion_token or not db_id:
+            return jsonify({"error": "Faltan variables NOTION_TOKEN o NOTION_DB_ID en el servidor"}), 500
+
+        # Importar módulos de Fábrica de Apuntes
+        try:
+            from subir_a_notion import subir_apuntes, obtener_o_crear_pagina_materia
+            from generar_apuntes import enviar_notificacion_telegram, programar_active_recall_en_notion
+        except ImportError as e:
+            return jsonify({"error": f"No se pudo importar módulos de Fábrica: {e}"}), 500
+
+        # Crear carpeta temporal y escribir archivos
+        tmpdir = tempfile.mkdtemp(prefix="apuntes_")
+        ficha_path = None
+        cuestionario_path = None
+
+        if ficha_content:
+            ficha_path = os.path.join(tmpdir, f"Ficha_{materia}_Clase{clase}_{fecha}.md")
+            with open(ficha_path, "w", encoding="utf-8") as f:
+                f.write(ficha_content)
+            print(f"[SUBIR-APUNTES] Ficha escrita en {ficha_path} ({len(ficha_content)} chars)")
+
+        if cuestionario_content:
+            cuestionario_path = os.path.join(tmpdir, f"Cuestionario_{materia}_Clase{clase}_{fecha}.md")
+            with open(cuestionario_path, "w", encoding="utf-8") as f:
+                f.write(cuestionario_content)
+            print(f"[SUBIR-APUNTES] Cuestionario escrito en {cuestionario_path} ({len(cuestionario_content)} chars)")
+
+        # Obtener página de materia
+        materia_page_id = None
+        try:
+            materia_page_id = obtener_o_crear_pagina_materia(notion_token, db_id, materia)
+        except Exception as e:
+            print(f"[SUBIR-APUNTES WARN] No se pudo obtener página de materia: {e}")
+
+        # Subir ficha
+        f1 = False
+        if ficha_path:
+            print(f"[SUBIR-APUNTES] Subiendo Ficha...")
+            f1 = subir_apuntes(materia, clase, fecha, "Ficha + Handoff", ficha_path, notion_token, materia_page_id)
+
+        # Subir cuestionario
+        f2 = False
+        if cuestionario_path:
+            print(f"[SUBIR-APUNTES] Subiendo Cuestionario...")
+            f2 = subir_apuntes(materia, clase, fecha, "Cuestionario + Casos", cuestionario_path, notion_token, materia_page_id)
+
+        # Limpiar archivos temporales
+        try:
+            import shutil
+            shutil.rmtree(tmpdir, ignore_errors=True)
+        except Exception:
+            pass
+
+        if not f1 and not f2:
+            return jsonify({"error": "No se pudo subir ningún documento a Notion"}), 500
+
+        # Notificación por Telegram
+        print(f"[SUBIR-APUNTES] Enviando notificación Telegram...")
+        enviar_notificacion_telegram(materia, clase, fecha, tema)
+
+        # Active Recall
+        print(f"[SUBIR-APUNTES] Programando Active Recall...")
+        tema_estudio = f"{materia} - Clase {clase}: {tema}"
+        programar_active_recall_en_notion(tema_estudio, notion_token, db_id)
+
+        return jsonify({
+            "ok": True,
+            "mensaje": f"Apuntes de {materia} Clase {clase} subidos y notificados",
+            "ficha": f1,
+            "cuestionario": f2
+        }), 200
+
+    except Exception as e:
+        print(f"[SUBIR-APUNTES ERROR] {traceback.format_exc()}")
         return jsonify({"error": str(e)}), 500
 
 
