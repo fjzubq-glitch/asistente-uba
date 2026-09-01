@@ -1,0 +1,28 @@
+name: Buenos dias 8am
+
+on:
+  schedule:
+    # 8:00 AM Argentina = 11:00 UTC
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+
+jobs:
+  notificar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wake up Render + trigger alarmas
+        env:
+          RENDER_URL: ${{ vars.RENDER_PING_URL }}
+        run: |
+          if [ -z "$RENDER_URL" ]; then
+            echo "RENDER_URL no configurada. Skip."
+            exit 0
+          fi
+          # Ping para despertar Render
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$RENDER_URL/ping")
+          echo "Ping status: $STATUS"
+          sleep 10
+          # Segundo ping para asegurar que esté despierto
+          STATUS2=$(curl -s -o /dev/null -w "%{http_code}" "$RENDER_URL/ping")
+          echo "Second ping status: $STATUS2"
+          echo "Render should be awake and alarm thread running"
