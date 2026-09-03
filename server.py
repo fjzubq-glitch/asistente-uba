@@ -308,6 +308,11 @@ def ejecutar_ciclo_uba():
     send_url_uba = f"https://api.telegram.org/bot{TELEGRAM_TOKEN_UBA}/sendMessage"
     MI_CHAT_ID_UBA = cargar_chat_id_uba()
     chats = _cargar_chats(CHATS_FILE_UBA, CHAT_ID_FILE_UBA)
+    # Fallback: si no hay chats en archivos, usar TELEGRAM_CHAT_ID del .env
+    if not chats:
+        env_chat = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+        if env_chat and env_chat != "0":
+            chats = [env_chat]
     if not chats:
         return
     try:
@@ -443,6 +448,11 @@ def ejecutar_ciclo_vero():
     send_url_vero = f"https://api.telegram.org/bot{TELEGRAM_TOKEN_VERO}/sendMessage"
     MI_CHAT_ID_VERO = cargar_chat_id_vero()
     chats = _cargar_chats(CHATS_FILE_VERO, CHAT_ID_FILE_VERO)
+    # Fallback: si no hay chats en archivos, usar TELEGRAM_CHAT_ID del .env
+    if not chats:
+        env_chat = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+        if env_chat and env_chat != "0":
+            chats = [env_chat]
     if not chats:
         return
     try:
